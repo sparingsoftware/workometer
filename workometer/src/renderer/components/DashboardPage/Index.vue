@@ -1,5 +1,7 @@
 <template>
-    <p>Hello</p>
+  <div>
+    <el-button>Hello</el-button>
+  </div>
 </template>
 
 <script>
