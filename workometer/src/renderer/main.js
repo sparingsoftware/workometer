@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import jiraClient from './jira'
 import handleErrorsMixin from './mixins/handleErrors'
+import locale from 'element-ui/lib/locale/lang/en'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/reset.css'
@@ -17,7 +18,7 @@ Vue.jira = Vue.prototype.$jira = jiraClient
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, {locale})
 
 /* eslint-disable no-new */
 Vue.mixin(handleErrorsMixin)

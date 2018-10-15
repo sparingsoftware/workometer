@@ -10,5 +10,7 @@
 </script>
 
 <style>
-  /* CSS */
+  .fluid {
+    width: 100%;
+  }
 </style>
