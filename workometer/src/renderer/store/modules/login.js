@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 const state = {
-  basic_auth: {}
+  basic_auth: null
 }
 
 const mutations = {
