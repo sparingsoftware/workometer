@@ -1,4 +1,8 @@
 // global page rules
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
 }
@@ -15,6 +19,7 @@ body {
 }
 
 .view {
+  max-width: 100%;
   height: 100vh;
   width: 100vw;
   position: relative;
