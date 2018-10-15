@@ -4,7 +4,7 @@
       <el-option
         v-for="item in boards"
         :key="item.id"
-        :label="item.name"
+        :label="`${item.name} - ${item.location.name}`"
         :value="item.id">
       </el-option>
     </el-select>
@@ -29,6 +29,11 @@
     computed: {
       boards () {
         return this.$store.state.boards.boards
+      }
+    },
+    watch: {
+      selectedBoard (board) {
+        this.$store.commit('SET_SELECTED_BOARD', board)
       }
     }
   }

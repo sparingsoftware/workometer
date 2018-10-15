@@ -1,12 +1,16 @@
 import Vue from 'vue'
 
 const state = {
-  boards: []
+  boards: [],
+  selectedBoard: null
 }
 
 const mutations = {
   PUSH_BOARDS (state, boards) {
     state.boards.push(...boards)
+  },
+  SET_SELECTED_BOARD (state, board) {
+    state.selectedBoard = board
   }
 }
 
