@@ -11,8 +11,8 @@
 </template>
 
 <script>
-  import issues from './Issues'
-  import recentWorklogs from './RecentWorklogs/'
+  import issues from './issues'
+  import recentWorklogs from './recentWorklogs/'
   import boardsPicker from './boardsPicker'
 
   export default {

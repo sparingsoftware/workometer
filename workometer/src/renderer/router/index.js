@@ -8,12 +8,12 @@ const router = new Router({
     {
       path: '/',
       name: 'dashboard',
-      component: require('@/components/DashboardPage').default
+      component: require('@/components/dashboardPage').default
     },
     {
       path: '/login/',
       name: 'login',
-      component: require('@/components/LoginPage').default
+      component: require('@/components/loginPage').default
     },
     {
       path: '*',
