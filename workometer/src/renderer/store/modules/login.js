@@ -4,6 +4,12 @@ const state = {
   basic_auth: null
 }
 
+const getters = {
+  isUserAuth (state) {
+    return !!state.basic_auth
+  }
+}
+
 const mutations = {
   SET_BASIC_AUTH (state, payload) {
     state.basic_auth = payload
@@ -21,6 +27,7 @@ const actions = {
 
 export default {
   state,
+  getters,
   mutations,
   actions
 }

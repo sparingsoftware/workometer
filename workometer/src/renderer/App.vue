@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <transition :name="slideDir" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
   export default {
+    computed: {
+      isUserAuth () {
+        return this.$store.getters.isUserAuth
+      },
+      slideDir () {
+        return this.isUserAuth ? 'slide-left' : 'slide-right'
+      }
+    }
   }
 </script>
 
-<style>
-  .fluid {
-    width: 100%;
-  }
+<style lang="scss">
+  @import "assets/sass/global";
 </style>
