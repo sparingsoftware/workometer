@@ -1,3 +1,8 @@
+// global page rules
+body {
+  margin: 0;
+}
+
 // global styling
 .centered-content {
   display: flex;
@@ -9,12 +14,21 @@
   width: 100%;
 }
 
+.view {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
 // animations
 // slide left right animation
 .slide-right-leave-active,
 .slide-right-enter-active,
 .slide-left-leave-active,
 .slide-left-enter-active {
+  transform: translate(0, 0);
   transition: transform 0.3s;
 }
 

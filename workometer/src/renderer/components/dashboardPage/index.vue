@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="view">
     <boards-picker/>
     <el-tabs v-model="currentTab" @tab-click="changeTab" stretch>
       <el-tab-pane label="Issues" name="issues"/>
