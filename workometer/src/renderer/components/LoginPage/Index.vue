@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-form :model="form" ref="form" label-width="120px" @submit.native.prevent="submitForm('form')">
+    <el-form :model="form" ref="form" @submit.native.prevent="submitForm('form')">
       <el-form-item
         prop="username"
         label="Username"
