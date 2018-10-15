@@ -14,6 +14,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.jira = Vue.prototype.$jira = jiraClient
+
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)

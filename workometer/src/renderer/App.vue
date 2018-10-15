@@ -6,7 +6,14 @@
 
 <script>
   export default {
-    name: 'workometer'
+    created () {
+      this.setJiraConnectorCredentialsFromStore()
+    },
+    methods: {
+      setJiraConnectorCredentialsFromStore () {
+        this.$jira.basic_auth = this.$store.state.login.basic_auth
+      }
+    }
   }
 </script>
 
