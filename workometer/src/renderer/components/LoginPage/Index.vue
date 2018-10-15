@@ -76,10 +76,4 @@ export default {
     top: 50%;
     left: 50%;
   }
-
-  .centered-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

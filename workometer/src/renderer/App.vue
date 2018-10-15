@@ -20,28 +20,5 @@
 </script>
 
 <style lang="scss">
-  /* CSS */
-  // slide left right animation
-  .slide-right-leave-active,
-  .slide-right-enter-active,
-  .slide-left-leave-active,
-  .slide-left-enter-active {
-    transition: transform 0.3s;
-  }
-
-  .slide-right-enter {
-    transform: translate(-100vw, 0);
-  }
-
-  .slide-right-leave-to {
-    transform: translate(100vw, 0);
-  }
-
-  .slide-left-enter {
-    transform: translate(100vw, 0);
-  }
-
-  .slide-left-leave-to {
-    transform: translate(-100vw, 0);
-  }
+  @import "assets/sass/global";
 </style>
