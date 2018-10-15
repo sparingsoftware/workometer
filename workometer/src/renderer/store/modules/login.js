@@ -1,21 +1,21 @@
+import Vue from 'vue'
+
 const state = {
-  username: '',
-  password: ''
+  basic_auth: {}
 }
 
 const mutations = {
-  DECREMENT_MAIN_COUNTER (state) {
-    state.main--
-  },
-  INCREMENT_MAIN_COUNTER (state) {
-    state.main++
+  SET_BASIC_AUTH (state, payload) {
+    state.basic_auth = payload
   }
 }
 
 const actions = {
-  login ({ commit }) {
-    // do something async
-    commit('INCREMENT_MAIN_COUNTER')
+  login ({commit}, payload) {
+    return Vue.jira.auth.login(payload).then(response => {
+      Vue.jira.basic_auth = payload
+      commit('SET_BASIC_AUTH', payload)
+    })
   }
 }
 

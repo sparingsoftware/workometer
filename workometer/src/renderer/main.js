@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import jiraClient from './jira'
+import handleErrorsMixin from './mixins/handleErrors'
 
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/reset.css'
@@ -18,6 +19,8 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 /* eslint-disable no-new */
+Vue.mixin(handleErrorsMixin)
+
 new Vue({
   components: {App},
   router,

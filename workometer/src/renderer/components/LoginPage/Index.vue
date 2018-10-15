@@ -19,7 +19,6 @@
         <el-button type="primary" @click="submitForm('form')">Login</el-button>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 
@@ -45,9 +44,10 @@
       submitForm (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!')
+            this.$store.dispatch('login', this.form).then(response => {
+              this.$router.push({name: 'dashboard'})
+            }).catch(this.handleErrors)
           } else {
-            console.log('error submit!!')
             return false
           }
         })
