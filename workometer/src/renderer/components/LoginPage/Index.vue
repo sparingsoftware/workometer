@@ -4,18 +4,14 @@
       <el-form-item
         prop="username"
         label="Username"
-        :rules="[
-      { required: true, message: 'Please input username', trigger: 'blur' }
-    ]"
+        :rules="rules.username"
       >
         <el-input v-model="form.username"/>
       </el-form-item>
       <el-form-item
         prop="password"
         label="Password"
-        :rules="[
-      { required: true, message: 'Please input password', trigger: 'blur' }
-    ]"
+        :rules="rules.password"
       >
         <el-input v-model="form.password" type="password"/>
       </el-form-item>
@@ -34,6 +30,14 @@
         form: {
           username: '',
           password: ''
+        },
+        rules: {
+          username: [
+            {required: true, message: 'Please input username', trigger: 'blur'}
+          ],
+          password: [
+            {required: true, message: 'Please input password', trigger: 'blur'}
+          ]
         }
       }
     },
