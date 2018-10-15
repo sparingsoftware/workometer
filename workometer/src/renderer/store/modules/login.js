@@ -1,5 +1,6 @@
 const state = {
-  main: 0
+  username: '',
+  password: ''
 }
 
 const mutations = {
@@ -12,7 +13,7 @@ const mutations = {
 }
 
 const actions = {
-  someAsyncTask ({ commit }) {
+  login ({ commit }) {
     // do something async
     commit('INCREMENT_MAIN_COUNTER')
   }

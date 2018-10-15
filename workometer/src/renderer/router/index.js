@@ -6,12 +6,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/temp',
       name: 'dashboard',
       component: require('@/components/DashboardPage/Index').default
     },
     {
-      path: '/login/',
+      path: '/',
       name: 'login',
       component: require('@/components/LoginPage/Index').default
     },
