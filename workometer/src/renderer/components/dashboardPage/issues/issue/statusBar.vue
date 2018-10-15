@@ -1,11 +1,15 @@
 <template>
     <div>
-        STATUS
+        status: {{ status.name }}
     </div>
 </template>
 
 <script>
-    export default {}
+    export default {
+      props: {
+        status: Object
+      }
+    }
 </script>
 
 <style lang="scss" scoped>
