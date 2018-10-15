@@ -2,16 +2,16 @@
   <div>
     <boards-picker/>
     <el-tabs v-model="currentTab" @tab-click="changeTab" stretch>
-      <el-tab-pane label="Recent Worklogs" name="worklogs"/>
       <el-tab-pane label="Issues" name="issues"/>
+      <el-tab-pane label="Recent Worklogs" name="worklogs"/>
     </el-tabs>
-    <recent-worklogs v-if="currentTab === 'worklogs'"/>
     <issues v-if="currentTab === 'issues'"/>
+    <recent-worklogs v-if="currentTab === 'worklogs'"/>
   </div>
 </template>
 
 <script>
-  import issues from './issues'
+  import issues from './issues/'
   import recentWorklogs from './recentWorklogs/'
   import boardsPicker from './boardsPicker'
 
@@ -28,7 +28,7 @@
     },
     data () {
       return {
-        currentTab: 'worklogs'
+        currentTab: 'issues'
       }
     }
   }
