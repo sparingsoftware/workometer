@@ -1,7 +1,7 @@
 <template>
   <div>
     <p v-for="board in boards.values">
-      {{ board.location.boardName }} - {{ board.name }}
+      {{ board.name }}
     </p>
     <el-button>Hello</el-button>
   </div>
