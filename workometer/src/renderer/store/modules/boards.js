@@ -8,7 +8,7 @@ const state = {
 
 const mutations = {
   PUSH_BOARDS (state, boards) {
-    state.boards = uniq([state.boards, ...boards])
+    state.boards = uniq([...state.boards, ...boards])
   },
   SET_SELECTED_BOARD (state, board) {
     state.selectedBoard = board

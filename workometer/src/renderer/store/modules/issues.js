@@ -17,13 +17,10 @@ const actions = {
     let lastPageFetched = false
     let startAt = 0
     while (!lastPageFetched) {
-      const response = await Vue.jira.board.getIssuesForBacklog({boardId, startAt, maxResults: 500})
+      const response = await Vue.jira.board.getIssuesForBacklog({boardId, startAt, maxResults: 50})
       partialIssues.push(...response.issues)
-      const nextChunk = response.startAt + response.maxResults
-      startAt = nextChunk
-      console.log(nextChunk)
-      console.log({boardId, issues: partialIssues}, 'bId, issues')
-      lastPageFetched = nextChunk >= response.total
+      startAt = response.startAt + response.maxResults
+      lastPageFetched = startAt >= response.total
     }
     commit('SET_ISSUES_FOR_BOARD', {boardId, issues: partialIssues})
   }
