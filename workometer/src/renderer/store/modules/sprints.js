@@ -2,7 +2,7 @@ import Vue from 'vue'
 import uniqBy from 'lodash.uniqby'
 
 const state = {
-  selectedSprint: {},
+  selectedSprint: null,
   sprints: []
 }
 
@@ -12,6 +12,9 @@ const mutations = {
   },
   pushSprints (state, sprints) {
     state.sprints = uniqBy([...state.sprints, ...sprints], s => s.name)
+  },
+  setSprints (state, sprints) {
+    state.sprints = sprints
   }
 }
 

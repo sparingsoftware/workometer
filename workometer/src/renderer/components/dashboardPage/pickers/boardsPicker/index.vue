@@ -36,6 +36,7 @@ export default {
   },
   watch: {
     selectedBoard () {
+      this.setSprints([])
       this.fetchSprints()
     }
   },
@@ -47,7 +48,10 @@ export default {
       fetchBoards: 'boards/fetchBoards',
       fetchSprints: 'sprints/fetchSprints'
     }),
-    ...mapMutations({ setSelectedBoard: 'boards/setSelectedBoard' })
+    ...mapMutations({
+      setSelectedBoard: 'boards/setSelectedBoard',
+      setSprints: 'sprints/setSprints'
+    })
   }
 }
 </script>

@@ -2,8 +2,8 @@ import Vue from 'vue'
 import uniqBy from 'lodash.uniqby'
 
 const state = {
-  boards: [],
-  selectedBoard: null
+  selectedBoard: null,
+  boards: []
 }
 
 const mutations = {
