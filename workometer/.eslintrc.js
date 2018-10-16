@@ -8,7 +8,10 @@ module.exports = {
     browser: true,
     node: true
   },
-  extends: 'standard',
+  extends: [
+    'eslint:recommended',
+    'standard',
+  ],
   globals: {
     __static: true
   },
@@ -22,6 +25,7 @@ module.exports = {
     'generator-star-spacing': 0,
     'eol-last': 0,
     // allow debugger during development
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }
 }

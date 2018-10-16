@@ -13,7 +13,7 @@
 <script>
   import issues from './issues/'
   import recentWorklogs from './recentWorklogs/'
-  import boardsPicker from './boardsPicker'
+  import boardsPicker from './boardsPicker/'
 
   export default {
     components: {

@@ -10,12 +10,14 @@
   export default {
     methods: {
       fetchIssues () {
-        const boardId = this.$store.state.boards.selectedBoard
-        this.$store.dispatch('fetchIssues', boardId)
+        this.$store.dispatch('fetchIssues')
       }
     },
     watch: {
-      selectedBoard (board) {
+      selectedSprint () {
+        this.fetchIssues()
+      },
+      selectedBoard () {
         this.fetchIssues()
       }
     },
@@ -23,11 +25,16 @@
       issue
     },
     computed: {
+      selectedSprint () {
+        return this.$store.state.boards.selectedSprint
+      },
       selectedBoard () {
         return this.$store.state.boards.selectedBoard
       },
       issues () {
-        return this.$store.state.issues.issuesForBoard[this.selectedBoard]
+        return this.selectedSprint
+          ? this.$store.state.issues.issuesForSprint[this.selectedSprint]
+          : this.$store.state.issues.issuesForBoard[this.selectedBoard]
       }
     }
   }

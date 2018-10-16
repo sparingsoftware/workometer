@@ -3,7 +3,8 @@ import uniq from 'lodash.uniq'
 
 const state = {
   boards: [],
-  selectedBoard: null
+  selectedBoard: null,
+  selectedSprint: null
 }
 
 const mutations = {
@@ -12,6 +13,9 @@ const mutations = {
   },
   SET_SELECTED_BOARD (state, board) {
     state.selectedBoard = board
+  },
+  SET_SELECTED_SPRINT (state, sprintId) {
+    state.selectedSprint = sprintId
   }
 }
 
