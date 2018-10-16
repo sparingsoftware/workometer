@@ -5,39 +5,36 @@
 </template>
 
 <script>
-  import issue from './issue/'
+import issue from './issue/'
+import { mapActions, mapState } from 'vuex'
 
-  export default {
-    methods: {
-      fetchIssues () {
-        this.$store.dispatch('fetchIssues')
-      }
+export default {
+  methods: mapActions({ fetchIssues: 'issues/fetchIssues' }),
+  watch: {
+    selectedSprint () {
+      this.fetchIssues()
     },
-    watch: {
-      selectedSprint () {
-        this.fetchIssues()
-      },
-      selectedBoard () {
-        this.fetchIssues()
-      }
-    },
-    components: {
-      issue
-    },
-    computed: {
-      selectedSprint () {
-        return this.$store.state.boards.selectedSprint
-      },
-      selectedBoard () {
-        return this.$store.state.boards.selectedBoard
-      },
-      issues () {
-        return this.selectedSprint
-          ? this.$store.state.issues.issuesForSprint[this.selectedSprint]
-          : this.$store.state.issues.issuesForBoard[this.selectedBoard]
-      }
+    selectedBoard () {
+      this.fetchIssues()
+    }
+  },
+  components: {
+    issue
+  },
+  computed: {
+    ...mapState({
+      selectedSprint: state => state.boards.selectedSprint,
+      selectedBoard: state => state.boards.selectedBoard,
+      issuesForSprint: state => state.issues.issuesForSprint,
+      issuesForBoard: state => state.issues.issuesForBoard
+    }),
+    issues () {
+      return this.selectedSprint
+        ? this.issuesForSprint[this.selectedSprint]
+        : this.issuesForBoard[this.selectedBoard]
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

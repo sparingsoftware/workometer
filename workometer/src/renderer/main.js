@@ -18,13 +18,13 @@ Vue.jira = Vue.prototype.$jira = jiraClient
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI, {locale})
+Vue.use(ElementUI, { locale })
 
 /* eslint-disable no-new */
 Vue.mixin(handleErrorsMixin)
 
 new Vue({
-  components: {App},
+  components: { App },
   router,
   store,
   template: '<App/>'

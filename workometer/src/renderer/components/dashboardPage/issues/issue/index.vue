@@ -6,16 +6,16 @@
 </template>
 
 <script>
-  import statusBar from './statusBar'
+import statusBar from './statusBar'
 
-  export default {
-    props: {
-      issue: Object
-    },
-    components: {
-      statusBar
-    }
+export default {
+  props: {
+    issue: Object
+  },
+  components: {
+    statusBar
   }
+}
 </script>
 
 <style lang="scss" scoped>

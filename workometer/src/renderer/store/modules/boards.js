@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import uniq from 'lodash.uniq'
+import uniqBy from 'lodash.uniqby'
 
 const state = {
   boards: [],
@@ -8,13 +8,13 @@ const state = {
 }
 
 const mutations = {
-  PUSH_BOARDS (state, boards) {
-    state.boards = uniq([...state.boards, ...boards])
+  pushBoards (state, boards) {
+    state.boards = uniqBy([...state.boards, ...boards], x => x.id)
   },
-  SET_SELECTED_BOARD (state, board) {
+  setSelectedBoard (state, board) {
     state.selectedBoard = board
   },
-  SET_SELECTED_SPRINT (state, sprintId) {
+  setSelectedSprint (state, sprintId) {
     state.selectedSprint = sprintId
   }
 }
@@ -25,12 +25,13 @@ const actions = {
       if (!response.isLast) {
         dispatch('fetchBoards', { startAt: response.maxResults + response.startAt })
       }
-      commit('PUSH_BOARDS', response.values)
+      commit('pushBoards', response.values)
     })
   }
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   actions

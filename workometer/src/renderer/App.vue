@@ -7,16 +7,16 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      isUserAuth () {
-        return this.$store.getters.isUserAuth
-      },
-      slideDir () {
-        return this.isUserAuth ? 'slide-left' : 'slide-right'
-      }
+export default {
+  computed: {
+    isUserAuth () {
+      return this.$store.getters.isUserAuth
+    },
+    slideDir () {
+      return this.isUserAuth ? 'slide-left' : 'slide-right'
     }
   }
+}
 </script>
 
 <style lang="scss">

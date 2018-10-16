@@ -11,27 +11,27 @@
 </template>
 
 <script>
-  import issues from './issues/'
-  import recentWorklogs from './recentWorklogs/'
-  import boardsPicker from './boardsPicker/'
+import issues from './issues/'
+import recentWorklogs from './recentWorklogs/'
+import boardsPicker from './boardsPicker/'
 
-  export default {
-    components: {
-      boardsPicker,
-      issues,
-      recentWorklogs
-    },
-    methods: {
-      changeTab (tab, event) {
-        this.currentTab = tab.name
-      }
-    },
-    data () {
-      return {
-        currentTab: 'issues'
-      }
+export default {
+  components: {
+    boardsPicker,
+    issues,
+    recentWorklogs
+  },
+  methods: {
+    changeTab (tab, event) {
+      this.currentTab = tab.name
+    }
+  },
+  data () {
+    return {
+      currentTab: 'issues'
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
