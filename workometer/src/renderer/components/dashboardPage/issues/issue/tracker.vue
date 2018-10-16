@@ -1,7 +1,8 @@
 <template>
   <div>
-    <button class="start-tracking-button">
-      <i class="fa fa-play-circle" aria-hidden="true"/>
+    <button class="start-tracking-button" @click="startIssueTracking">
+      <i v-if="issueTracked" class="fa fa-stop-circle" aria-hidden="true"/>
+      <i v-else class="fa fa-play-circle" aria-hidden="true"/>
     </button>
   </div>
 </template>
@@ -12,6 +13,19 @@ export default {
     issue: {
       type: Object,
       default: () => ({})
+    }
+  },
+  computed: {
+    issueTracked () {
+      return this.$store.state.tracker.trackedIssue === this.issue
+    }
+  },
+  methods: {
+    startIssueTracking () {
+      this.$store.commit('tracker/startIssueTracking', this.issue)
+    },
+    stopIssueTracking () {
+      console.log('a')
     }
   }
 }
