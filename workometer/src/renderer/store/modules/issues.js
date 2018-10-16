@@ -19,7 +19,7 @@ const actions = {
     const partialIssues = []
     let lastPageFetched = false
     let startAt = 0
-    const selectedSprint = rootState.boards.selectedSprint
+    const selectedSprint = rootState.sprints.selectedSprint
     const paramId = selectedSprint ? { sprintId: selectedSprint } : { boardId: rootState.boards.selectedBoard }
 
     while (!lastPageFetched) {

@@ -3,13 +3,12 @@ import uniqBy from 'lodash.uniqby'
 
 const state = {
   boards: [],
-  selectedBoard: null,
-  selectedSprint: null
+  selectedBoard: null
 }
 
 const mutations = {
   pushBoards (state, boards) {
-    state.boards = uniqBy([...state.boards, ...boards], x => x.id)
+    state.boards = uniqBy([...state.boards, ...boards], b => b.id)
   },
   setSelectedBoard (state, board) {
     state.selectedBoard = board

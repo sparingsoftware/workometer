@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedSprint: state => state.boards.selectedSprint,
+      selectedSprint: state => state.sprints.selectedSprint,
       selectedBoard: state => state.boards.selectedBoard,
       issuesForSprint: state => state.issues.issuesForSprint,
       issuesForBoard: state => state.issues.issuesForBoard

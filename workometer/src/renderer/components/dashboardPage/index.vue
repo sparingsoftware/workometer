@@ -1,6 +1,9 @@
 <template>
   <div class="view">
-    <boards-picker/>
+    <div class="pickers">
+      <boards-picker/>
+      <sprints-picker/>
+    </div>
     <el-tabs v-model="currentTab" stretch @tab-click="changeTab">
       <el-tab-pane label="Issues" name="issues"/>
       <el-tab-pane label="Recent Worklogs" name="worklogs"/>
@@ -13,12 +16,14 @@
 <script>
 import Issues from './issues/'
 import RecentWorklogs from './recentWorklogs/'
-import BoardsPicker from './boardsPicker/'
+import BoardsPicker from './pickers/boardsPicker/'
+import SprintsPicker from './pickers/sprintsPicker/'
 
 export default {
   components: {
     BoardsPicker,
     RecentWorklogs,
+    SprintsPicker,
     Issues
   },
   data () {
@@ -27,7 +32,7 @@ export default {
     }
   },
   methods: {
-    changeTab (tab, event) {
+    changeTab (tab) {
       this.currentTab = tab.name
     }
   }
@@ -37,5 +42,9 @@ export default {
 <style lang="scss" scoped>
   /deep/ .el-tabs__item {
     user-select: none;
+  }
+
+  .pickers {
+    padding: 15px 15px 10px;
   }
 </style>
