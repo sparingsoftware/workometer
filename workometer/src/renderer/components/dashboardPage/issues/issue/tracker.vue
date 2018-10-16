@@ -1,8 +1,18 @@
 <template>
   <div>
-    <button class="start-tracking-button" @click="startIssueTracking">
-      <i v-if="issueTracked" class="fa fa-stop-circle" aria-hidden="true"/>
-      <i v-else class="fa fa-play-circle" aria-hidden="true"/>
+    <button class="start-tracking-button">
+      <i
+        v-if="issueTracked"
+        aria-hidden="true"
+        class="fa fa-stop-circle"
+        @click="startIssueTracking"
+      />
+      <i
+        v-else
+        aria-hidden="true"
+        class="fa fa-play-circle"
+        @click="stopIssueTracking"
+      />
     </button>
   </div>
 </template>
