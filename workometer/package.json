@@ -58,6 +58,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "element-ui": "^2.4.8",
+    "font-awesome": "^4.7.0",
     "jira-connector": "^2.9.0",
     "lodash.uniqby": "^4.7.0",
     "vue": "^2.5.16",
