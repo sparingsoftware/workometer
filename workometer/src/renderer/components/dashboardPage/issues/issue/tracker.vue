@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     issueTracked () {
-      return this.$store.state.tracker.trackedIssue === this.issue
+      return this.$store.state.tracker.issueTracked === this.issue
     }
   },
   methods: {

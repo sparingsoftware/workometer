@@ -1,13 +1,13 @@
 // import Vue from 'vue'
 
 const state = {
-  trackedIssue: null,
+  issueTracked: null,
   trackingStartTime: null
 }
 
 const mutations = {
   startIssueTracking (state, issue) {
-    state.trackedIssue = issue
+    state.issueTracked = issue
   }
 }
 
