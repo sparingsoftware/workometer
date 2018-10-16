@@ -2,16 +2,14 @@
   <div>
     <button class="start-tracking-button">
       <i
-        v-if="issueTracked"
-        aria-hidden="true"
+        v-if="issueTracked === issue"
         class="fa fa-stop-circle"
-        @click="startIssueTracking"
+        @click="stopIssueTracking"
       />
       <i
         v-else
-        aria-hidden="true"
         class="fa fa-play-circle"
-        @click="stopIssueTracking"
+        @click="startIssueTracking"
       />
     </button>
   </div>
@@ -27,15 +25,27 @@ export default {
   },
   computed: {
     issueTracked () {
-      return this.$store.state.tracker.issueTracked === this.issue
+      return this.$store.state.tracker.issueTracked
     }
   },
   methods: {
     startIssueTracking () {
-      this.$store.commit('tracker/startIssueTracking', this.issue)
+      if (this.issueTracked) {
+        this.$confirm('Another issue is already tracked. Do you want to save worklog and start another one?', 'Warning', {
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+          type: 'warning'
+        }).then(() => {
+          this.$store.dispatch('tracker/stopIssueTracking')
+          this.$store.commit('tracker/startIssueTracking', this.issue)
+        }).catch(() => {
+        })
+      } else {
+        this.$store.commit('tracker/startIssueTracking', this.issue)
+      }
     },
     stopIssueTracking () {
-      console.log('a')
+      this.$store.dispatch('tracker/stopIssueTracking')
     }
   }
 }
