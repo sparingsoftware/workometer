@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
+    parser: 'babel-eslint',
     sourceType: 'module'
   },
   env: {
@@ -11,12 +11,13 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'standard',
+    'plugin:vue/recommended'
   ],
   globals: {
     __static: true
   },
   plugins: [
-    'html'
+    'vue'
   ],
   'rules': {
     // allow paren-less arrow functions
@@ -26,6 +27,16 @@ module.exports = {
     'eol-last': 0,
     // allow debugger during development
     'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-multiple-empty-lines': ['error', { 'max': 2 }],
+    'vue/require-v-for-key': 0,
+    'vue/html-closing-bracket-spacing': 0,
+    'vue/max-attributes-per-line': [2, {
+      'singleline': 3,
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': false
+      }
+    }]
   }
 }

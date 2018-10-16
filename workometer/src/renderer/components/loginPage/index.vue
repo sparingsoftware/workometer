@@ -1,23 +1,15 @@
 <template>
   <div class="view">
     <div class="wrapper">
-      <el-form :model="form" ref="form" @submit.native.prevent>
-        <el-form-item
-          prop="username"
-          label="Username"
-          :rules="rules.username"
-        >
+      <el-form ref="form" :model="form" @submit.native.prevent>
+        <el-form-item prop="username" label="Username" :rules="rules.username">
           <el-input v-model="form.username" @keyup.enter.native.prevent="submitForm('form')"/>
         </el-form-item>
-        <el-form-item
-          prop="password"
-          label="Password"
-          :rules="rules.password"
-        >
+        <el-form-item prop="password" label="Password" :rules="rules.password">
           <el-input v-model="form.password" type="password" @keyup.enter.native.prevent="submitForm('form')"/>
         </el-form-item>
         <el-form-item class="centered-content">
-          <el-button type="primary" @click="submitForm('form')" :loading="isFormSending">Login</el-button>
+          <el-button type="primary" :loading="isFormSending" @click.native="submitForm('form')">Login</el-button>
         </el-form-item>
       </el-form>
     </div>

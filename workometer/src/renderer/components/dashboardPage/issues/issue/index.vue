@@ -6,14 +6,17 @@
 </template>
 
 <script>
-import statusBar from './statusBar'
+import StatusBar from './statusBar'
 
 export default {
-  props: {
-    issue: Object
-  },
   components: {
-    statusBar
+    StatusBar
+  },
+  props: {
+    issue: {
+      type: Object,
+      default: () => ({})
+    }
   }
 }
 </script>

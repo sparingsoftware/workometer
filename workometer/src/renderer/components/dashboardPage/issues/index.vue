@@ -9,15 +9,6 @@ import issue from './issue/'
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  methods: mapActions({ fetchIssues: 'issues/fetchIssues' }),
-  watch: {
-    selectedSprint () {
-      this.fetchIssues()
-    },
-    selectedBoard () {
-      this.fetchIssues()
-    }
-  },
   components: {
     issue
   },
@@ -33,7 +24,16 @@ export default {
         ? this.issuesForSprint[this.selectedSprint]
         : this.issuesForBoard[this.selectedBoard]
     }
-  }
+  },
+  watch: {
+    selectedSprint () {
+      this.fetchIssues()
+    },
+    selectedBoard () {
+      this.fetchIssues()
+    }
+  },
+  methods: mapActions({ fetchIssues: 'issues/fetchIssues' })
 }
 </script>
 

@@ -7,7 +7,10 @@
 <script>
 export default {
   props: {
-    status: Object
+    status: {
+      type: Object,
+      default: () => ({})
+    }
   }
 }
 </script>

@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import axios from 'axios'
 
@@ -20,9 +21,9 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI, { locale })
 
-/* eslint-disable no-new */
 Vue.mixin(handleErrorsMixin)
 
+/* eslint-disable no-new */
 new Vue({
   components: { App },
   router,

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition :name="slideDir" mode="out-in">
-      <router-view></router-view>
+      <router-view/>
     </transition>
   </div>
 </template>
