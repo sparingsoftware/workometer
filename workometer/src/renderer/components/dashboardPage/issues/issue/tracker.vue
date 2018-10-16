@@ -4,18 +4,21 @@
       <i
         v-if="issueTracked === issue"
         class="fa fa-stop-circle"
-        @click="stopIssueTracking"
+        @click="storeTrackingIssue"
       />
       <i
         v-else
         class="fa fa-play-circle"
         @click="startIssueTracking"
       />
+      <p v-if="issueTracked === issue">{{ trackedTime }}</p>
     </button>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   props: {
     issue: {
@@ -26,6 +29,10 @@ export default {
   computed: {
     issueTracked () {
       return this.$store.state.tracker.issueTracked
+    },
+    trackedTime () {
+      // TODO: make it reactive
+      return moment().diff(this.$store.state.tracker.trackingStartTime, 'seconds')
     }
   },
   methods: {
@@ -36,7 +43,7 @@ export default {
           cancelButtonText: 'No',
           type: 'warning'
         }).then(() => {
-          this.$store.dispatch('tracker/stopIssueTracking')
+          this.storeTrackingIssue()
           this.$store.commit('tracker/startIssueTracking', this.issue)
         }).catch(() => {
         })
@@ -44,8 +51,18 @@ export default {
         this.$store.commit('tracker/startIssueTracking', this.issue)
       }
     },
-    stopIssueTracking () {
-      this.$store.dispatch('tracker/stopIssueTracking')
+    storeTrackingIssue () {
+      this.$store.dispatch('tracker/stopIssueTracking').then(response => {
+        this.$notify({
+          title: 'Success',
+          message: 'Worklog saved',
+          type: 'success'
+        })
+        this.$store.commit('tracker/setIssueTracked', null)
+        this.$store.commit('tracker/setTrackingStartTime', null)
+      }).catch(err => {
+        this.handleErrors(err)
+      })
     }
   }
 }
