@@ -6,7 +6,7 @@
         <span class="title">
           Welcome to your new project!
         </span>
-        <system-information></system-information>
+        <system-information/>
       </div>
 
       <div class="right-side">
@@ -34,7 +34,7 @@
 import SystemInformation from './LandingPage/SystemInformation'
 
 export default {
-  name: 'landing-page',
+  name: 'LandingPage',
   components: { SystemInformation },
   methods: {
     open (link) {
