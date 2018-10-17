@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -8,12 +9,12 @@ const router = new Router({
     {
       path: '/',
       name: 'dashboard',
-      component: require('@/components/DashboardPage/Index').default
+      component: require('@/components/dashboardPage').default
     },
     {
       path: '/login/',
       name: 'login',
-      component: require('@/components/LoginPage/Index').default
+      component: require('@/components/loginPage').default
     },
     {
       path: '*',
@@ -26,7 +27,7 @@ router.beforeEach((to, from, next) => {
   if (store.state.login.basic_auth) {
     next()
   } else {
-    to.name === 'login' ? next() : next({name: 'login'})
+    to.name === 'login' ? next() : next({ name: 'login' })
   }
 })
 
