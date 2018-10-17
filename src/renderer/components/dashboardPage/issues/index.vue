@@ -22,6 +22,7 @@ export default {
       issuesForBoard: state => state.issues.issuesForBoard
     }),
     issues () {
+      console.log(this.issuesForBoard[this.selectedBoard])
       return this.selectedSprint
         ? this.issuesForSprint[this.selectedSprint]
         : this.issuesForBoard[this.selectedBoard]
