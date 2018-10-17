@@ -1,27 +1,37 @@
 import Vue from 'vue'
 
-const unfoldJiraRequest = (service, itemsKey = 'values') => async payload => {
-  let isLast = false
-  const items = []
-  let startAt
-  do {
-    const response = await service({
-      startAt,
-      ...payload
+const unfoldJiraRequest = ({ request, payload, flatMapKey }) => {
+  const fetchItems = (items = [], startAt = 0) => {
+    return request({ ...payload, startAt }).then(res => {
+      const startAt = res.startAt + res.maxResults
+      const isLast = res.isLast || startAt >= res.total
+      const newItems = [...items, ...res[flatMapKey]]
+      return isLast ? newItems : fetchItems(newItems, startAt)
     })
-    items.push(...response[itemsKey])
-    startAt = response.startAt + response.maxResults
-    isLast = response.isLast !== undefined
-      ? response.isLast
-      : response.startAt + response.maxResults >= response.total
-  } while (!isLast)
+  }
 
-  return items
+  return fetchItems()
 }
 
 export default {
-  getAllBoards: unfoldJiraRequest(payload => Vue.jira.board.getAllBoards(payload)),
-  getSprintsForBoard: unfoldJiraRequest(payload => Vue.jira.board.getSprintsForBoard(payload)),
-  getIssuesForSprint: unfoldJiraRequest(payload => Vue.jira.sprint.getSprintIssues(payload), 'issues'),
-  getIssuesForBacklog: unfoldJiraRequest(payload => Vue.jira.board.getIssuesForBacklog(payload), 'issues')
+  getAllBoards: config => unfoldJiraRequest({
+    request: payload => Vue.jira.board.getAllBoards(payload),
+    payload: config,
+    flatMapKey: 'values'
+  }),
+  getSprintsForBoard: boardId => unfoldJiraRequest({
+    request: payload => Vue.jira.board.getSprintsForBoard(payload),
+    payload: { boardId },
+    flatMapKey: 'values'
+  }),
+  getIssuesForSprint: sprintId => unfoldJiraRequest({
+    request: payload => Vue.jira.sprint.getSprintIssues(payload),
+    payload: { maxResults: 500, sprintId },
+    flatMapKey: 'issues'
+  }),
+  getIssuesForBacklog: boardId => unfoldJiraRequest({
+    request: payload => Vue.jira.board.getIssuesForBacklog(payload),
+    payload: { maxResults: 500, boardId },
+    flatMapKey: 'issues'
+  })
 }

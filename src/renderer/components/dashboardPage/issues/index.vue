@@ -28,11 +28,11 @@ export default {
     }
   },
   watch: {
-    selectedSprint () {
-      this.fetchIssuesForSprint()
+    selectedSprint (id) {
+      if (id) this.fetchIssuesForSprint(id)
     },
-    selectedBoard () {
-      this.fetchIssuesForBoard()
+    selectedBoard (id) {
+      if (id) this.fetchIssuesForBoard(id)
     }
   },
   methods: mapActions({

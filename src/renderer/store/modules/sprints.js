@@ -23,7 +23,7 @@ const actions = {
     const backlog = { name: 'Backlog', id: null }
     const boardId = rootState.boards.selectedBoard
     commit('setSelectedSprint', null)
-    service.getSprintsForBoard({ boardId }).then(sprints => {
+    service.getSprintsForBoard(boardId).then(sprints => {
       commit('pushSprints', [
         backlog,
         ...sprints.filter(sprint => sprint.state === 'active')
