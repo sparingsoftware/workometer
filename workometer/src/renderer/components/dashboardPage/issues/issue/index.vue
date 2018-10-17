@@ -10,7 +10,7 @@
 
 <script>
 import StatusBar from './statusBar'
-import Tracker from './tracker'
+import Tracker from './tracker/'
 
 export default {
   components: {
@@ -39,6 +39,7 @@ export default {
     }
     &__tracking {
       margin-left: 15px;
+      text-align: right;
     }
   }
 </style>

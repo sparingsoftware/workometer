@@ -10,6 +10,7 @@ const mutations = {
   startIssueTracking (state, issue) {
     state.issueTracked = issue
     state.trackingStartTime = moment()
+    console.log(state.trackingStartTime.format())
   },
   clearIssueTracked (state) {
     state.issueTracked = null

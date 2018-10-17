@@ -11,16 +11,22 @@
         class="fa fa-play-circle"
         @click="startTracking"
       />
-      <p v-if="issueTracked === issue">{{ trackedTime }}</p>
     </button>
+    <div v-if="issueTracked === issue" class="elapsed-time">
+      <elapsed-time/>
+    </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import ElapsedTime from './elapsedTime'
+import {mapState, mapMutations, mapActions} from 'vuex'
 
 export default {
+  components: {
+    ElapsedTime
+  },
   props: {
     issue: {
       type: Object,
@@ -79,16 +85,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.start-tracking-button {
-  padding: 0;
-  background: 0;
-  border: 0;
-  font-size: 40px;
-  color: #409EFF;
-  outline: none;
-  &:hover {
-    color: #86d8ff;
-    cursor: pointer;
+  .start-tracking-button {
+    padding: 0;
+    background: 0;
+    border: 0;
+    font-size: 40px;
+    color: #409EFF;
+    outline: none;
+    &:hover {
+      color: #86d8ff;
+      cursor: pointer;
+    }
   }
-}
+
+  .elapsed-time {
+    font-size: 20px;
+    font-weight: 700
+  }
 </style>
