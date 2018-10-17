@@ -19,10 +19,9 @@ const mutations = {
 }
 
 const actions = {
-  fetchBoards ({ commit }) {
-    service.getAllBoards({ type: 'scrum' }).then(boards => {
-      commit('pushBoards', boards)
-    })
+  async fetchBoards ({ commit }) {
+    const boards = await service.getAllBoards({ type: 'scrum' })
+    commit('pushBoards', boards)
   }
 }
 
