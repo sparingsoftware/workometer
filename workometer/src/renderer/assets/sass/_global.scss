@@ -1,5 +1,5 @@
 // global page rules
-* {
+*, *::after, *::before {
   box-sizing: border-box;
 }
 
@@ -51,4 +51,8 @@ body {
 
 .slide-left-leave-to {
   transform: translate(-100vw, 0);
+}
+
+.text-uppercase {
+  text-transform: uppercase;
 }

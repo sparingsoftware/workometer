@@ -1,6 +1,8 @@
 <template>
   <div>
-    <issue v-for="issue in issues" :key="issue.id" :issue="issue"/>
+    <transition-group name="el-fade-in">
+      <issue v-for="issue in issues" :key="issue.id" :issue="issue"/>
+    </transition-group>
   </div>
 </template>
 
