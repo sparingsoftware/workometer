@@ -9,7 +9,7 @@
       <i
         v-else
         class="fa fa-play-circle"
-        @click="startIssueTracking"
+        @click="startTracking"
       />
       <p v-if="issueTracked === issue">{{ trackedTime }}</p>
     </button>
@@ -18,6 +18,7 @@
 
 <script>
 import moment from 'moment'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   props: {
@@ -27,16 +28,25 @@ export default {
     }
   },
   computed: {
-    issueTracked () {
-      return this.$store.state.tracker.issueTracked
-    },
+    ...mapState({
+      issueTracked: state => state.tracker.issueTracked,
+      trackingStartTime: state => state.tracker.trackingStartTime
+    }),
     trackedTime () {
       // TODO: make it reactive
-      return moment().diff(this.$store.state.tracker.trackingStartTime, 'seconds')
+      return moment().diff(this.trackingStartTime, 'seconds')
     }
   },
   methods: {
-    startIssueTracking () {
+    ...mapMutations({
+      startIssueTracking: 'tracker/startIssueTracking',
+      clearIssueTracked: 'tracker/clearIssueTracked',
+      clearTrackingStartTime: 'tracker/clearTrackingStartTime'
+    }),
+    ...mapActions({
+      stopIssueTracking: 'tracker/stopIssueTracking'
+    }),
+    startTracking () {
       if (this.issueTracked) {
         this.$confirm('Another issue is already tracked. Do you want to save worklog and start another one?', 'Warning', {
           confirmButtonText: 'Yes',
@@ -44,22 +54,22 @@ export default {
           type: 'warning'
         }).then(() => {
           this.storeTrackingIssue()
-          this.$store.commit('tracker/startIssueTracking', this.issue)
+          this.startIssueTracking(this.issue)
         }).catch(() => {
         })
       } else {
-        this.$store.commit('tracker/startIssueTracking', this.issue)
+        this.startIssueTracking(this.issue)
       }
     },
     storeTrackingIssue () {
-      this.$store.dispatch('tracker/stopIssueTracking').then(response => {
+      this.stopIssueTracking().then(response => {
         this.$notify({
           title: 'Success',
           message: 'Worklog saved',
           type: 'success'
         })
-        this.$store.commit('tracker/setIssueTracked', null)
-        this.$store.commit('tracker/setTrackingStartTime', null)
+        this.clearIssueTracked()
+        this.clearTrackingStartTime()
       }).catch(err => {
         this.handleErrors(err)
       })
