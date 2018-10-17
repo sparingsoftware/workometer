@@ -37,25 +37,14 @@ export default {
   },
   methods: {
     submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          // Enable loading animation
-          this.isFormSending = true
-          // Dispatching event to the store
-          this.$store.dispatch('login', this.form).then(() => {
-            // Disabling loading animation
-            this.isFormSending = false
-            // Redirecting to the dashboard
-            this.$router.push({ name: 'dashboard' })
-          }).catch(err => {
-            // Handling errors
-            this.handleErrors(err)
-            // Disabling loading animation
-            this.isFormSending = false
-          })
-        } else {
-          return false
-        }
+      this.$refs[formName].validate(valid => {
+        if (!valid) return
+        this.isFormSending = true
+        this.$store.dispatch('login', this.form).then(() => {
+          this.$router.push({ name: 'dashboard' })
+        }).catch(this.handleErrors).finally(() => {
+          this.isFormSending = false
+        })
       })
     }
   }

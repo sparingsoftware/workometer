@@ -20,7 +20,7 @@ const mutations = {
 
 const actions = {
   fetchBoards ({ commit, dispatch }, payload) {
-    return Vue.jira.board.getAllBoards({ type: 'scrum', ...payload }).then(response => {
+    Vue.jira.board.getAllBoards({ type: 'scrum', ...payload }).then(response => {
       if (!response.isLast) {
         dispatch('fetchBoards', { startAt: response.maxResults + response.startAt })
       }
