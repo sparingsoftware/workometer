@@ -1,6 +1,5 @@
-# workometer
-
-> Electron based app to track tasks time
+# Work'o'meter
+Desktop time tracker for JIRA
 
 #### Build Setup
 
@@ -24,5 +23,3 @@ npm run lint
 ```
 
 ---
-
-This project was generated with [electron-vue](https://github.com/SimulatedGREG/electron-vue)@[cf53551](https://github.com/SimulatedGREG/electron-vue/tree/cf53551a209b49220525e7de80f1c541d7096aef) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about the original structure can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
