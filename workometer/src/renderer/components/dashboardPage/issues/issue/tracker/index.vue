@@ -19,9 +19,8 @@
 </template>
 
 <script>
-import moment from 'moment'
 import ElapsedTime from './elapsedTime'
-import {mapState, mapMutations, mapActions} from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -33,16 +32,10 @@ export default {
       default: () => ({})
     }
   },
-  computed: {
-    ...mapState({
-      issueTracked: state => state.tracker.issueTracked,
-      trackingStartTime: state => state.tracker.trackingStartTime
-    }),
-    trackedTime () {
-      // TODO: make it reactive
-      return moment().diff(this.trackingStartTime, 'seconds')
-    }
-  },
+  computed: mapState({
+    issueTracked: state => state.tracker.issueTracked,
+    trackingStartTime: state => state.tracker.trackingStartTime
+  }),
   methods: {
     ...mapMutations({
       startIssueTracking: 'tracker/startIssueTracking',
@@ -61,8 +54,7 @@ export default {
         }).then(() => {
           this.storeTrackingIssue()
           this.startIssueTracking(this.issue)
-        }).catch(() => {
-        })
+        }).catch(() => {})
       } else {
         this.startIssueTracking(this.issue)
       }
@@ -76,9 +68,7 @@ export default {
         })
         this.clearIssueTracked()
         this.clearTrackingStartTime()
-      }).catch(err => {
-        this.handleErrors(err)
-      })
+      }).catch(this.handleErrors)
     }
   }
 }

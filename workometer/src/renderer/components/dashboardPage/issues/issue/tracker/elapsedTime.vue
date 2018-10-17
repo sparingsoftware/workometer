@@ -6,25 +6,22 @@
 
 <script>
 import moment from 'moment'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   data () {
     return {
-      elapsedTime: null,
-      timer: null
+      elapsedTime: null
     }
   },
-  computed: {
-    ...mapState({
-      trackingStartTime: state => state.tracker.trackingStartTime
-    })
-  },
+  computed: mapState({
+    trackingStartTime: state => state.tracker.trackingStartTime
+  }),
   created () {
-    this.timer = setInterval(this.calculateElapsedTime, 1000)
-  },
-  beforeDestroy () {
-    clearInterval(this.timer)
+    const timerId = setInterval(this.calculateElapsedTime, 1000)
+    this.$once('hook:beforeDestroy', () => {
+      clearInterval(timerId)
+    })
   },
   methods: {
     calculateElapsedTime () {

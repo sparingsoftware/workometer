@@ -20,11 +20,14 @@ export default {
   },
   computed: {
     tagType () {
-      return {
+      const statusName = this.status.name.toLowerCase()
+      const statusTypeMap = {
         'done': 'success',
         'to do': 'info',
         'in progress': 'warning'
-      }[this.status.name.toLowerCase()] || 'danger'
+      }
+
+      return statusTypeMap[statusName] || 'danger'
     }
   }
 }

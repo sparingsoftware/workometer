@@ -12,7 +12,7 @@
         <el-option
           v-for="item in sprints"
           :key="item.id"
-          :label="`${item.name}`"
+          :label="item.name"
           :value="item.id"
         />
       </el-select>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   computed: {
@@ -38,7 +38,7 @@ export default {
       }
     }
   },
-  methods: mapMutations({setSelectedSprint: 'sprints/setSelectedSprint'})
+  methods: mapMutations({ setSelectedSprint: 'sprints/setSelectedSprint' })
 }
 </script>
 

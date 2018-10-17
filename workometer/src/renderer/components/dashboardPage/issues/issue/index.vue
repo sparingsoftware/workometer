@@ -30,7 +30,6 @@ export default {
   .issue {
     display: flex;
     justify-content: space-between;
-    box-sizing: border-box;
     padding: 20px 15px;
     border-top: 1px solid #e2e2e2;
     border-bottom: 1px solid #e2e2e2;
