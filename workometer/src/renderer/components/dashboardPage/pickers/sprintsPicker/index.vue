@@ -1,25 +1,27 @@
 <template>
   <div class="sprints-picker">
-    <el-select
-      v-if="sprints.length > 0"
-      v-model="selectedSprint"
-      class="fluid"
-      placeholder="Select sprint or backlog"
-      clearable
-      filterable
-    >
-      <el-option
-        v-for="item in sprints"
-        :key="item.id"
-        :label="`${item.name}`"
-        :value="item.id"
-      />
-    </el-select>
+    <transition name="el-fade-in">
+      <el-select
+        v-show="sprints.length > 0"
+        v-model="selectedSprint"
+        class="fluid"
+        placeholder="Select sprint or backlog"
+        clearable
+        filterable
+      >
+        <el-option
+          v-for="item in sprints"
+          :key="item.id"
+          :label="`${item.name}`"
+          :value="item.id"
+        />
+      </el-select>
+    </transition>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 
 export default {
   computed: {
@@ -36,7 +38,7 @@ export default {
       }
     }
   },
-  methods: mapMutations({ setSelectedSprint: 'sprints/setSelectedSprint' })
+  methods: mapMutations({setSelectedSprint: 'sprints/setSelectedSprint'})
 }
 </script>
 
