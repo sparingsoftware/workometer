@@ -20,9 +20,9 @@ const mutations = {
 
 const actions = {
   fetchBoards ({commit, dispatch}, payload) {
-    service.getAllBoards(
-      {type: 'scrum', ...payload}
-    ).then(boards => {
+    service.getAllBoards({
+      type: 'scrum', ...payload
+    }).then(boards => {
       commit('pushBoards', boards)
     })
   }

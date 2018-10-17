@@ -29,13 +29,16 @@ export default {
   },
   watch: {
     selectedSprint () {
-      this.fetchIssues()
+      this.fetchIssuesForSprint()
     },
     selectedBoard () {
-      this.fetchIssues()
+      this.fetchIssuesForBoard()
     }
   },
-  methods: mapActions({ fetchIssues: 'issues/fetchIssues' })
+  methods: mapActions({
+    fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
+    fetchIssuesForBoard: 'issues/fetchIssuesForBoard'
+  })
 }
 </script>
 
