@@ -1,5 +1,5 @@
-import Vue from 'vue'
 import uniqBy from 'lodash.uniqby'
+import service from '@/service'
 
 const state = {
   selectedSprint: null,
@@ -23,12 +23,11 @@ const actions = {
     const backlog = { name: 'Backlog', id: null }
     const boardId = rootState.boards.selectedBoard
     commit('setSelectedSprint', null)
-
-    return Vue.jira.board.getSprintsForBoard({ boardId }).then(response => {
-      if (!response.isLast) {
-        dispatch('fetchSprints', { startAt: response.maxResults + response.startAt })
-      }
-      commit('pushSprints', [backlog, ...response.values.filter(sprint => sprint.state === 'active')])
+    service.getSprintsForBoard({ boardId }).then(sprints => {
+      commit('pushSprints', [
+        backlog,
+        ...sprints.filter(sprint => sprint.state === 'active')
+      ])
     })
   }
 }

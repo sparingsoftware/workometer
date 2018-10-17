@@ -1,5 +1,5 @@
-import Vue from 'vue'
 import uniqBy from 'lodash.uniqby'
+import service from '@/service'
 
 const state = {
   selectedBoard: null,
@@ -19,12 +19,11 @@ const mutations = {
 }
 
 const actions = {
-  fetchBoards ({ commit, dispatch }, payload) {
-    Vue.jira.board.getAllBoards({ type: 'scrum', ...payload }).then(response => {
-      if (!response.isLast) {
-        dispatch('fetchBoards', { startAt: response.maxResults + response.startAt })
-      }
-      commit('pushBoards', response.values)
+  fetchBoards ({commit, dispatch}, payload) {
+    service.getAllBoards(
+      {type: 'scrum', ...payload}
+    ).then(boards => {
+      commit('pushBoards', boards)
     })
   }
 }
