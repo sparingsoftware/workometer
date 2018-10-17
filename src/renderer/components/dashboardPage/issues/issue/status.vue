@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <el-tag
-      size="mini"
-      :type="tagType"
-      class="text-uppercase status"
-    >
-      {{ status.name }}
-    </el-tag>
-  </div>
+  <el-tag
+    size="mini"
+    :type="tagType"
+    class="text-uppercase status"
+  >
+    {{ status.name }}
+  </el-tag>
 </template>
 
 <script>
