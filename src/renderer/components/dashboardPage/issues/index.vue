@@ -1,14 +1,14 @@
 <template>
   <div>
     <transition-group name="el-fade-in">
-      <issue v-for="issue in issues" :key="issue.id" :issue="issue"/>
+      <issue v-for="issue in getIssues" :key="issue.id" :issue="issue"/>
     </transition-group>
   </div>
 </template>
 
 <script>
 import issue from './issue/'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -17,15 +17,12 @@ export default {
   computed: {
     ...mapState({
       selectedSprint: state => state.sprints.selectedSprint,
-      selectedBoard: state => state.boards.selectedBoard,
-      issuesForSprint: state => state.issues.issuesForSprint,
-      issuesForBoard: state => state.issues.issuesForBoard
+      selectedBoard: state => state.boards.selectedBoard
     }),
-    issues () {
-      return this.selectedSprint
-        ? this.issuesForSprint[this.selectedSprint]
-        : this.issuesForBoard[this.selectedBoard]
-    }
+    ...mapGetters({
+      getIssues: 'issues/getIssues',
+      getFilteredIssues: 'filters/getFilteredIssues'
+    })
   },
   watch: {
     selectedSprint (id) {

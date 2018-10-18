@@ -15,6 +15,14 @@ const mutations = {
   }
 }
 
+const getters = {
+  getIssues (state, getters, rootState) {
+    return rootState.sprints.selectedSprint
+      ? state.issuesForSprint[rootState.sprints.selectedSprint]
+      : state.issuesForBoard[rootState.boards.selectedBoard]
+  }
+}
+
 const actions = {
   async fetchIssuesForBoard ({ commit }, id) {
     const issues = await service.getIssuesForBacklog(id)
@@ -30,5 +38,6 @@ export default {
   namespaced: true,
   state,
   mutations,
+  getters,
   actions
 }
