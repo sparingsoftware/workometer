@@ -1,18 +1,26 @@
 <template>
   <div>
+    <context-menu ref="menuWrapper"/>
     <transition-group name="el-fade-in">
-      <issue v-for="issue in issues" :key="issue.id" :issue="issue"/>
+      <issue
+        v-for="issue in issues"
+        :key="issue.id"
+        :issue="issue"
+        @contextmenu.native.prevent="openMenu($event, issue)"
+      />
     </transition-group>
   </div>
 </template>
 
 <script>
 import issue from './issue/'
+import ContextMenu from './contextMenu/'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   components: {
-    issue
+    issue,
+    ContextMenu
   },
   computed: {
     ...mapState({
@@ -35,10 +43,15 @@ export default {
       if (id) this.fetchIssuesForBoard(id)
     }
   },
-  methods: mapActions({
-    fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
-    fetchIssuesForBoard: 'issues/fetchIssuesForBoard'
-  })
+  methods: {
+    ...mapActions({
+      fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
+      fetchIssuesForBoard: 'issues/fetchIssuesForBoard'
+    }),
+    openMenu (event, issue) {
+      this.$refs.menuWrapper.$refs.menu.open(event, issue)
+    }
+  }
 }
 </script>
 
