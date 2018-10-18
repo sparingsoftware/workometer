@@ -1,18 +1,21 @@
 <template>
   <div>
     <transition-group name="el-fade-in">
-      <issue v-for="issue in getIssues" :key="issue.id" :issue="issue"/>
+      <search key="search"/>
+      <issue v-for="issue in getFilteredIssues" :key="issue.id" :issue="issue"/>
     </transition-group>
   </div>
 </template>
 
 <script>
 import issue from './issue/'
+import search from './search/'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
-    issue
+    issue,
+    search
   },
   computed: {
     ...mapState({
