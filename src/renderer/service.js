@@ -33,5 +33,8 @@ export default {
     request: payload => Vue.jira.board.getIssuesForBacklog(payload),
     payload: { maxResults: 500, boardId },
     flatMapKey: 'issues'
+  }),
+  login: creds => Vue.jira.auth.login(creds).then(res => {
+    Vue.jira.basic_auth = creds
   })
 }
