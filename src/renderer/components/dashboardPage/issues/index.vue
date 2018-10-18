@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition-group name="el-fade-in">
-      <search key="search"/>
+      <search key="search" class="search"/>
       <issue v-for="issue in getFilteredIssues" :key="issue.id" :issue="issue"/>
     </transition-group>
   </div>
@@ -43,5 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .search {
+    padding: 0 15px 15px;
+  }
 </style>
