@@ -2,10 +2,10 @@
   <div class="sprints-picker">
     <transition name="el-fade-in">
       <el-select
-        v-show="sprints.length > 0"
         v-model="selectedSprint"
+        :disabled="sprints.length === 0"
         class="fluid"
-        placeholder="Select sprint or backlog"
+        :placeholder="placeholder"
         clearable
         filterable
       >
@@ -29,6 +29,11 @@ export default {
       sprints: state => state.sprints.sprints,
       currentSprint: state => state.sprints.selectedSprint
     }),
+    placeholder () {
+      return this.sprints.length === 0
+        ? ''
+        : 'Select sprint or backlog'
+    },
     selectedSprint: {
       get () {
         return this.currentSprint
