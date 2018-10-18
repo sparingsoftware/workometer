@@ -18,14 +18,12 @@
 <script>
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
-import { mapActions, mapState } from 'vuex'
 import search from './search/'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
-    issue,
-    search
+    search,
     issue,
     ContextMenu
   },
