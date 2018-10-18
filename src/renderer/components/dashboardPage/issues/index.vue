@@ -1,14 +1,17 @@
 <template>
   <div>
     <context-menu ref="menuWrapper"/>
-    <transition-group name="el-fade-in">
-      <issue
-        v-for="issue in issues"
-        :key="issue.id"
-        :issue="issue"
-        @contextmenu.native.prevent="openMenu($event, issue)"
-      />
-    </transition-group>
+    <search key="search" class="search"/>
+    <div class="issues">
+      <transition-group name="el-fade-in">
+        <issue
+          v-for="issue in getFilteredIssues"
+          :key="issue.id"
+          :issue="issue"
+          @contextmenu.native.prevent="openMenu($event, issue)"
+        />
+      </transition-group>
+    </div>
   </div>
 </template>
 
@@ -16,24 +19,25 @@
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import { mapActions, mapState } from 'vuex'
+import search from './search/'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
+    issue,
+    search
     issue,
     ContextMenu
   },
   computed: {
     ...mapState({
       selectedSprint: state => state.sprints.selectedSprint,
-      selectedBoard: state => state.boards.selectedBoard,
-      issuesForSprint: state => state.issues.issuesForSprint,
-      issuesForBoard: state => state.issues.issuesForBoard
+      selectedBoard: state => state.boards.selectedBoard
     }),
-    issues () {
-      return this.selectedSprint
-        ? this.issuesForSprint[this.selectedSprint]
-        : this.issuesForBoard[this.selectedBoard]
-    }
+    ...mapGetters({
+      getIssues: 'issues/getIssues',
+      getFilteredIssues: 'filters/getFilteredIssues'
+    })
   },
   watch: {
     selectedSprint (id) {
@@ -56,5 +60,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .search {
+    padding: 0 15px 15px;
+  }
 
+  .issues {
+    height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
+    overflow-y: scroll;
+  }
 </style>

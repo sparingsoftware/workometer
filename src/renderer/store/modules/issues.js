@@ -1,17 +1,34 @@
 import Vue from 'vue'
 import service from '@/service'
+import deburr from 'lodash.deburr'
 
 const state = {
   issuesForSprint: {},
   issuesForBoard: {}
 }
 
+const addSearchableField = issue => ({
+  ...issue,
+  searchableField: deburr(issue.fields.summary + issue.key).toLowerCase()
+})
+
 const mutations = {
   setIssuesForBoard (state, payload) {
-    Vue.set(state.issuesForBoard, payload.id, payload.issues)
+    const issues = payload.issues.map(addSearchableField)
+    Vue.set(state.issuesForBoard, payload.id, issues)
   },
   setIssuesForSprint (state, payload) {
-    Vue.set(state.issuesForSprint, payload.id, payload.issues)
+    const issues = payload.issues.map(addSearchableField)
+    Vue.set(state.issuesForSprint, payload.id, issues)
+  }
+}
+
+const getters = {
+  getIssues (state, getters, rootState) {
+    const issues = rootState.sprints.selectedSprint
+      ? state.issuesForSprint[rootState.sprints.selectedSprint]
+      : state.issuesForBoard[rootState.boards.selectedBoard]
+    return issues || []
   }
 }
 
@@ -30,5 +47,6 @@ export default {
   namespaced: true,
   state,
   mutations,
+  getters,
   actions
 }
