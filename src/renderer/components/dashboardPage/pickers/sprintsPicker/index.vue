@@ -3,7 +3,7 @@
     <transition name="el-fade-in">
       <el-select
         v-model="selectedSprint"
-        :disabled="sprints.length === 0"
+        :disabled="!sprints.length"
         class="fluid"
         :placeholder="placeholder"
         clearable
@@ -30,9 +30,9 @@ export default {
       currentSprint: state => state.sprints.selectedSprint
     }),
     placeholder () {
-      return this.sprints.length === 0
-        ? ''
-        : 'Select sprint or backlog'
+      return this.sprints.length
+        ? 'Select sprint or backlog'
+        : ''
     },
     selectedSprint: {
       get () {

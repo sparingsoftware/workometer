@@ -12,7 +12,7 @@
 <script>
 import issue from './issue/'
 import search from './search/'
-import {mapActions, mapState, mapGetters} from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   components: {
