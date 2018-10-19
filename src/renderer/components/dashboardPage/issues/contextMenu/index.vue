@@ -67,5 +67,6 @@ export default {
   .separator {
     margin-left: 20px;
     cursor: default;
+    color: #939393;
   }
 </style>
