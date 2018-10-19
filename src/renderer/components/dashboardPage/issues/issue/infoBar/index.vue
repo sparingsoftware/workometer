@@ -64,6 +64,7 @@ export default {
       display: inline-block;
       vertical-align: middle;
       width: 30px;
+      margin-right: 6px;
     }
   }
 </style>
