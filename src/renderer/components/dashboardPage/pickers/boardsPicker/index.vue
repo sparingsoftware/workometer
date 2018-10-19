@@ -35,9 +35,12 @@ export default {
     }
   },
   watch: {
-    selectedBoardId () {
-      this.setSprints([])
-      this.fetchSprints()
+    selectedBoardId: {
+      immediate: true,
+      handler () {
+        this.setSprints([])
+        this.fetchSprints()
+      }
     }
   },
   created () {

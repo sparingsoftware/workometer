@@ -41,10 +41,13 @@ export default {
     selectedSprintId (id) {
       if (id) this.fetchIssuesForSprint(id)
     },
-    selectedBoardId (id) {
-      if (id) {
-        this.fetchIssuesForBoard(id)
-        this.fetchStatusesForProject()
+    selectedBoardId: {
+      immediate: true,
+      handler (id) {
+        if (id) {
+          this.fetchIssuesForBoard(id)
+          this.fetchStatusesForProject()
+        }
       }
     }
   },

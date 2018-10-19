@@ -22,6 +22,7 @@ const actions = {
   fetchSprints ({ commit, dispatch, rootState }) {
     const backlog = { name: 'Backlog', id: null }
     const boardId = rootState.boards.selectedBoardId
+    if (!boardId) return
     commit('setSelectedSprintId', null)
     service.getSprintsForBoard(boardId).then(sprints => {
       commit('pushSprints', [
