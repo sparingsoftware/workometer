@@ -35,7 +35,6 @@ export default {
 <style lang="scss" scoped>
   .v-context {
     border: 1px solid #e2e2e2 !important;
-    box-shadow: none !important;
     outline: none !important;
   }
 </style>
