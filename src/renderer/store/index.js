@@ -7,7 +7,10 @@ Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  reducer: state => ({ login: state.login })
+  reducer: state => ({
+    login: state.login,
+    boards: state.boards
+  })
 })
 
 export default new Vuex.Store({
