@@ -16,7 +16,6 @@
 <script>
 import Tracker from './tracker/'
 import InfoBar from './infoBar/'
-import open from 'open'
 
 export default {
   components: {
@@ -27,11 +26,6 @@ export default {
     issue: {
       type: Object,
       default: () => ({})
-    }
-  },
-  methods: {
-    openInBrowser (url) {
-      open(url)
     }
   }
 }

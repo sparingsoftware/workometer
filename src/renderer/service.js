@@ -33,5 +33,16 @@ export default {
     request: payload => Vue.jira.board.getIssuesForBacklog(payload),
     payload: { maxResults: 500, boardId },
     flatMapKey: 'issues'
-  })
+  }),
+  setIssueStatus: async (issue, status) => {
+    const transitions = await Vue.jira.issue.getTransitions({ issueId: issue.id })
+    const statusTransition = transitions.transitions.find(transition => transition.name === status.name)
+    if (!statusTransition) return
+    return Vue.jira.issue.transitionIssue({
+      issueId: issue.id,
+      transition: {
+        id: statusTransition.id
+      }
+    })
+  }
 }

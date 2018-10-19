@@ -40,6 +40,9 @@ const actions = {
   async fetchIssuesForSprint ({ commit }, id) {
     const issues = await service.getIssuesForSprint(id)
     commit('setIssuesForSprint', { id, issues })
+  },
+  setIssueStatus ({ commit }, {issue, status}) {
+    return service.setIssueStatus(issue, status)
   }
 }
 

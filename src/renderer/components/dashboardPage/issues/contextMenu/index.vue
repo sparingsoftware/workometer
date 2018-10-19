@@ -3,9 +3,18 @@
     <vue-context ref="menu">
       <ul slot-scope="child" class="actions">
         <p class="separator">Actions</p>
-        <li @click="logWork(child.data)">Log Work</li>
+        <li
+          @click="logWork(child.data)"
+        >
+          Log Work
+        </li>
         <p class="separator">Change status</p>
-        <li v-for="status in statuses(child.data)">{{ status.name }}</li>
+        <li
+          v-for="status in statuses(child.data)"
+          @click="setIssueStatus({ issue: child.data, status })"
+        >
+          {{ status.name }}
+        </li>
       </ul>
     </vue-context>
     <log-work-dialog ref="logWorkDialog"/>
@@ -13,7 +22,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { VueContext } from 'vue-context'
 import LogWorkDialog from './actions/logWorkDialog/'
 
@@ -34,6 +43,9 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      setIssueStatus: 'issues/setIssueStatus'
+    }),
     logWork (issue) {
       this.$refs.logWorkDialog.logWork(issue)
     },
@@ -51,6 +63,7 @@ export default {
     border: 1px solid #e2e2e2 !important;
     outline: none !important;
   }
+
   .separator {
     margin-left: 20px;
     cursor: default;
