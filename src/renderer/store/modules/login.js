@@ -1,7 +1,8 @@
 import Vue from 'vue'
 
 const state = {
-  basic_auth: null
+  basic_auth: null,
+  host: 'panowie.atlassian.net'
 }
 
 const getters = {

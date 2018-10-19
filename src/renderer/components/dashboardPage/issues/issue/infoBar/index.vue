@@ -4,9 +4,9 @@
     <status class="issue__status" :status="issue.fields.status"/>
     <a
       class="issue__link"
-      @click="openInBrowser(issue.self)"
+      @click="openInBrowser(issue.key)"
     >
-      <i class="fa-external-link" title="Go to issue on Jira"/>
+      <i class="fa fa-external-link" title="Go to issue on Jira"/>
     </a>
   </div>
 </template>
@@ -14,6 +14,7 @@
 <script>
 import Status from './status'
 import open from 'open'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -25,9 +26,11 @@ export default {
       default: () => ({})
     }
   },
+  computed: mapState({ host: state => state.login.host }),
   methods: {
-    openInBrowser (url) {
-      open(url)
+    openInBrowser (issueKey) {
+      const link = `http://${this.host}/browse/${issueKey}`
+      open(link)
     }
   }
 }
