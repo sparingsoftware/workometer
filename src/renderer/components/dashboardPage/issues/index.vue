@@ -29,8 +29,8 @@ export default {
   },
   computed: {
     ...mapState({
-      selectedSprint: state => state.sprints.selectedSprint,
-      selectedBoard: state => state.boards.selectedBoard
+      selectedSprintId: state => state.sprints.selectedSprintId,
+      selectedBoardId: state => state.boards.selectedBoardId
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues',
@@ -38,17 +38,21 @@ export default {
     })
   },
   watch: {
-    selectedSprint (id) {
+    selectedSprintId (id) {
       if (id) this.fetchIssuesForSprint(id)
     },
-    selectedBoard (id) {
-      if (id) this.fetchIssuesForBoard(id)
+    selectedBoardId (id) {
+      if (id) {
+        this.fetchIssuesForBoard(id)
+        this.fetchStatusesForProject()
+      }
     }
   },
   methods: {
     ...mapActions({
       fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
-      fetchIssuesForBoard: 'issues/fetchIssuesForBoard'
+      fetchIssuesForBoard: 'issues/fetchIssuesForBoard',
+      fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
     }),
     openMenu (event, issue) {
       this.$refs.menuWrapper.$refs.menu.open(event, issue)

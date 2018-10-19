@@ -2,7 +2,7 @@
   <div class="sprints-picker">
     <transition name="el-fade-in">
       <el-select
-        v-model="selectedSprint"
+        v-model="selectedSprintId"
         :disabled="!sprints.length"
         class="fluid"
         :placeholder="placeholder"
@@ -27,23 +27,23 @@ export default {
   computed: {
     ...mapState({
       sprints: state => state.sprints.sprints,
-      currentSprint: state => state.sprints.selectedSprint
+      currentSprint: state => state.sprints.selectedSprintId
     }),
     placeholder () {
       return this.sprints.length
         ? 'Select sprint or backlog'
         : ''
     },
-    selectedSprint: {
+    selectedSprintId: {
       get () {
         return this.currentSprint
       },
       set (value) {
-        this.setSelectedSprint(value)
+        this.setSelectedSprintId(value)
       }
     }
   },
-  methods: mapMutations({ setSelectedSprint: 'sprints/setSelectedSprint' })
+  methods: mapMutations({ setSelectedSprintId: 'sprints/setSelectedSprintId' })
 }
 </script>
 

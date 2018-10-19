@@ -2,13 +2,13 @@ import uniqBy from 'lodash.uniqby'
 import service from '@/service'
 
 const state = {
-  selectedSprint: null,
+  selectedSprintId: null,
   sprints: []
 }
 
 const mutations = {
-  setSelectedSprint (state, sprint) {
-    state.selectedSprint = sprint
+  setSelectedSprintId (state, sprintId) {
+    state.selectedSprintId = sprintId
   },
   pushSprints (state, sprints) {
     state.sprints = uniqBy([...state.sprints, ...sprints], s => s.name)
@@ -21,8 +21,8 @@ const mutations = {
 const actions = {
   fetchSprints ({ commit, dispatch, rootState }) {
     const backlog = { name: 'Backlog', id: null }
-    const boardId = rootState.boards.selectedBoard
-    commit('setSelectedSprint', null)
+    const boardId = rootState.boards.selectedBoardId
+    commit('setSelectedSprintId', null)
     service.getSprintsForBoard(boardId).then(sprints => {
       commit('pushSprints', [
         backlog,

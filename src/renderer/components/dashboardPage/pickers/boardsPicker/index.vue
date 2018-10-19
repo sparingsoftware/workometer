@@ -1,7 +1,7 @@
 <template>
   <div class="boards-picker">
     <el-select
-      v-model="selectedBoard"
+      v-model="selectedBoardId"
       class="fluid"
       placeholder="Select board"
       filterable
@@ -23,9 +23,9 @@ export default {
   computed: {
     ...mapState({
       boards: state => state.boards.boards,
-      currentBoard: state => state.boards.selectedBoard
+      currentBoard: state => state.boards.selectedBoardId
     }),
-    selectedBoard: {
+    selectedBoardId: {
       get () {
         return this.currentBoard
       },
@@ -35,7 +35,7 @@ export default {
     }
   },
   watch: {
-    selectedBoard () {
+    selectedBoardId () {
       this.setSprints([])
       this.fetchSprints()
     }

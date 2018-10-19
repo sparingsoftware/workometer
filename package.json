@@ -62,6 +62,8 @@
     "font-awesome": "^4.7.0",
     "jira-connector": "^2.9.0",
     "lodash.deburr": "^4.1.0",
+    "lodash.keyby": "^4.6.0",
+    "lodash.mapvalues": "^4.6.0",
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.22.2",
     "open": "0.0.5",

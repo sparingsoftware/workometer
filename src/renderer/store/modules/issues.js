@@ -25,9 +25,9 @@ const mutations = {
 
 const getters = {
   getIssues (state, getters, rootState) {
-    const issues = rootState.sprints.selectedSprint
-      ? state.issuesForSprint[rootState.sprints.selectedSprint]
-      : state.issuesForBoard[rootState.boards.selectedBoard]
+    const issues = rootState.sprints.selectedSprintId
+      ? state.issuesForSprint[rootState.sprints.selectedSprintId]
+      : state.issuesForBoard[rootState.boards.selectedBoardId]
     return issues || []
   }
 }
