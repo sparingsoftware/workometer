@@ -1,5 +1,11 @@
 <template>
   <div class="issue__info">
+    <img
+      v-if="issue.fields.assignee"
+      class="issue__avatar"
+      :src="issue.fields.assignee.avatarUrls['48x48']"
+      :title="issue.fields.assignee.displayName"
+    >
     <img class="issue__icon" :src="issue.fields.issuetype.iconUrl" :title="issue.fields.issuetype.name">
     <status class="issue__status" :status="issue.fields.status"/>
     <a
@@ -53,6 +59,11 @@ export default {
       vertical-align: middle;
       font-size: 16px;
       cursor: pointer;
+    }
+    &__avatar {
+      display: inline-block;
+      vertical-align: middle;
+      width: 30px;
     }
   }
 </style>
