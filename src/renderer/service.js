@@ -44,5 +44,8 @@ export default {
         id: statusTransition.id
       }
     })
+  },
+  getIssue: payload => {
+    return Vue.jira.issue.getIssue(payload)
   }
 }

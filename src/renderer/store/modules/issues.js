@@ -20,6 +20,9 @@ const mutations = {
   setIssuesForSprint (state, payload) {
     const issues = payload.issues.map(addSearchableField)
     Vue.set(state.issuesForSprint, payload.id, issues)
+  },
+  updateIssue (state, { oldIssue, newIssue }) {
+    Object.assign(oldIssue, newIssue)
   }
 }
 
@@ -41,8 +44,10 @@ const actions = {
     const issues = await service.getIssuesForSprint(id)
     commit('setIssuesForSprint', { id, issues })
   },
-  setIssueStatus ({ commit }, {issue, status}) {
-    return service.setIssueStatus(issue, status)
+  async setIssueStatus ({ commit }, { issue, status }) {
+    await service.setIssueStatus(issue, status)
+    const updatedIssue = await service.getIssue({ issueId: issue.id })
+    commit('updateIssue', { oldIssue: issue, newIssue: updatedIssue })
   }
 }
 
