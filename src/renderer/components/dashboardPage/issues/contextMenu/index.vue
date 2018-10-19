@@ -1,7 +1,7 @@
 <template>
   <div>
     <vue-context ref="menu">
-      <ul slot-scope="child">
+      <ul slot-scope="child" class="actions">
         <li @click="logWork(child.data)">Log Work</li>
       </ul>
     </vue-context>
@@ -33,4 +33,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .v-context {
+    border: 1px solid #e2e2e2 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
 </style>
