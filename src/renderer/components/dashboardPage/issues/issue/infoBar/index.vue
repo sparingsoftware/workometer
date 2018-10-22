@@ -4,7 +4,7 @@
       v-if="issue.fields.assignee"
       class="issue__avatar"
       :src="issue.fields.assignee.avatarUrls['48x48']"
-      :title="issue.fields.assignee.displayName"
+      :title="`Assignee: ${issue.fields.assignee.displayName}`"
     >
     <img class="issue__icon" :src="issue.fields.issuetype.iconUrl" :title="issue.fields.issuetype.name">
     <status class="issue__status" :status="issue.fields.status"/>
@@ -65,6 +65,7 @@ export default {
       vertical-align: middle;
       width: 30px;
       margin-right: 6px;
+      border-radius: 50%;
     }
   }
 </style>
