@@ -3,7 +3,8 @@ import deburr from 'lodash.deburr'
 const state = {
   query: '',
   statuses: [],
-  issueTypes: []
+  issueTypes: [],
+  issueAssignee: null
 }
 
 const mutations = {
@@ -15,6 +16,9 @@ const mutations = {
   },
   setIssueTypeFilter (state, issueTypes) {
     state.issueTypes = issueTypes
+  },
+  setIssueAssigneeFilter (state, assigneeAccountId) {
+    state.issueAssignee = assigneeAccountId
   }
 }
 
@@ -35,12 +39,19 @@ const filterByIssueTypes = types => issue => {
     : true
 }
 
+const filterByAssignee = assigneeAccountId => issue => {
+  return assigneeAccountId
+    ? issue.fields.assignee && issue.fields.assignee.accountId === assigneeAccountId
+    : true
+}
+
 const getters = {
   getFilteredIssues (state, getters, rootState, rootGetters) {
     const issues = rootGetters['issues/getIssues']
     return issues.filter(filterByQuery(state.query))
       .filter(filterByStatuses(state.statuses))
       .filter(filterByIssueTypes(state.issueTypes))
+      .filter(filterByAssignee(state.issueAssignee))
   }
 }
 
