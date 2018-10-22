@@ -1,7 +1,11 @@
 <template>
   <div>
+    <filters ref="filtersDialog"/>
     <context-menu ref="contextMenu"/>
-    <search key="search" class="search"/>
+    <search class="search"/>
+    <el-button class="filters-button" @click="setFilters">
+      <i class="fa fa-filter"/>
+    </el-button>
     <div class="issues">
       <transition-group name="el-fade-in">
         <issue
@@ -20,12 +24,14 @@ import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import search from './search/'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import filters from './filters/'
 
 export default {
   components: {
     search,
     issue,
-    ContextMenu
+    ContextMenu,
+    filters
   },
   computed: {
     ...mapState({
@@ -59,6 +65,9 @@ export default {
     }),
     openMenu (event, issue) {
       this.$refs.contextMenu.$refs.vueContext.open(event, issue)
+    },
+    setFilters () {
+      this.$refs.filtersDialog.openFiltersDialog()
     }
   }
 }
@@ -67,6 +76,12 @@ export default {
 <style lang="scss" scoped>
   .search {
     padding: 0 15px 15px;
+    display: inline-block;
+    width: 88%;
+  }
+
+  .filters-button {
+    display: inline-block;
   }
 
   .issues {
