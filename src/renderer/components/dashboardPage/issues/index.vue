@@ -2,12 +2,19 @@
   <div>
     <filters ref="filtersDialog"/>
     <context-menu ref="contextMenu"/>
-    <search class="search"/>
-    <el-badge :hidden="!filtersSet" is-dot>
-      <el-button class="filters-button" title="Set filters" @click="setFilters">
-        <i class="fa fa-filter"/>
-      </el-button>
-    </el-badge>
+    <div class="filters-bar">
+      <search class="search"/>
+      <el-badge :hidden="!filtersSet" is-dot>
+        <el-button
+          class="filters-button"
+          title="Set filters"
+          :type="filtersSet ? 'primary' : ''"
+          @click="setFilters"
+        >
+          <i class="fa fa-filter"/>
+        </el-button>
+      </el-badge>
+    </div>
     <div class="issues">
       <transition-group name="el-fade-in">
         <issue
@@ -77,14 +84,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .search {
+  .filters-bar {
     padding: 0 15px 15px;
-    display: inline-block;
-    width: 88%;
+    display: flex;
+    justify-content: space-between;
   }
 
-  .filters-button {
-    display: inline-block;
+  .search {
+    width: 100%;
+    margin-right: 15px;
   }
 
   .issues {
