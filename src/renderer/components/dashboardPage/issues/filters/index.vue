@@ -7,6 +7,11 @@
             <el-checkbox v-for="status in availableStatuses" :key="status" :label="status"/>
           </el-checkbox-group>
         </el-form-item>
+        <el-form-item label="Task type">
+          <el-checkbox-group v-model="taskTypesSelected">
+            <el-checkbox v-for="task in availableTaskTypes" :key="task" :label="task"/>
+          </el-checkbox-group>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
@@ -27,7 +32,8 @@ export default {
   },
   computed: {
     ...mapState({
-      statusesSelected: state => state.filters.statuses
+      storeStatuses: state => state.filters.statuses,
+      storeTaskTypes: state => state.filters.taskTypes
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues'
@@ -36,18 +42,31 @@ export default {
       const statuses = this.getIssues.map(issue => issue.fields.status.name)
       return [...new Set(statuses)]
     },
+    availableTaskTypes () {
+      const types = this.getIssues.map(issue => issue.fields.issuetype.name)
+      return [...new Set(types)]
+    },
     selectedStatuses: {
       get () {
-        return this.statusesSelected
+        return this.storeStatuses
       },
       set (value) {
         this.setStatusesFilter(value)
+      }
+    },
+    taskTypesSelected: {
+      get () {
+        return this.storeTaskTypes
+      },
+      set (value) {
+        this.setTaskTypeFilter(value)
       }
     }
   },
   methods: {
     ...mapMutations({
-      setStatusesFilter: 'filters/setStatusesFilter'
+      setStatusesFilter: 'filters/setStatusesFilter',
+      setTaskTypeFilter: 'filters/setTaskTypeFilter'
     }),
     openFiltersDialog () {
       this.dialogVisible = true
