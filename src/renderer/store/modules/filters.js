@@ -20,7 +20,9 @@ const filterByQuery = query => issue => {
 }
 
 const filterByStatuses = statuses => issue => {
-  return statuses.includes(issue.fields.status.name)
+  return statuses.length
+    ? statuses.includes(issue.fields.status.name)
+    : true
 }
 
 const getters = {

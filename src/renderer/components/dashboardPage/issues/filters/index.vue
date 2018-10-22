@@ -3,10 +3,8 @@
     <el-dialog title="Set filters" :visible.sync="dialogVisible" width="80vw">
       <el-form>
         <el-form-item label="Status">
-          x: {{ x }}
-
           <el-checkbox-group v-model="selectedStatuses">
-            <el-checkbox v-for="status in statuses" :key="status" :label="status"/>
+            <el-checkbox v-for="status in availableStatuses" :key="status" :label="status"/>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -29,20 +27,21 @@ export default {
   },
   computed: {
     ...mapState({
-      statusesFilter: 'filters/statuses'
+      statusesSelected: state => state.filters.statuses
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues'
     }),
-    statuses () {
+    availableStatuses () {
       const statuses = this.getIssues.map(issue => issue.fields.status.name)
       return [...new Set(statuses)]
     },
     selectedStatuses: {
       get () {
-        return this.selectedStatuses
+        return this.statusesSelected
       },
       set (value) {
+        this.setStatusesFilter(value)
       }
     }
   },
