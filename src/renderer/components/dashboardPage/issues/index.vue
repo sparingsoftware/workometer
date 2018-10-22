@@ -3,9 +3,11 @@
     <filters ref="filtersDialog"/>
     <context-menu ref="contextMenu"/>
     <search class="search"/>
-    <el-button class="filters-button" @click="setFilters">
-      <i class="fa fa-filter"/>
-    </el-button>
+    <el-badge :hidden="!filtersSet" is-dot>
+      <el-button class="filters-button" title="Set filters" @click="setFilters">
+        <i class="fa fa-filter"/>
+      </el-button>
+    </el-badge>
     <div class="issues">
       <transition-group name="el-fade-in">
         <issue
@@ -40,7 +42,8 @@ export default {
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues',
-      getFilteredIssues: 'filters/getFilteredIssues'
+      getFilteredIssues: 'filters/getFilteredIssues',
+      filtersSet: 'filters/filtersSet'
     })
   },
   watch: {

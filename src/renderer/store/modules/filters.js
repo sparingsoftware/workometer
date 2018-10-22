@@ -52,6 +52,9 @@ const getters = {
       .filter(filterByStatuses(state.statuses))
       .filter(filterByIssueTypes(state.issueTypes))
       .filter(filterByAssignee(state.issueAssignee))
+  },
+  filtersSet (state) {
+    return state.statuses.length || state.issueTypes.length || state.issueAssignee
   }
 }
 
