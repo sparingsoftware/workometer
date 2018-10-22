@@ -5,6 +5,6 @@ const auth = store.state.login.basic_auth
 const host = store.state.login.host
 
 export default new JiraClient({
-  host,
-  ...auth && { basic_auth: auth }
+  ...auth && { basic_auth: auth },
+  host
 })

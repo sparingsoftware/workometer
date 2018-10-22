@@ -34,18 +34,19 @@ export default {
     payload: { maxResults: 500, boardId },
     flatMapKey: 'issues'
   }),
-  setIssueStatus: async (issue, status) => {
-    const transitions = await Vue.jira.issue.getTransitions({ issueId: issue.id })
-    const statusTransition = transitions.transitions.find(transition => transition.name === status.name)
+  setIssueStatus: async (issueId, statusName) => {
+    const { transitions } = await Vue.jira.issue.getTransitions({ issueId })
+    const statusTransition = transitions.find(transition => transition.name === statusName)
     if (!statusTransition) return
     return Vue.jira.issue.transitionIssue({
-      issueId: issue.id,
-      transition: {
-        id: statusTransition.id
-      }
+      transition: { id: statusTransition.id },
+      issueId
     })
   },
   getIssue: payload => {
     return Vue.jira.issue.getIssue(payload)
+  },
+  getStatuses: projectIdOrKey => {
+    return Vue.jira.project.getStatuses({ projectIdOrKey })
   }
 }

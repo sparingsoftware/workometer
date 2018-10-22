@@ -20,7 +20,7 @@ const mutations = {
 }
 
 const actions = {
-  stopIssueTracking ({ commit, dispatch, state }) {
+  stopIssueTracking ({ commit, state }) {
     const differenceInSeconds = moment().diff(state.trackingStartTime, 'seconds')
     // TODO; return if difference under 60 sec
     return Vue.jira.issue.addWorkLog({

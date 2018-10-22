@@ -1,11 +1,9 @@
 <template>
   <div>
-    <vue-context ref="menu">
+    <vue-context ref="vueContext">
       <ul slot-scope="child" class="actions">
         <p class="separator">Actions</p>
-        <li
-          @click="logWork(child.data)"
-        >
+        <li @click="logWork(child.data)">
           Log Work
         </li>
         <p class="separator">Change status</p>

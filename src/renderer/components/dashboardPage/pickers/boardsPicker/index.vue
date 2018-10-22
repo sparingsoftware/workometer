@@ -38,7 +38,6 @@ export default {
     selectedBoardId: {
       immediate: true,
       handler () {
-        this.setSprints([])
         this.fetchSprints()
       }
     }

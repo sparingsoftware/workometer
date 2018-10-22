@@ -1,6 +1,6 @@
 <template>
   <div>
-    <context-menu ref="menuWrapper"/>
+    <context-menu ref="contextMenu"/>
     <search key="search" class="search"/>
     <div class="issues">
       <transition-group name="el-fade-in">
@@ -58,7 +58,7 @@ export default {
       fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
     }),
     openMenu (event, issue) {
-      this.$refs.menuWrapper.$refs.menu.open(event, issue)
+      this.$refs.contextMenu.$refs.vueContext.open(event, issue)
     }
   }
 }

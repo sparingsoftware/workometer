@@ -22,7 +22,7 @@ const mutations = {
     Vue.set(state.issuesForSprint, payload.id, issues)
   },
   updateIssue (state, { oldIssue, newIssue }) {
-    Object.assign(oldIssue, newIssue)
+    /* This is a state mutation! */ Object.assign(oldIssue, newIssue)
   }
 }
 
@@ -45,7 +45,7 @@ const actions = {
     commit('setIssuesForSprint', { id, issues })
   },
   async setIssueStatus ({ commit }, { issue, status }) {
-    await service.setIssueStatus(issue, status)
+    await service.setIssueStatus(issue.id, status.name)
     const updatedIssue = await service.getIssue({ issueId: issue.id })
     commit('updateIssue', { oldIssue: issue, newIssue: updatedIssue })
   }

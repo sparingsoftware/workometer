@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import keyBy from 'lodash.keyby'
 import mapValues from 'lodash.mapvalues'
 import service from '@/service'
@@ -10,7 +9,7 @@ const state = {
 }
 
 const mutations = {
-  pushBoards (state, boards) {
+  setBoards (state, boards) {
     state.boards = boards
   },
   setSelectedBoard (state, boardId) {
@@ -25,12 +24,12 @@ const mutations = {
 const actions = {
   async fetchBoards ({ commit }) {
     const boards = await service.getAllBoards({ type: 'scrum' })
-    commit('pushBoards', boards)
+    commit('setBoards', boards)
   },
   async fetchStatusesForSelectedBoard ({ commit, state }) {
     const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
     const projectId = selectedBoard.location.projectId
-    const statuses = await Vue.jira.project.getStatuses({ projectIdOrKey: projectId })
+    const statuses = await service.getStatuses(projectId)
     commit('setStatusesMap', statuses)
   }
 }

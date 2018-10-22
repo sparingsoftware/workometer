@@ -4,9 +4,10 @@
     :class="{'issue--subtask': issue.fields.issuetype.subtask}"
   >
     <div class="issue__details">
-      <p class="issue__title">
-        <strong>{{ issue.key }}</strong> {{ issue.fields.summary }}
-      </p>
+      <div class="issue__key">{{ issue.key }}</div>
+      <div class="issue__description">
+        {{ issue.fields.summary }}
+      </div>
       <info-bar :issue="issue"/>
     </div>
     <tracker class="issue__tracking" :issue="issue"/>
@@ -44,8 +45,11 @@ export default {
     &--subtask {
       padding: 10px 15px 10px 40px;
     }
-    &__title {
-      margin: 0;
+    &__key {
+      font-weight: 700;
+    }
+    &__description {
+      margin: 0 0 5px;
     }
     &__tracking {
       margin-left: 15px;

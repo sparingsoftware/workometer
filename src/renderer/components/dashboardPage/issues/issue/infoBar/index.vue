@@ -8,10 +8,7 @@
     >
     <img class="issue__icon" :src="issue.fields.issuetype.iconUrl" :title="issue.fields.issuetype.name">
     <status class="issue__status" :status="issue.fields.status"/>
-    <a
-      class="issue__link"
-      @click="openInBrowser(issue.key)"
-    >
+    <a class="issue__link" @click="openInBrowser(issue.key)">
       <i class="fa fa-external-link" title="Go to issue on Jira"/>
     </a>
   </div>
@@ -35,8 +32,7 @@ export default {
   computed: mapState({ host: state => state.login.host }),
   methods: {
     openInBrowser (issueKey) {
-      const link = `http://${this.host}/browse/${issueKey}`
-      open(link)
+      open(`http://${this.host}/browse/${issueKey}`)
     }
   }
 }
@@ -53,9 +49,6 @@ export default {
       margin-right: 5px;
     }
     &__link {
-      & i {
-        font-style: normal;
-      }
       vertical-align: middle;
       font-size: 16px;
       cursor: pointer;
