@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div class="tracker">
+    <transition name="el-fade-in">
+      <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
+    </transition>
     <button class="start-tracking-button">
       <i
-        v-if="issueTracked === issue"
+        v-if="isIssueTracked"
         class="fa fa-stop-circle"
         @click="storeTrackingIssue"
       />
@@ -12,9 +15,6 @@
         @click="startTracking"
       />
     </button>
-    <div v-if="issueTracked === issue" class="elapsed-time">
-      <elapsed-time/>
-    </div>
   </div>
 </template>
 
@@ -32,10 +32,15 @@ export default {
       default: () => ({})
     }
   },
-  computed: mapState({
-    issueTracked: state => state.tracker.issueTracked,
-    trackingStartTime: state => state.tracker.trackingStartTime
-  }),
+  computed: {
+    ...mapState({
+      issueTracked: state => state.tracker.issueTracked,
+      trackingStartTime: state => state.tracker.trackingStartTime
+    }),
+    isIssueTracked () {
+      return this.issueTracked && this.issueTracked.id === this.issue.id
+    }
+  },
   methods: {
     ...mapMutations({
       startIssueTracking: 'tracker/startIssueTracking',
@@ -54,7 +59,8 @@ export default {
         }).then(() => {
           this.storeTrackingIssue()
           this.startIssueTracking(this.issue)
-        }).catch(() => {})
+        }).catch(() => {
+        })
       } else {
         this.startIssueTracking(this.issue)
       }
@@ -75,6 +81,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .tracker {
+    display: flex;
+    align-items: center;
+  }
+
   .start-tracking-button {
     padding: 0;
     background: 0;
@@ -90,6 +101,7 @@ export default {
 
   .elapsed-time {
     font-size: 20px;
-    font-weight: 700
+    display: inline-block;
+    margin-right: 8px;
   }
 </style>
