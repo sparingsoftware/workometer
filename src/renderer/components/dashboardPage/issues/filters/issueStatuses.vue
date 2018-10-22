@@ -11,11 +11,11 @@ import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters({
-      getIssues: 'issues/getIssues'
-    }),
     ...mapState({
       storeStatuses: state => state.filters.statuses
+    }),
+    ...mapGetters({
+      getIssues: 'issues/getIssues'
     }),
     availableStatuses () {
       const statuses = this.getIssues.map(issue => issue.fields.status.name)
