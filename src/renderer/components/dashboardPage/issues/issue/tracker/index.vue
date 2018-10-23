@@ -48,7 +48,7 @@ export default {
     },
     saveAllowed () {
       const secondsElapsed = +this.elapsedTime / 1000
-      return secondsElapsed < 60
+      return secondsElapsed > 60
     }
   },
   methods: {
@@ -76,12 +76,15 @@ export default {
           confirmButtonText: 'Yes',
           cancelButtonText: 'No',
           type: 'warning'
-        }).then(() => {
-        if (this.saveAllowed) {
-          this.stopIssueTracking()
-        }
-        this.startIssueTracking(this.issue)
-      }).catch(() => {
+        })
+        .then(() => {
+          if (this.saveAllowed) {
+            this.stopIssueTracking()
+          } else {
+            this.clearTracker()
+          }
+          this.startIssueTracking(this.issue)
+        }).catch(() => {
       })
     },
     startTracking () {
@@ -92,20 +95,23 @@ export default {
       }
     },
     stopIssueTracking () {
-      if (this.saveAllowed) {
+      if (!this.saveAllowed) {
         this.confirmationBelow60Seconds()
       } else {
-        this.loading = true
-        this.saveWorklog().then(response => {
-          this.$notify({
-            title: 'Success',
-            message: 'Worklog saved',
-            type: 'success'
-          })
-          this.loading = false
-          this.clearTracker()
-        }).catch(this.handleErrors)
+        this.storeWorklog()
       }
+    },
+    storeWorklog () {
+      this.loading = true
+      this.saveWorklog().then(response => {
+        this.$notify({
+          title: 'Success',
+          message: 'Worklog saved',
+          type: 'success'
+        })
+        this.loading = false
+        this.clearTracker()
+      }).catch(this.handleErrors)
     },
     clearTracker () {
       this.clearIssueTracked()
