@@ -1,22 +1,23 @@
 <template>
   <div>
-    {{ elapsedTime }}
+    {{ formattedElapsedTime }}
   </div>
 </template>
 
 <script>
 import moment from 'moment'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
-  data () {
-    return {
-      elapsedTime: null
+  computed: {
+    ...mapState({
+      trackingStartTime: state => state.tracker.trackingStartTime,
+      elapsedTime: state => state.tracker.elapsedTime
+    }),
+    formattedElapsedTime () {
+      return this.elapsedTime && this.elapsedTime.format('HH:mm:ss')
     }
   },
-  computed: mapState({
-    trackingStartTime: state => state.tracker.trackingStartTime
-  }),
   created () {
     const timerId = setInterval(this.calculateElapsedTime, 1000)
     this.$once('hook:beforeDestroy', () => {
@@ -24,8 +25,11 @@ export default {
     })
   },
   methods: {
+    ...mapMutations({
+      setElapsedTime: 'tracker/setElapsedTime'
+    }),
     calculateElapsedTime () {
-      this.elapsedTime = moment.utc(moment().diff(this.trackingStartTime)).format('HH:mm:ss')
+      this.setElapsedTime(moment.utc(moment().diff(this.trackingStartTime)))
     }
   }
 }

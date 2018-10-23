@@ -7,7 +7,7 @@
       <i
         v-if="isIssueTracked"
         class="fa fa-stop-circle"
-        @click="storeTrackingIssue"
+        @click="stopIssueTracking"
       />
       <i
         v-else
@@ -35,7 +35,8 @@ export default {
   computed: {
     ...mapState({
       issueTracked: state => state.tracker.issueTracked,
-      trackingStartTime: state => state.tracker.trackingStartTime
+      trackingStartTime: state => state.tracker.trackingStartTime,
+      elapsedTime: state => state.tracker.elapsedTime
     }),
     isIssueTracked () {
       return this.issueTracked && this.issueTracked.id === this.issue.id
@@ -48,33 +49,51 @@ export default {
       clearTrackingStartTime: 'tracker/clearTrackingStartTime'
     }),
     ...mapActions({
-      stopIssueTracking: 'tracker/stopIssueTracking'
+      saveWorklog: 'tracker/saveWorklog'
     }),
-    startTracking () {
-      if (this.issueTracked) {
-        this.$confirm('Another issue is already tracked. Do you want to save worklog and start another one?', 'Warning', {
+    confirmationBelow60Seconds () {
+      this.$confirm('Worklogs must be over 60 seconds. Do you want to cancel tracking?', 'Warning', {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning'
+      }).then(() => {
+        this.clearIssueTracked()
+        this.clearTrackingStartTime()
+      }).catch(() => {})
+    },
+    confirmationWhileAnotherIssueTracked () {
+      this.$confirm(
+        'Another issue is already tracked. Do you want to save worklog and start another one?',
+        'Warning', {
           confirmButtonText: 'Yes',
           cancelButtonText: 'No',
           type: 'warning'
         }).then(() => {
-          this.storeTrackingIssue()
-          this.startIssueTracking(this.issue)
-        }).catch(() => {
-        })
+        this.stopIssueTracking()
+        this.startIssueTracking(this.issue)
+      }).catch(() => {})
+    },
+    startTracking () {
+      if (this.issueTracked) {
+        this.confirmationWhileAnotherIssueTracked()
       } else {
         this.startIssueTracking(this.issue)
       }
     },
-    storeTrackingIssue () {
-      this.stopIssueTracking().then(response => {
-        this.$notify({
-          title: 'Success',
-          message: 'Worklog saved',
-          type: 'success'
-        })
-        this.clearIssueTracked()
-        this.clearTrackingStartTime()
-      }).catch(this.handleErrors)
+    stopIssueTracking () {
+      if (this.elapsedTime.seconds() < 10) {
+        this.confirmationBelow60Seconds()
+      } else {
+        this.saveWorklog().then(response => {
+          this.$notify({
+            title: 'Success',
+            message: 'Worklog saved',
+            type: 'success'
+          })
+          this.clearIssueTracked()
+          this.clearTrackingStartTime()
+        }).catch(this.handleErrors)
+      }
     }
   }
 }

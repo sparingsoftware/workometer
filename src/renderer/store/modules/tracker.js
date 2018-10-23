@@ -3,7 +3,8 @@ import moment from 'moment'
 
 const state = {
   issueTracked: null,
-  trackingStartTime: null
+  trackingStartTime: null,
+  elapsedTime: null
 }
 
 const mutations = {
@@ -16,13 +17,15 @@ const mutations = {
   },
   clearTrackingStartTime (state) {
     state.trackingStartTime = null
+  },
+  setElapsedTime (state, time) {
+    state.elapsedTime = time
   }
 }
 
 const actions = {
-  stopIssueTracking ({ commit, state }) {
+  saveWorklog ({ commit, state }) {
     const differenceInSeconds = moment().diff(state.trackingStartTime, 'seconds')
-    // TODO; return if difference under 60 sec
     return Vue.jira.issue.addWorkLog({
       issueId: state.issueTracked.id,
       worklog: {
