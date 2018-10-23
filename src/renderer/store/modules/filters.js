@@ -8,6 +8,11 @@ const state = {
 }
 
 const mutations = {
+  clearFilters (state) {
+    state.statuses = []
+    state.issueTypes = []
+    state.issueAssignee = null
+  },
   setFilterQuery (state, query) {
     state.query = query
   },

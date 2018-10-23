@@ -4,16 +4,23 @@
     <context-menu ref="contextMenu"/>
     <div class="filters-bar">
       <search class="search"/>
-      <el-badge :hidden="!filtersSet" is-dot>
-        <el-button
-          class="filters-button"
-          title="Set filters"
-          :type="filtersSet ? 'primary' : ''"
-          @click="setFilters"
-        >
-          <i class="fa fa-filter"/>
-        </el-button>
-      </el-badge>
+      <el-button
+        class="filters-button"
+        title="Set filters"
+        :type="filtersSet ? 'primary' : ''"
+        @click="setFilters"
+      >
+        <i class="fa fa-filter"/>
+      </el-button>
+      <el-button
+        v-if="filtersSet"
+        class="remove-filters-button"
+        icon="el-icon-close"
+        size="mini"
+        title="Clear filters"
+        circle
+        @click="clearFilters"
+      />
     </div>
     <div class="issues">
       <transition-group name="el-fade-in">
@@ -32,7 +39,7 @@
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import search from './search/'
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import filters from './filters/'
 
 export default {
@@ -73,6 +80,9 @@ export default {
       fetchIssuesForBoard: 'issues/fetchIssuesForBoard',
       fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
     }),
+    ...mapMutations({
+      clearFilters: 'filters/clearFilters'
+    }),
     openMenu (event, issue) {
       this.$refs.contextMenu.$refs.vueContext.open(event, issue)
     },
@@ -88,6 +98,7 @@ export default {
     padding: 0 15px 15px;
     display: flex;
     justify-content: space-between;
+    position: relative;
   }
 
   .search {
@@ -98,5 +109,11 @@ export default {
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     overflow-y: scroll;
+  }
+
+  .remove-filters-button {
+    position: absolute;
+    top: -11px;
+    right: 4px;
   }
 </style>
