@@ -2,7 +2,7 @@
   <div class="view">
     <div class="wrapper">
       <el-form ref="form" :model="form" @submit.native.prevent>
-        <el-form-item prop="username" label="Username" :rules="rules.username">
+        <el-form-item prop="username" label="Email or username" :rules="rules.username">
           <el-input v-model="form.username" @keyup.enter.native.prevent="submitForm('form')"/>
         </el-form-item>
         <el-form-item prop="password" label="Password" :rules="rules.password">

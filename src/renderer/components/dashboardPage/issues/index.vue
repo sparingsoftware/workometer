@@ -1,7 +1,27 @@
 <template>
   <div>
+    <filters ref="filtersDialog"/>
     <context-menu ref="contextMenu"/>
-    <search key="search" class="search"/>
+    <div class="filters-bar">
+      <search class="search"/>
+      <el-button
+        class="filters-button"
+        title="Set filters"
+        :type="filterType"
+        @click="openFilters"
+      >
+        <i class="fa fa-filter"/>
+      </el-button>
+      <el-button
+        v-if="filtersSet"
+        class="remove-filters-button"
+        icon="el-icon-close"
+        size="mini"
+        title="Clear filters"
+        circle
+        @click="clearFilters"
+      />
+    </div>
     <div class="issues">
       <transition-group name="el-fade-in">
         <issue
@@ -19,13 +39,15 @@
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import search from './search/'
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import filters from './filters/'
 
 export default {
   components: {
     search,
     issue,
-    ContextMenu
+    ContextMenu,
+    filters
   },
   computed: {
     ...mapState({
@@ -34,8 +56,12 @@ export default {
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues',
-      getFilteredIssues: 'filters/getFilteredIssues'
-    })
+      getFilteredIssues: 'filters/getFilteredIssues',
+      filtersSet: 'filters/filtersSet'
+    }),
+    filterType () {
+      return this.filtersSet ? 'primary' : ''
+    }
   },
   watch: {
     selectedSprintId (id) {
@@ -57,20 +83,40 @@ export default {
       fetchIssuesForBoard: 'issues/fetchIssuesForBoard',
       fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
     }),
+    ...mapMutations({
+      clearFilters: 'filters/clearFilters'
+    }),
     openMenu (event, issue) {
       this.$refs.contextMenu.$refs.vueContext.open(event, issue)
+    },
+    openFilters () {
+      this.$refs.filtersDialog.openFiltersDialog()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .search {
+  .filters-bar {
     padding: 0 15px 15px;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .search {
+    width: 100%;
+    margin-right: 15px;
   }
 
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     overflow-y: scroll;
+  }
+
+  .remove-filters-button {
+    position: absolute;
+    top: -11px;
+    right: 4px;
   }
 </style>
