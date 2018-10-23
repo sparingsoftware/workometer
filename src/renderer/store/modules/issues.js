@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import service from '@/service'
 import deburr from 'lodash.deburr'
-import { waitFor } from 'vue-wait';
 
 const state = {
   issuesForSprint: {},
