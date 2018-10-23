@@ -3,7 +3,7 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <button class="start-tracking-button">
+    <button class="start-tracking-button" :loading="loading">
       <i
         v-if="isIssueTracked"
         class="fa fa-stop-circle"
@@ -21,6 +21,7 @@
 <script>
 import ElapsedTime from './elapsedTime'
 import { mapState, mapMutations, mapActions } from 'vuex'
+// import moment from 'moment'
 
 export default {
   components: {
@@ -30,6 +31,11 @@ export default {
     issue: {
       type: Object,
       default: () => ({})
+    }
+  },
+  data () {
+    return {
+      loading: false
     }
   },
   computed: {
@@ -81,15 +87,17 @@ export default {
       }
     },
     stopIssueTracking () {
-      if (this.elapsedTime.seconds() < 10) {
+      if (+this.elapsedTime / 1000 < 60) {
         this.confirmationBelow60Seconds()
       } else {
+        this.loading = true
         this.saveWorklog().then(response => {
           this.$notify({
             title: 'Success',
             message: 'Worklog saved',
             type: 'success'
           })
+          this.loading = false
           this.clearIssueTracked()
           this.clearTrackingStartTime()
         }).catch(this.handleErrors)
