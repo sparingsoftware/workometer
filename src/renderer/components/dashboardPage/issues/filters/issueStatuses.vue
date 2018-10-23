@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import uniq from 'lodash.uniq'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default {
@@ -19,7 +20,7 @@ export default {
     }),
     availableStatuses () {
       const statuses = this.getIssues.map(issue => issue.fields.status.name)
-      return [...new Set(statuses)]
+      return uniq(statuses)
     },
     selectedStatuses: {
       get () {

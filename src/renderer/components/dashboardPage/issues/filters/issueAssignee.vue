@@ -27,7 +27,8 @@ export default {
       const assigneedIssues = this.getIssues.filter(issue => issue.fields.assignee)
       const users = assigneedIssues.map(issue => issue.fields.assignee)
       const uniqUsers = uniqBy(users, 'accountId')
-      return uniqUsers
+      const unassignedUser = { accountId: 'unassigned', displayName: 'Unassigned' }
+      return [...uniqUsers, unassignedUser]
     },
     issueAssigneeSelected: {
       get () {

@@ -33,21 +33,17 @@ const filterByQuery = query => issue => {
 }
 
 const filterByStatuses = statuses => issue => {
-  return statuses.length
-    ? statuses.includes(issue.fields.status.name)
-    : true
+  return !statuses.length || statuses.includes(issue.fields.status.name)
 }
 
 const filterByIssueTypes = types => issue => {
-  return types.length
-    ? types.includes(issue.fields.issuetype.name)
-    : true
+  return !types.length || types.includes(issue.fields.issuetype.name)
 }
 
 const filterByAssignee = assigneeAccountId => issue => {
-  return assigneeAccountId
-    ? issue.fields.assignee && issue.fields.assignee.accountId === assigneeAccountId
-    : true
+  return !assigneeAccountId ||
+    (assigneeAccountId === 'unassigned' && !issue.fields.assignee) ||
+    (issue.fields.assignee && issue.fields.assignee.accountId === assigneeAccountId)
 }
 
 const getters = {

@@ -6,7 +6,7 @@
     </div>
     <el-tabs v-model="currentTab" stretch @tab-click="changeTab">
       <el-tab-pane label="Issues" name="issues"/>
-      <el-tab-pane v-if="false" label="Recent Worklogs" name="worklogs"/>
+      <!--<el-tab-pane label="Recent Worklogs" name="worklogs"/>-->
     </el-tabs>
     <issues v-if="currentTab === 'issues'"/>
     <recent-worklogs v-if="currentTab === 'worklogs'"/>

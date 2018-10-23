@@ -7,8 +7,8 @@
       <el-button
         class="filters-button"
         title="Set filters"
-        :type="filtersSet ? 'primary' : ''"
-        @click="setFilters"
+        :type="filterType"
+        @click="openFilters"
       >
         <i class="fa fa-filter"/>
       </el-button>
@@ -58,7 +58,10 @@ export default {
       getIssues: 'issues/getIssues',
       getFilteredIssues: 'filters/getFilteredIssues',
       filtersSet: 'filters/filtersSet'
-    })
+    }),
+    filterType () {
+      return this.filtersSet ? 'primary' : ''
+    }
   },
   watch: {
     selectedSprintId (id) {
@@ -86,7 +89,7 @@ export default {
     openMenu (event, issue) {
       this.$refs.contextMenu.$refs.vueContext.open(event, issue)
     },
-    setFilters () {
+    openFilters () {
       this.$refs.filtersDialog.openFiltersDialog()
     }
   }
