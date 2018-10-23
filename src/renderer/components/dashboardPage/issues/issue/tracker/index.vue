@@ -3,11 +3,11 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <button class="start-tracking-button">
+    <button class="start-tracking-button" :loading="loading">
       <i
         v-if="isIssueTracked"
         class="fa fa-stop-circle"
-        @click="storeTrackingIssue"
+        @click="stopIssueTracking"
       />
       <i
         v-else
@@ -32,49 +32,85 @@ export default {
       default: () => ({})
     }
   },
+  data () {
+    return {
+      loading: false
+    }
+  },
   computed: {
     ...mapState({
       issueTracked: state => state.tracker.issueTracked,
-      trackingStartTime: state => state.tracker.trackingStartTime
+      trackingStartTime: state => state.tracker.trackingStartTime,
+      elapsedTime: state => state.tracker.elapsedTime
     }),
     isIssueTracked () {
       return this.issueTracked && this.issueTracked.id === this.issue.id
+    },
+    saveAllowed () {
+      const secondsElapsed = +this.elapsedTime / 1000
+      return secondsElapsed < 60
     }
   },
   methods: {
     ...mapMutations({
       startIssueTracking: 'tracker/startIssueTracking',
       clearIssueTracked: 'tracker/clearIssueTracked',
-      clearTrackingStartTime: 'tracker/clearTrackingStartTime'
+      clearTrackingStartTime: 'tracker/clearTrackingStartTime',
+      setElapsedTime: 'tracker/setElapsedTime'
     }),
     ...mapActions({
-      stopIssueTracking: 'tracker/stopIssueTracking'
+      saveWorklog: 'tracker/saveWorklog'
     }),
-    startTracking () {
-      if (this.issueTracked) {
-        this.$confirm('Another issue is already tracked. Do you want to save worklog and start another one?', 'Warning', {
+    confirmationBelow60Seconds () {
+      this.$confirm('Worklogs must be over 60 seconds. Do you want to cancel tracking?', 'Warning', {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+        type: 'warning'
+      }).then(this.clearTracker).catch(() => {
+      })
+    },
+    confirmationWhileAnotherIssueTracked () {
+      this.$confirm(
+        'Another issue is already tracked. Do you want to save worklog and start another one?',
+        'Warning', {
           confirmButtonText: 'Yes',
           cancelButtonText: 'No',
           type: 'warning'
         }).then(() => {
-          this.storeTrackingIssue()
-          this.startIssueTracking(this.issue)
-        }).catch(() => {
-        })
+        if (this.saveAllowed) {
+          this.stopIssueTracking()
+        }
+        this.startIssueTracking(this.issue)
+      }).catch(() => {
+      })
+    },
+    startTracking () {
+      if (this.issueTracked) {
+        this.confirmationWhileAnotherIssueTracked()
       } else {
         this.startIssueTracking(this.issue)
       }
     },
-    storeTrackingIssue () {
-      this.stopIssueTracking().then(response => {
-        this.$notify({
-          title: 'Success',
-          message: 'Worklog saved',
-          type: 'success'
-        })
-        this.clearIssueTracked()
-        this.clearTrackingStartTime()
-      }).catch(this.handleErrors)
+    stopIssueTracking () {
+      if (this.saveAllowed) {
+        this.confirmationBelow60Seconds()
+      } else {
+        this.loading = true
+        this.saveWorklog().then(response => {
+          this.$notify({
+            title: 'Success',
+            message: 'Worklog saved',
+            type: 'success'
+          })
+          this.loading = false
+          this.clearTracker()
+        }).catch(this.handleErrors)
+      }
+    },
+    clearTracker () {
+      this.clearIssueTracked()
+      this.clearTrackingStartTime()
+      this.setElapsedTime(null)
     }
   }
 }
