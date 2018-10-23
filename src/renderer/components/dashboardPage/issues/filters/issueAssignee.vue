@@ -1,5 +1,5 @@
 <template>
-  <el-form-item label="Assignee">
+  <el-form-item label="Assignee" label-width="100px">
     <el-select v-model="issueAssigneeSelected" placeholder="Assignee" clearable>
       <el-option
         v-for="assignee in availableAssignees"

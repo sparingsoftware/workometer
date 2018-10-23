@@ -1,5 +1,5 @@
 <template>
-  <el-form-item label="Status">
+  <el-form-item label="Status" label-width="100px">
     <el-checkbox-group v-model="selectedStatuses">
       <el-checkbox v-for="status in availableStatuses" :key="status" :label="status"/>
     </el-checkbox-group>
