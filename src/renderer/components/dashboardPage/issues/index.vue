@@ -22,16 +22,23 @@
         @click="clearFilters"
       />
     </div>
-    <div class="issues">
-      <transition-group name="el-fade-in">
-        <issue
-          v-for="issue in getFilteredIssues"
-          :key="issue.id"
-          :issue="issue"
-          @contextmenu.native.prevent="openMenu($event, issue)"
-        />
-      </transition-group>
-    </div>
+    <v-wait for="issuesLoading">
+      <template slot="waiting">
+        <div>
+          Loading the list...
+        </div>
+      </template>
+      <div class="issues">
+        <transition-group name="el-fade-in">
+          <issue
+            v-for="issue in getFilteredIssues"
+            :key="issue.id"
+            :issue="issue"
+            @contextmenu.native.prevent="openMenu($event, issue)"
+          />
+        </transition-group>
+      </div>
+    </v-wait>
   </div>
 </template>
 

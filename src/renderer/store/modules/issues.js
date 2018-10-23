@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import service from '@/service'
 import deburr from 'lodash.deburr'
+import { waitFor } from 'vue-wait';
 
 const state = {
   issuesForSprint: {},
@@ -36,9 +37,11 @@ const getters = {
 }
 
 const actions = {
-  async fetchIssuesForBoard ({ commit }, id) {
+  async fetchIssuesForBoard ({ commit, dispatch }, id) {
+    dispatch('wait/start', 'issuesLoading', { root: true })
     const issues = await service.getIssuesForBacklog(id)
     commit('setIssuesForBoard', { id, issues })
+    dispatch('wait/end', 'issuesLoading', { root: true })
   },
   async fetchIssuesForSprint ({ commit }, id) {
     const issues = await service.getIssuesForSprint(id)

@@ -12,6 +12,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.css'
+import VueWait from 'vue-wait'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -20,6 +21,7 @@ Vue.jira = Vue.prototype.$jira = jiraClient
 Vue.config.productionTip = false
 
 Vue.use(ElementUI, { locale })
+Vue.use(VueWait)
 
 Vue.mixin(handleErrorsMixin)
 
@@ -28,5 +30,8 @@ new Vue({
   components: { App },
   router,
   store,
-  template: '<App/>'
+  template: '<App/>',
+  wait: new VueWait({
+    useVuex: true
+  })
 }).$mount('#app')
