@@ -52,7 +52,8 @@ export default {
     ...mapMutations({
       startIssueTracking: 'tracker/startIssueTracking',
       clearIssueTracked: 'tracker/clearIssueTracked',
-      clearTrackingStartTime: 'tracker/clearTrackingStartTime'
+      clearTrackingStartTime: 'tracker/clearTrackingStartTime',
+      setElapsedTime: 'tracker/setElapsedTime'
     }),
     ...mapActions({
       saveWorklog: 'tracker/saveWorklog'
@@ -62,10 +63,8 @@ export default {
         confirmButtonText: 'Yes',
         cancelButtonText: 'No',
         type: 'warning'
-      }).then(() => {
-        this.clearIssueTracked()
-        this.clearTrackingStartTime()
-      }).catch(() => {})
+      }).then(this.clearTracker).catch(() => {
+      })
     },
     confirmationWhileAnotherIssueTracked () {
       this.$confirm(
@@ -77,7 +76,8 @@ export default {
         }).then(() => {
         this.stopIssueTracking()
         this.startIssueTracking(this.issue)
-      }).catch(() => {})
+      }).catch(() => {
+      })
     },
     startTracking () {
       if (this.issueTracked) {
@@ -98,10 +98,14 @@ export default {
             type: 'success'
           })
           this.loading = false
-          this.clearIssueTracked()
-          this.clearTrackingStartTime()
+          this.clearTracker()
         }).catch(this.handleErrors)
       }
+    },
+    clearTracker () {
+      this.clearIssueTracked()
+      this.clearTrackingStartTime()
+      this.setElapsedTime(null)
     }
   }
 }
