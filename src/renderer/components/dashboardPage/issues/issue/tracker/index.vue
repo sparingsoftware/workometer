@@ -21,7 +21,6 @@
 <script>
 import ElapsedTime from './elapsedTime'
 import { mapState, mapMutations, mapActions } from 'vuex'
-// import moment from 'moment'
 
 export default {
   components: {
@@ -91,7 +90,7 @@ export default {
         this.confirmationBelow60Seconds()
       } else {
         this.loading = true
-        this.saveWorklog().then(response => {
+        this.saveWorklog().then(() => {
           this.$notify({
             title: 'Success',
             message: 'Worklog saved',
