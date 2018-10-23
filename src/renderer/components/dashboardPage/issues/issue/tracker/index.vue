@@ -84,8 +84,7 @@ export default {
             this.clearTracker()
           }
           this.startIssueTracking(this.issue)
-        }).catch(() => {
-      })
+        }).catch(() => {})
     },
     startTracking () {
       if (this.issueTracked) {
