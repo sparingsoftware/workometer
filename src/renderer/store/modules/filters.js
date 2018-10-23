@@ -1,12 +1,29 @@
 import deburr from 'lodash.deburr'
 
 const state = {
-  query: ''
+  query: '',
+  statuses: [],
+  issueTypes: [],
+  issueAssignee: null
 }
 
 const mutations = {
+  clearFilters (state) {
+    state.statuses = []
+    state.issueTypes = []
+    state.issueAssignee = null
+  },
   setFilterQuery (state, query) {
     state.query = query
+  },
+  setStatusesFilter (state, statuses) {
+    state.statuses = statuses
+  },
+  setIssueTypeFilter (state, issueTypes) {
+    state.issueTypes = issueTypes
+  },
+  setIssueAssigneeFilter (state, assigneeAccountId) {
+    state.issueAssignee = assigneeAccountId
   }
 }
 
@@ -15,10 +32,30 @@ const filterByQuery = query => issue => {
   return issue.searchableField.includes(deburredQuery)
 }
 
+const filterByStatuses = statuses => issue => {
+  return !statuses.length || statuses.includes(issue.fields.status.name)
+}
+
+const filterByIssueTypes = types => issue => {
+  return !types.length || types.includes(issue.fields.issuetype.name)
+}
+
+const filterByAssignee = assigneeAccountId => issue => {
+  return !assigneeAccountId ||
+    (assigneeAccountId === 'unassigned' && !issue.fields.assignee) ||
+    (issue.fields.assignee && issue.fields.assignee.accountId === assigneeAccountId)
+}
+
 const getters = {
   getFilteredIssues (state, getters, rootState, rootGetters) {
     const issues = rootGetters['issues/getIssues']
     return issues.filter(filterByQuery(state.query))
+      .filter(filterByStatuses(state.statuses))
+      .filter(filterByIssueTypes(state.issueTypes))
+      .filter(filterByAssignee(state.issueAssignee))
+  },
+  filtersSet (state) {
+    return state.statuses.length || state.issueTypes.length || state.issueAssignee
   }
 }
 
