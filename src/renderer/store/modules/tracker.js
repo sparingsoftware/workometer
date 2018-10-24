@@ -24,13 +24,14 @@ const mutations = {
 }
 
 const actions = {
-  saveWorklog ({ commit, state }) {
-    const differenceInSeconds = moment().diff(state.trackingStartTime, 'seconds')
+  saveWorklog ({commit, state}, trackingStopTime) {
+    trackingStopTime = trackingStopTime || moment()
+    const timeSpentSeconds = trackingStopTime.diff(state.trackingStartTime, 'seconds')
     return Vue.jira.issue.addWorkLog({
       issueId: state.issueTracked.id,
       worklog: {
         started: state.trackingStartTime.format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
-        timeSpentSeconds: differenceInSeconds
+        timeSpentSeconds: timeSpentSeconds
       }
     })
   }
