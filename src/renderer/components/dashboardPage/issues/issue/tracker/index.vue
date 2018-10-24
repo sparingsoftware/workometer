@@ -110,7 +110,7 @@ export default {
           })
         }
       }).catch(() => {
-        inactivityMonitor.start(60, this.confirmationInactivity)
+        inactivityMonitor.start(this.confirmationInactivity)
       })
     },
     startNewTracking () {
@@ -122,7 +122,7 @@ export default {
     },
     startTracking (issue) {
       this.startIssueTracking(issue)
-      inactivityMonitor.start(60, this.confirmationInactivity)
+      inactivityMonitor.start(this.confirmationInactivity)
     },
     stopIssueTracking () {
       if (!this.saveAllowed) {

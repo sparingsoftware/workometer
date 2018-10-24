@@ -3,12 +3,13 @@ import desktopIdle from 'desktop-idle'
 const inactivityMonitor = {
   interval: null,
   idleTime: 0,
+  inactivityTime: 5 * 60, // 5 minutes
 
-  start (inactivityTime, callback) {
+  start (callback) {
     /*
     Starts tracking user's desktop inactivity.
     Calls `callback` when user becomes active again after at least
-    `inactivityTime` of inactivity.
+    `this.inactivityTime` of inactivity.
      */
     if (this.interval) {
       throw Error('There is already running monitor. Use stop() to stop it.')
@@ -17,7 +18,7 @@ const inactivityMonitor = {
       () => {
         const measuredIdleTime = desktopIdle.getIdleTime()
         const userActiveAgain = measuredIdleTime < this.idleTime
-        const userInactiveLongEnough = this.idleTime >= inactivityTime
+        const userInactiveLongEnough = this.idleTime >= this.inactivityTime
         if (userActiveAgain && userInactiveLongEnough) {
           const time = this.idleTime
           this.stop()
