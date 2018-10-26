@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import {remote} from 'electron'
-import {mapActions, mapMutations, mapState} from 'vuex'
+import { remote } from 'electron'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import moment from 'moment'
 import ElapsedTime from './elapsedTime'
 import inactivityMonitor from '@/inactivity'
@@ -95,22 +95,25 @@ export default {
       const idleSince = moment().subtract(idleTimeSeconds, 'seconds')
       this.$confirm(
         `You were inactive for ${idleTime.format('HH:mm:ss')}. ` +
-        'Do you want to exclude that period from your worklog?',
+        'Do you want to include that period from your worklog?',
         'Warning',
         {
-          confirmButtonText: 'Yes',
-          cancelButtonText: 'No',
+          confirmButtonText: 'Keep',
+          cancelButtonText: 'Exclude',
           type: 'warning'
         }
       ).then(() => {
-        if (this.saveAllowed) {
-          const issue = this.issueTracked
+        inactivityMonitor.start(this.confirmationInactivity)
+      }).catch(() => {
+        const isSaveAllowed = (this.elapsedTime - idleTime) / 1000 > 60
+        const issue = this.issueTracked
+        if (isSaveAllowed) {
           this.storeWorklog(idleSince).then(() => {
             this.startTracking(issue)
           })
+        } else {
+          this.startTracking(issue)
         }
-      }).catch(() => {
-        inactivityMonitor.start(this.confirmationInactivity)
       })
     },
     startNewTracking () {
