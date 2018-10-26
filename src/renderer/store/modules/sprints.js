@@ -25,7 +25,10 @@ const actions = {
     service.getSprintsForBoard(boardId).then(sprints => {
       const activeSprints = sprints.filter(sprint => sprint.state === 'active')
       const backlog = { name: 'Backlog', id: null }
-      commit('setSprints', [backlog, ...activeSprints])
+      commit('setSprints', [...activeSprints, backlog])
+      if (activeSprints.length) {
+        commit('setSelectedSprintId', activeSprints[0].id)
+      }
     })
   }
 }
