@@ -22,7 +22,7 @@
         @click="clearFilters"
       />
     </div>
-    <div class="issues">
+    <perfect-scrollbar class="issues">
       <transition-group name="el-fade-in">
         <issue
           v-for="issue in getFilteredIssues"
@@ -31,7 +31,7 @@
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
-    </div>
+    </perfect-scrollbar>
   </div>
 </template>
 
@@ -111,7 +111,7 @@ export default {
 
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
-    overflow-y: scroll;
+    padding-right: 5px;
   }
 
   .remove-filters-button {
