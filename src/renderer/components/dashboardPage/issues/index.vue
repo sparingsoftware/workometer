@@ -22,23 +22,18 @@
         @click="clearFilters"
       />
     </div>
-    <v-wait for="issuesLoading">
-      <template slot="waiting">
-        <div>
-          Loading the list...
-        </div>
-      </template>
-      <div class="issues">
-        <transition-group name="el-fade-in">
-          <issue
-            v-for="issue in getFilteredIssues"
-            :key="issue.id"
-            :issue="issue"
-            @contextmenu.native.prevent="openMenu($event, issue)"
-          />
-        </transition-group>
-      </div>
-    </v-wait>
+    <div class="issues">
+      <preloader-bar v-wait:visible="'issuesLoading'" main/>
+      <transition-group name="el-fade-in">
+        <issue
+          v-for="issue in getFilteredIssues"
+          :key="issue.id"
+          :issue="issue"
+          @contextmenu.native.prevent="openMenu($event, issue)"
+        />
+      </transition-group>
+
+    </div>
   </div>
 </template>
 
@@ -46,7 +41,7 @@
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import search from './search/'
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
 
 export default {

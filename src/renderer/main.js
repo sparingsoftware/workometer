@@ -13,6 +13,7 @@ import 'element-ui/lib/theme-chalk/reset.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.css'
 import VueWait from 'vue-wait'
+import PreloaderBar from '@/components/preloaderBar'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -22,6 +23,7 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI, { locale })
 Vue.use(VueWait)
+Vue.component('PreloaderBar', PreloaderBar)
 
 Vue.mixin(handleErrorsMixin)
 

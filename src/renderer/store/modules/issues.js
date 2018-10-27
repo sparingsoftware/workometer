@@ -22,7 +22,8 @@ const mutations = {
     Vue.set(state.issuesForSprint, payload.id, issues)
   },
   updateIssue (state, { oldIssue, newIssue }) {
-    /* This is a state mutation! */ Object.assign(oldIssue, newIssue)
+    /* This is a state mutation! */
+    Object.assign(oldIssue, newIssue)
   }
 }
 
@@ -42,14 +43,18 @@ const actions = {
     commit('setIssuesForBoard', { id, issues })
     dispatch('wait/end', 'issuesLoading', { root: true })
   },
-  async fetchIssuesForSprint ({ commit }, id) {
+  async fetchIssuesForSprint ({ commit, dispatch }, id) {
+    dispatch('wait/start', 'issuesLoading', { root: true })
     const issues = await service.getIssuesForSprint(id)
     commit('setIssuesForSprint', { id, issues })
+    dispatch('wait/end', 'issuesLoading', { root: true })
   },
-  async setIssueStatus ({ commit }, { issue, status }) {
+  async setIssueStatus ({ commit, dispatch }, { issue, status }) {
+    dispatch('wait/start', `issueStatusChange_${issue.id}`, { root: true })
     await service.setIssueStatus(issue.id, status.name)
     const updatedIssue = await service.getIssue({ issueId: issue.id })
     commit('updateIssue', { oldIssue: issue, newIssue: updatedIssue })
+    dispatch('wait/end', `issueStatusChange_${issue.id}`, { root: true })
   }
 }
 

@@ -13,6 +13,7 @@
         :value="item.id"
       />
     </el-select>
+    <preloader-bar v-wait:visible="'boardsLoading'"/>
   </div>
 </template>
 
@@ -59,6 +60,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .boards-picker {
+    position: relative;
     margin-bottom: 7px;
   }
 </style>
