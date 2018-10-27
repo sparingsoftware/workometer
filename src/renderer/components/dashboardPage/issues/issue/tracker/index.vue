@@ -12,15 +12,18 @@
       <i
         v-else
         class="fa fa-play-circle"
-        @click="startTracking"
+        @click="startNewTracking"
       />
     </button>
   </div>
 </template>
 
 <script>
+import { remote } from 'electron'
+import { mapActions, mapMutations, mapState } from 'vuex'
+import moment from 'moment'
 import ElapsedTime from './elapsedTime'
-import { mapState, mapMutations, mapActions } from 'vuex'
+import inactivityMonitor from '@/inactivity'
 
 export default {
   components: {
@@ -71,7 +74,7 @@ export default {
     },
     confirmationWhileAnotherIssueTracked () {
       this.$confirm(
-        'Another issue is already tracked. Do you want to save worklog and start another one?',
+        'Another issue is already tracked. Do you want to go home and start another one?',
         'Warning', {
           confirmButtonText: 'Yes',
           cancelButtonText: 'No',
@@ -83,15 +86,46 @@ export default {
           } else {
             this.clearTracker()
           }
-          this.startIssueTracking(this.issue)
-        }).catch(() => {})
+          this.startTracking(this.issue)
+        })
     },
-    startTracking () {
+    confirmationInactivity (idleTimeSeconds) {
+      remote.getCurrentWindow().show()
+      const idleTime = moment.utc(idleTimeSeconds * 1000)
+      const idleSince = moment().subtract(idleTimeSeconds, 'seconds')
+      this.$confirm(
+        `You were inactive for ${idleTime.format('HH:mm:ss')}. ` +
+        'Do you want to include that period from your worklog?',
+        'Warning',
+        {
+          confirmButtonText: 'Keep',
+          cancelButtonText: 'Exclude',
+          type: 'warning'
+        }
+      ).then(() => {
+        inactivityMonitor.start(this.confirmationInactivity)
+      }).catch(() => {
+        const isSaveAllowed = (this.elapsedTime - idleTime) / 1000 > 60
+        const issue = this.issueTracked
+        if (isSaveAllowed) {
+          this.storeWorklog(idleSince).then(() => {
+            this.startTracking(issue)
+          })
+        } else {
+          this.startTracking(issue)
+        }
+      })
+    },
+    startNewTracking () {
       if (this.issueTracked) {
         this.confirmationWhileAnotherIssueTracked()
       } else {
-        this.startIssueTracking(this.issue)
+        this.startTracking(this.issue)
       }
+    },
+    startTracking (issue) {
+      this.startIssueTracking(issue)
+      inactivityMonitor.start(this.confirmationInactivity)
     },
     stopIssueTracking () {
       if (!this.saveAllowed) {
@@ -100,22 +134,24 @@ export default {
         this.storeWorklog()
       }
     },
-    storeWorklog () {
+    storeWorklog (trackingStopTime) {
       this.loading = true
-      this.saveWorklog().then(response => {
-        this.$notify({
-          title: 'Success',
-          message: 'Worklog saved',
-          type: 'success'
-        })
-        this.loading = false
-        this.clearTracker()
-      }).catch(this.handleErrors)
+      return this.saveWorklog(trackingStopTime)
+        .then(response => {
+          this.$notify({
+            title: 'Success',
+            message: 'Worklog saved',
+            type: 'success'
+          })
+          this.loading = false
+          this.clearTracker()
+        }).catch(this.handleErrors)
     },
     clearTracker () {
       this.clearIssueTracked()
       this.clearTrackingStartTime()
       this.setElapsedTime(null)
+      inactivityMonitor.stop()
     }
   }
 }

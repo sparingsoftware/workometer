@@ -1,5 +1,5 @@
-import Vue from 'vue'
 import moment from 'moment'
+import service from '@/service'
 
 const state = {
   issueTracked: null,
@@ -24,15 +24,9 @@ const mutations = {
 }
 
 const actions = {
-  saveWorklog ({ commit, state }) {
-    const differenceInSeconds = moment().diff(state.trackingStartTime, 'seconds')
-    return Vue.jira.issue.addWorkLog({
-      issueId: state.issueTracked.id,
-      worklog: {
-        started: state.trackingStartTime.format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
-        timeSpentSeconds: differenceInSeconds
-      }
-    })
+  saveWorklog ({commit, state}, trackingStopTime = moment()) {
+    const timeSpentSeconds = trackingStopTime.diff(state.trackingStartTime, 'seconds')
+    return service.addWorkLog(state.issueTracked.id, state.trackingStartTime, timeSpentSeconds)
   }
 }
 

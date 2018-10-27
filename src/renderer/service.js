@@ -43,6 +43,16 @@ export default {
       issueId
     })
   },
+  addWorkLog: (trackedIssueId, trackingStartTime, timeSpentSeconds, comment = '') => {
+    return Vue.jira.issue.addWorkLog({
+      issueId: trackedIssueId,
+      worklog: {
+        started: trackingStartTime.format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
+        timeSpentSeconds: timeSpentSeconds,
+        comment
+      }
+    })
+  },
   getIssue: payload => {
     return Vue.jira.issue.getIssue(payload)
   },
