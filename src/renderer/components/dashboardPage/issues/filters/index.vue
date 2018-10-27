@@ -4,6 +4,7 @@
       <el-form>
         <issue-statuses/>
         <issue-types/>
+        <issue-components/>
         <issue-assignee/>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -16,13 +17,15 @@
 <script>
 import IssueStatuses from './issueStatuses'
 import IssueTypes from './issueTypes'
+import IssueComponents from './issueComponents'
 import IssueAssignee from './issueAssignee'
 
 export default {
   components: {
     IssueAssignee,
     IssueStatuses,
-    IssueTypes
+    IssueTypes,
+    IssueComponents
   },
   data () {
     return {
