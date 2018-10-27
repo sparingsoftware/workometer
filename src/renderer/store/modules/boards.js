@@ -5,7 +5,8 @@ import service from '@/service'
 const state = {
   selectedBoardId: null,
   boards: [],
-  statusesMap: {}
+  statusesMap: {},
+  statuses: []
 }
 
 const mutations = {
@@ -16,6 +17,7 @@ const mutations = {
     state.selectedBoardId = boardId
   },
   setStatusesMap (state, statuses) {
+    state.statuses = statuses
     const statusesMap = keyBy(statuses, 'name')
     state.statusesMap = mapValues(statusesMap, 'statuses')
   }

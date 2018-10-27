@@ -1,6 +1,7 @@
 <template>
   <div>
     <filters ref="filtersDialog"/>
+    <issue-form ref="issueForm"/>
     <context-menu ref="contextMenu"/>
     <div class="filters-bar">
       <search class="search"/>
@@ -31,6 +32,11 @@
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
+      <el-button class="create-issue-button" @click="createNewIssue">
+        <i
+          class="fa fa-plus-circle"
+        />
+      </el-button>
     </perfect-scrollbar>
   </div>
 </template>
@@ -38,6 +44,7 @@
 <script>
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
+import IssueForm from './form/'
 import search from './search/'
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 import filters from './filters/'
@@ -47,7 +54,8 @@ export default {
     search,
     issue,
     ContextMenu,
-    filters
+    filters,
+    IssueForm
   },
   computed: {
     ...mapState({
@@ -91,6 +99,9 @@ export default {
     },
     openFilters () {
       this.$refs.filtersDialog.openFiltersDialog()
+    },
+    createNewIssue () {
+      this.$refs.issueForm.openIssueForm()
     }
   }
 }
@@ -118,5 +129,11 @@ export default {
     position: absolute;
     top: -11px;
     right: 4px;
+  }
+
+  .create-issue-button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
   }
 </style>
