@@ -67,7 +67,7 @@ const getters = {
       .filter(filterByAssignee(state.issueAssignee))
   },
   filtersSet (state) {
-    return state.statuses.length || state.issueTypes.length || state.issueAssignee
+    return state.statuses.length || state.issueTypes.length || state.issueAssignee || state.issueComponents.length
   }
 }
 
