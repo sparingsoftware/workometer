@@ -14,7 +14,7 @@
 <script>
 import uniqBy from 'lodash.uniqby'
 import { mapGetters, mapMutations, mapState } from 'vuex'
-import flatten from 'lodash.flatten'
+import flatMap from 'lodash.flatmap'
 
 export default {
   computed: {
@@ -25,10 +25,8 @@ export default {
       getIssues: 'issues/getIssues'
     }),
     availableComponents () {
-      const components = this.getIssues
-        .filter(issue => issue.fields.components.length)
-        .map(issue => issue.fields.components)
-      return uniqBy(flatten(components), 'id')
+      const components = flatMap(this.getIssues, issue => issue.fields.components)
+      return uniqBy(components, 'id')
     },
     issueComponentsSelected: {
       get () {
