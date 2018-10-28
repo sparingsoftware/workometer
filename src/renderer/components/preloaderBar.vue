@@ -29,9 +29,9 @@ export default {
       position: fixed;
     }
 
-    animation: AnimationName 3s ease infinite;
+    animation: fading-gradient 3s ease infinite;
 
-    @keyframes AnimationName {
+    @keyframes fading-gradient {
       0% {
         background-position: 0% 50%
       }
