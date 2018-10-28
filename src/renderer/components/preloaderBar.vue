@@ -15,7 +15,6 @@ export default {
 
 <style lang="scss" scoped>
   .preloader-bar {
-    content: "";
     z-index: 1;
     position: absolute;
     bottom: 0;
@@ -32,28 +31,6 @@ export default {
 
     animation: AnimationName 3s ease infinite;
 
-    @-webkit-keyframes AnimationName {
-      0% {
-        background-position: 0% 50%
-      }
-      50% {
-        background-position: 100% 50%
-      }
-      100% {
-        background-position: 0% 50%
-      }
-    }
-    @-moz-keyframes AnimationName {
-      0% {
-        background-position: 0% 50%
-      }
-      50% {
-        background-position: 100% 50%
-      }
-      100% {
-        background-position: 0% 50%
-      }
-    }
     @keyframes AnimationName {
       0% {
         background-position: 0% 50%
