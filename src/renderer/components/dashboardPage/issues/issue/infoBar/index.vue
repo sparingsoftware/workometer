@@ -11,6 +11,16 @@
     <a class="issue__link" @click="openInBrowser(issue.key)">
       <i class="fa fa-external-link" title="Go to issue on Jira"/>
     </a>
+    <el-tag
+      v-for="component in issue.fields.components"
+      :key="component.id"
+      size="mini"
+      title="Component"
+      type="info"
+      class="text-uppercase status"
+    >
+      {{ component.name }}
+    </el-tag>
   </div>
 </template>
 
@@ -50,6 +60,7 @@ export default {
     }
     &__link {
       vertical-align: middle;
+      margin-right: 5px;
       font-size: 16px;
       cursor: pointer;
     }

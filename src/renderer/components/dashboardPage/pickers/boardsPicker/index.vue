@@ -31,6 +31,7 @@ export default {
         return this.currentBoard
       },
       set (value) {
+        this.clearFilters()
         this.setSelectedBoard(value)
       }
     }
@@ -53,7 +54,8 @@ export default {
     }),
     ...mapMutations({
       setSelectedBoard: 'boards/setSelectedBoard',
-      setSprints: 'sprints/setSprints'
+      setSprints: 'sprints/setSprints',
+      clearFilters: 'filters/clearFilters'
     })
   }
 }
