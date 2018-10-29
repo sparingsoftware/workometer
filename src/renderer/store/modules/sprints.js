@@ -11,17 +11,19 @@ const mutations = {
   },
   setSprints (state, sprints) {
     state.sprints = sprints
+  },
+  clearSprints (state) {
+    state.sprints = []
+    state.selectedSprintId = null
   }
 }
 
 const actions = {
-  fetchSprints ({ commit, rootState }) {
+  fetchSprints ({ commit, rootState, dispatch }) {
     const boardId = rootState.boards.selectedBoardId
     if (!boardId) return
-
-    commit('setSelectedSprintId', null)
-    commit('setSprints', [])
-
+    commit('clearSprints')
+    dispatch('wait/start', 'sprintsLoading', { root: true })
     service.getSprintsForBoard(boardId).then(sprints => {
       const activeSprints = sprints.filter(sprint => sprint.state === 'active')
       const backlog = { name: 'Backlog', id: null }
@@ -29,6 +31,7 @@ const actions = {
       if (activeSprints.length) {
         commit('setSelectedSprintId', activeSprints[0].id)
       }
+      dispatch('wait/end', 'sprintsLoading', { root: true })
     })
   }
 }

@@ -3,6 +3,7 @@
     class="issue fluid"
     :class="{'issue--subtask': issue.fields.issuetype.subtask}"
   >
+    <preloader-bar v-wait:visible="`issueStatusChange_${issue.id}`"/>
     <div class="issue__details">
       <div class="issue__key">{{ issue.key }}</div>
       <div class="issue__description">
@@ -34,6 +35,7 @@ export default {
 
 <style lang="scss" scoped>
   .issue {
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 20px 15px;

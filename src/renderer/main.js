@@ -14,6 +14,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.css'
 import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
+import VueWait from 'vue-wait'
+import PreloaderBar from '@/components/preloaderBar'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -22,6 +24,8 @@ Vue.jira = Vue.prototype.$jira = jiraClient
 Vue.config.productionTip = false
 
 Vue.use(ElementUI, { locale })
+Vue.use(VueWait)
+Vue.component('PreloaderBar', PreloaderBar)
 
 Vue.use(PerfectScrollbar)
 
@@ -32,5 +36,8 @@ new Vue({
   components: { App },
   router,
   store,
-  template: '<App/>'
+  template: '<App/>',
+  wait: new VueWait({
+    useVuex: true
+  })
 }).$mount('#app')

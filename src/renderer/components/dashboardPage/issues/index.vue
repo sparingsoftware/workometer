@@ -23,6 +23,7 @@
       />
     </div>
     <perfect-scrollbar class="issues">
+      <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
         <issue
           v-for="issue in getFilteredIssues"
@@ -39,7 +40,7 @@
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import search from './search/'
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
 
 export default {
