@@ -23,6 +23,13 @@ const mutations = {
   }
 }
 
+const getters = {
+  selectedProjectId (state) {
+    const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
+    return selectedBoard.location.projectId
+  }
+}
+
 const actions = {
   async fetchBoards ({ commit, dispatch }) {
     dispatch('wait/start', 'boardsLoading', { root: true })
@@ -30,10 +37,8 @@ const actions = {
     commit('setBoards', boards)
     dispatch('wait/end', 'boardsLoading', { root: true })
   },
-  async fetchStatusesForSelectedBoard ({ commit, state }) {
-    const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
-    const projectId = selectedBoard.location.projectId
-    const statuses = await service.getStatuses(projectId)
+  async fetchStatusesForSelectedBoard ({ commit, state, getters }) {
+    const statuses = await service.getStatuses(getters.selectedProjectId)
     commit('setStatusesMap', statuses)
   }
 }
@@ -41,6 +46,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }
