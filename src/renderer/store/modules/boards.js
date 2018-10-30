@@ -24,9 +24,11 @@ const mutations = {
 }
 
 const actions = {
-  async fetchBoards ({ commit }) {
+  async fetchBoards ({ commit, dispatch }) {
+    dispatch('wait/start', 'boardsLoading', { root: true })
     const boards = await service.getAllBoards({ type: 'scrum' })
     commit('setBoards', boards)
+    dispatch('wait/end', 'boardsLoading', { root: true })
   },
   async fetchStatusesForSelectedBoard ({ commit, state }) {
     const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)

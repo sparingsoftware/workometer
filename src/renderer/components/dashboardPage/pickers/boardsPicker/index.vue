@@ -13,6 +13,7 @@
         :value="item.id"
       />
     </el-select>
+    <preloader-bar v-wait:visible="'boardsLoading'"/>
   </div>
 </template>
 
@@ -30,6 +31,7 @@ export default {
         return this.currentBoard
       },
       set (value) {
+        this.clearFilters()
         this.setSelectedBoard(value)
       }
     }
@@ -52,13 +54,15 @@ export default {
     }),
     ...mapMutations({
       setSelectedBoard: 'boards/setSelectedBoard',
-      setSprints: 'sprints/setSprints'
+      setSprints: 'sprints/setSprints',
+      clearFilters: 'filters/clearFilters'
     })
   }
 }
 </script>
 <style lang="scss" scoped>
   .boards-picker {
+    position: relative;
     margin-bottom: 7px;
   }
 </style>

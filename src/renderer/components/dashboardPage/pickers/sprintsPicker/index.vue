@@ -1,5 +1,6 @@
 <template>
   <div class="sprints-picker">
+    <preloader-bar v-wait:visible="'sprintsLoading'"/>
     <transition name="el-fade-in">
       <el-select
         v-model="selectedSprintId"
@@ -50,5 +51,6 @@ export default {
 <style lang="scss" scoped>
   .sprints-picker {
     margin-top: 7px;
+    position: relative;
   }
 </style>
