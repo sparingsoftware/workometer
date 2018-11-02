@@ -55,6 +55,15 @@ const actions = {
     const updatedIssue = await service.getIssue({ issueId: issue.id })
     commit('updateIssue', { oldIssue: issue, newIssue: updatedIssue })
     dispatch('wait/end', `issueStatusChange_${issue.id}`, { root: true })
+  },
+  async refreshIssues ({ dispatch, rootState }) {
+    dispatch('wait/start', 'issueRefreshing', { root: true })
+    const selectedSprintId = rootState.sprints.selectedSprintId
+    const selectedBoardId = rootState.boards.selectedBoardId
+    console.log(selectedSprintId, selectedBoardId, 'asd')
+    await dispatch('fetchIssuesForSprint', selectedSprintId)
+    await dispatch('fetchIssuesForBoard', selectedBoardId)
+    dispatch('wait/end', 'issueRefreshing', { root: true })
   }
 }
 

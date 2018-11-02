@@ -2,6 +2,7 @@
   <div>
     <el-input
       v-model="filterQuery"
+      clearable
       placeholder="Search for key or summary"
     >
       <i slot="prefix" class="el-input__icon el-icon-search"/>

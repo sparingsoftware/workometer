@@ -21,6 +21,14 @@
         circle
         @click="clearFilters"
       />
+      <el-button
+        class=""
+        icon="el-icon-refresh"
+        size="mini"
+        :loading="$wait.is('issueRefreshing')"
+        title="Fetch issues again"
+        @click="refreshIssues"
+      />
     </div>
     <perfect-scrollbar class="issues">
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
@@ -82,6 +90,7 @@ export default {
     ...mapActions({
       fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
       fetchIssuesForBoard: 'issues/fetchIssuesForBoard',
+      refreshIssues: 'issues/refreshIssues',
       fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
     }),
     ...mapMutations({
