@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form-item :label="field.name" label-width="150px">
+    <el-form-item :label="field.key" label-width="150px">
       <el-select
         v-model="inputValue"
         filterable
@@ -55,16 +55,15 @@ export default {
   computed: {
     inputValue: {
       get () {
-        return this.value && this.value.name
+        return this.value && this.value.key
       },
       set (newValue) {
         this.$emit('input', {
-          name: newValue
+          key: newValue
         })
       }
     },
     autoCompleteUrl () {
-      console.log(this.meta, 'metaa')
       return this.allFields.issuelinks.autoCompleteUrl
     },
     ...mapState({
@@ -81,7 +80,6 @@ export default {
       }
       this.loading = true
       this.$jira.makeRequest(options).then(response => {
-        console.log(response, 'response')
         this.options = response.sections[0].issues
         this.loading = false
       })
