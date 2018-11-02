@@ -14,7 +14,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        {{ form }}
         <component
           :is="getComponentForField(field)"
           v-for="field in fields"
