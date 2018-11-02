@@ -58,7 +58,6 @@ export default {
     }),
     fields () {
       if (!this.selectedIssueType) return []
-      console.log(this.selectedIssueType.fields)
       const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
     },

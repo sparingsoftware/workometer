@@ -1,11 +1,15 @@
 export default {
   methods: {
     handleErrors (errors) {
-      console.log(errors, 'errors')
-      const parsedErrors = JSON.parse(errors).body.errorMessages
+      let formattedErrors = ''
+      const parsedErrors = JSON.parse(errors)
+      formattedErrors += parsedErrors.body.errorMessages.join('\n')
+      Object.keys(parsedErrors.body.errors).forEach(field => {
+        formattedErrors += `${field}: ${parsedErrors.body.errors[field]}`
+      })
       this.$notify({
         title: 'Error',
-        message: parsedErrors.join(),
+        message: formattedErrors,
         type: 'error'
       })
     }
