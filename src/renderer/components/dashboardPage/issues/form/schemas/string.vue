@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form-item :label="field.name" label-width="150px">
-      <el-input v-model="val" :placeholder="field.name"/>
+      <el-input v-model="inputValue" :placeholder="field.name"/>
     </el-form-item>
   </div>
 </template>
@@ -12,11 +12,20 @@ export default {
     field: {
       type: Object,
       default: () => {}
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
-  data () {
-    return {
-      val: null
+  computed: {
+    inputValue: {
+      get () {
+        return this.value
+      },
+      set (newValue) {
+        this.$emit('input', newValue)
+      }
     }
   }
 }

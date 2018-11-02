@@ -2,8 +2,8 @@
   <div>
     <el-form-item :label="field.name" label-width="150px">
       <el-select
-        v-model="asd"
-        placeholder="field.name"
+        v-model="inputValue"
+        :placeholder="field.name"
         autocomplete="off"
         clearable
       >
@@ -25,11 +25,21 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
-  data () {
-    return {
-      asd: null
+  computed: {
+    inputValue: {
+      get () {
+        return this.value
+      },
+      set (newValue) {
+        console.log('aaa')
+        this.$emit('input', newValue)
+      }
     }
   }
 }

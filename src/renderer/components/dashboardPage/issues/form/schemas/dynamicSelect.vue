@@ -2,7 +2,7 @@
   <div>
     <el-form-item :label="field.name" label-width="150px">
       <el-select
-        v-model="val"
+        v-model="inputValue"
         filterable
         remote
         reserve-keyword
@@ -12,8 +12,8 @@
       >
         <el-option
           v-for="option in options"
-          :key="option.id"
-          :value="option.id"
+          :key="option.name"
+          :value="option.name"
           :label="option.name"
         />
       </el-select>
@@ -28,13 +28,29 @@ export default {
       type: Object,
       default: () => {
       }
+    },
+    value: {
+      type: Object,
+      default: () => {
+      }
     }
   },
   data () {
     return {
       options: [],
-      loading: false,
-      val: null
+      loading: false
+    }
+  },
+  computed: {
+    inputValue: {
+      get () {
+        return this.value && this.value.name
+      },
+      set (newValue) {
+        this.$emit('input', {
+          name: newValue
+        })
+      }
     }
   },
   methods: {

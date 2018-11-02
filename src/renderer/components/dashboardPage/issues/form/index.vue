@@ -3,21 +3,23 @@
     <el-dialog title="Add new issue" width="90vw" :visible.sync="dialogVisible">
       <el-form :model="form">
         <el-form-item label="Type" label-width="150px">
-          <el-select v-model="form.issue_type" placeholder="Type" autocomplete="off">
+          <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
             <el-option
               v-for="type in meta.issuetypes"
-              :key="type.id"
-              :value="type.id"
+              :key="type.name"
+              :value="type.name"
               :label="type.name"
             >
               <img class="type-icon" :src="type.iconUrl" alt=""> {{ type.name }}
             </el-option>
           </el-select>
         </el-form-item>
+        {{ form }}
         <component
           :is="getComponentForField(field)"
           v-for="field in fields"
           :key="field.key"
+          v-model="form[field.key]"
           :field="field"
         />
       </el-form>
@@ -31,21 +33,23 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Select from './select'
-import String from './string'
-import DynamicSelect from './dynamicSelect'
+import Select from './schemas/select'
+import String from './schemas/string'
+import Project from './schemas/project'
+import DynamicSelect from './schemas/dynamicSelect'
 
 export default {
   data () {
     return {
       dialogVisible: false,
-      form: {},
+      form: {
+        issuetype: {}
+      },
       meta: {},
       allowedFields: [
-        'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
+        'project', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
       ]
-      //  project & issuetype would be default
     }
   },
   computed: {
@@ -58,14 +62,15 @@ export default {
       selectedProjectId: 'boards/selectedProjectId'
     }),
     fields () {
-      if (!this.form.issue_type) return []
-      const selectedIssueType = this.meta.issuetypes.find(type => type.id === this.form.issue_type)
+      if (!this.form.issuetype.name) return []
+      const selectedIssueType = this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
+      console.log(selectedIssueType.fields)
       const allowedFields = this.allowedFields.map(field => selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
     }
   },
   methods: {
-    openIssueForm (issue = {}) {
+    openIssueForm (issue = { issuetype: {} }) {
       this.$jira.issue.getCreateMetadata({
         projectIds: this.selectedProjectId,
         expand: 'projects.issuetypes.fields'
@@ -76,12 +81,14 @@ export default {
       this.dialogVisible = true
     },
     submitForm () {
-      this.$notify({
-        title: 'Success',
-        message: 'saved!',
-        type: 'success'
-      })
-      this.closeDialog()
+      this.$jira.issue.createIssue({ fields: this.form }).then(response => {
+        this.$notify({
+          title: 'Success',
+          message: 'Worklog saved',
+          type: 'success'
+        })
+        this.closeDialog()
+      }).catch(this.handleErrors)
     },
     closeDialog () {
       this.dialogVisible = false
@@ -89,16 +96,21 @@ export default {
     getComponentForField (field) {
       /*
       * TODO: parent field for subtasks
-      * default values selecting (for projects and issue type)
       * sprint selecting
       * epics
+      *      * Creating a sub-task is similar to creating a regular issue, with two important differences:
+     *
+     * * the issueType field must correspond to a sub-task issue type (you can use /issue/createmeta to discover
+     * sub-task issue types), and
+     * * you must provide a parent field in the issue create request containing the id or key of the parent issue.
       * */
-      if (field.allowedValues !== undefined) {
-        return Select
-      } else if (field.autoCompleteUrl) {
-        return DynamicSelect
+      const schemas = {
+        array: Select,
+        string: String,
+        user: DynamicSelect,
+        project: Project
       }
-      return String
+      return schemas[field.schema.type] || String
     }
   }
 }
