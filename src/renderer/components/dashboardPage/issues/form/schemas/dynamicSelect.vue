@@ -5,6 +5,7 @@
         v-model="inputValue"
         filterable
         remote
+        clearable
         reserve-keyword
         placeholder="Please enter a keyword"
         :remote-method="fetchOptions"
@@ -14,8 +15,11 @@
           v-for="option in options"
           :key="option.name"
           :value="option.name"
-          :label="option.name"
-        />
+          :label="option.displayName || option.name"
+        >
+          <img class="icon" :src="option.avatarUrls['16x16']" alt="">
+          {{ option.displayName || option.name }}
+        </el-option>
       </el-select>
     </el-form-item>
   </div>
@@ -63,7 +67,6 @@ export default {
       }
       this.loading = true
       this.$jira.makeRequest(options).then(response => {
-        console.log(response, 'response')
         this.options = response
         this.loading = false
       })
@@ -73,5 +76,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .icon {
+    max-height: 65%;
+    vertical-align: middle;
+    margin-right: 3px;
+    max-width: 20px;
+  }
 </style>

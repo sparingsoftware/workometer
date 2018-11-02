@@ -12,7 +12,10 @@
           :key="option.key"
           :value="option.key"
           :label="option.name"
-        />
+        >
+          <img class="icon" :src="option.avatarUrls['16x16']" alt="">
+          {{ option.name }}
+        </el-option>
       </el-select>
     </el-form-item>
   </div>
@@ -47,5 +50,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .icon {
+    max-height: 65%;
+    vertical-align: middle;
+    margin-right: 3px;
+  }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="Add new issue" width="90vw" :visible.sync="dialogVisible">
+    <el-dialog :title="`Add new issue to ${selectedProject.projectName}`" width="90vw" :visible.sync="dialogVisible">
       <el-form :model="form">
         <el-form-item label="Type" label-width="150px">
           <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
@@ -35,7 +35,6 @@
 import { mapState, mapGetters } from 'vuex'
 import Select from './schemas/select'
 import String from './schemas/string'
-import Project from './schemas/project'
 import DynamicSelect from './schemas/dynamicSelect'
 
 export default {
@@ -47,7 +46,7 @@ export default {
       },
       meta: {},
       allowedFields: [
-        'project', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
+        'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
       ]
     }
@@ -59,7 +58,7 @@ export default {
       selectedBoard: state => state.boards.selectedBoard
     }),
     ...mapGetters({
-      selectedProjectId: 'boards/selectedProjectId'
+      selectedProject: 'boards/selectedProject'
     }),
     fields () {
       if (!this.form.issuetype.name) return []
@@ -72,7 +71,7 @@ export default {
   methods: {
     openIssueForm (issue = { issuetype: {} }) {
       this.$jira.issue.getCreateMetadata({
-        projectIds: this.selectedProjectId,
+        projectIds: this.selectedProject.projectId,
         expand: 'projects.issuetypes.fields'
       }).then(response => {
         this.meta = response.projects[0]
@@ -81,10 +80,17 @@ export default {
       this.dialogVisible = true
     },
     submitForm () {
-      this.$jira.issue.createIssue({ fields: this.form }).then(response => {
+      this.$jira.issue.createIssue({
+        fields: {
+          ...this.form,
+          project: {
+            key: this.selectedProject.projectKey
+          }
+        }
+      }).then(response => {
         this.$notify({
           title: 'Success',
-          message: 'Worklog saved',
+          message: 'Issue added',
           type: 'success'
         })
         this.closeDialog()
@@ -107,8 +113,7 @@ export default {
       const schemas = {
         array: Select,
         string: String,
-        user: DynamicSelect,
-        project: Project
+        user: DynamicSelect
       }
       return schemas[field.schema.type] || String
     }
