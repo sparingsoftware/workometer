@@ -26,7 +26,7 @@
         icon="el-icon-refresh"
         size="mini"
         :loading="$wait.is('issueRefreshing')"
-        title="Fetch issues again"
+        title="Fetch issues and sprints again"
         @click="refreshIssues"
       />
     </div>
