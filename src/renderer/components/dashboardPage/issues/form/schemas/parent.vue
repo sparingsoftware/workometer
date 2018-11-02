@@ -13,12 +13,13 @@
       >
         <el-option
           v-for="option in options"
-          :key="option.name"
-          :value="option.name"
-          :label="option.displayName || option.name"
+          :key="option.key"
+          :value="option.key"
+          :label="option.summaryText"
         >
-          <img class="icon" :src="option.avatarUrls['16x16']" alt="">
-          {{ option.displayName || option.name }}
+          <img class="icon" :src="`https://${host}/${option.img}`" alt="">
+          <strong>{{ option.key }} - </strong>
+          {{ option.summaryText }}
         </el-option>
       </el-select>
     </el-form-item>
@@ -26,12 +27,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     field: {
       type: Object,
       default: () => {
       }
+    },
+    allFields: {
+      type: Object,
+      default: () => {}
     },
     value: {
       type: Object,
@@ -55,19 +62,27 @@ export default {
           name: newValue
         })
       }
-    }
+    },
+    autoCompleteUrl () {
+      console.log(this.meta, 'metaa')
+      return this.allFields.issuelinks.autoCompleteUrl
+    },
+    ...mapState({
+      host: state => state.login.host
+    })
   },
   methods: {
     fetchOptions (query) {
       const options = {
-        uri: `${this.field.autoCompleteUrl}${query}`,
+        uri: `${this.autoCompleteUrl}${query}`,
         method: 'GET',
         json: true,
         followAllRedirects: true
       }
       this.loading = true
       this.$jira.makeRequest(options).then(response => {
-        this.options = response
+        console.log(response, 'response')
+        this.options = response.sections[0].issues
         this.loading = false
       })
     }

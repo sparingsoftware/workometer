@@ -21,6 +21,7 @@
           :key="field.key"
           v-model="form[field.key]"
           :field="field"
+          :all-fields="selectedIssueType.fields"
         />
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -47,8 +48,8 @@ export default {
       },
       meta: {},
       allowedFields: [
-        'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
-        'priority', 'reporter', 'parent'
+        'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
+        'priority', 'reporter'
       ]
     }
   },
@@ -57,12 +58,13 @@ export default {
       selectedProject: 'boards/selectedProject'
     }),
     fields () {
+      if (!this.selectedIssueType) return []
       console.log(this.selectedIssueType.fields)
       const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
     },
     selectedIssueType () {
-      if (!this.form.issuetype.name) return {}
+      if (!this.form.issuetype.name) return
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     }
   },
@@ -105,7 +107,7 @@ export default {
         array: Select,
         string: String,
         user: DynamicSelect,
-        parent: Parent
+        issuelink: Parent
       }
       return schemas[field.schema.type] || String
     }
