@@ -5,12 +5,13 @@
         v-model="inputValue"
         :placeholder="field.name"
         autocomplete="off"
+        multiple
         clearable
       >
         <el-option
           v-for="option in field.allowedValues"
-          :key="option.id"
-          :value="option.id"
+          :key="option.name"
+          :value="option.name"
           :label="option.name"
         />
       </el-select>
@@ -27,18 +28,19 @@ export default {
       }
     },
     value: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     }
   },
   computed: {
     inputValue: {
       get () {
-        return this.value
+        return this.value && this.value.map(value => value.name)
       },
-      set (newValue) {
-        console.log('aaa')
-        this.$emit('input', newValue)
+      set (newValues) {
+        this.$emit('input', newValues.map(value => ({
+          name: value
+        })))
       }
     }
   }
