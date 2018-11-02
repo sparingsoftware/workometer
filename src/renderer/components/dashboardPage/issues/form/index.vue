@@ -32,9 +32,10 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Select from './schemas/select'
 import String from './schemas/string'
+import Parent from './schemas/parent'
 import DynamicSelect from './schemas/dynamicSelect'
 
 export default {
@@ -47,37 +48,37 @@ export default {
       meta: {},
       allowedFields: [
         'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
-        'priority', 'reporter'
+        'priority', 'reporter', 'parent'
       ]
     }
   },
   computed: {
-    ...mapState({
-      sprints: state => state.sprints.sprints,
-      statuses: state => state.boards.statuses,
-      selectedBoard: state => state.boards.selectedBoard
-    }),
     ...mapGetters({
       selectedProject: 'boards/selectedProject'
     }),
     fields () {
-      if (!this.form.issuetype.name) return []
-      const selectedIssueType = this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
-      console.log(selectedIssueType.fields)
-      const allowedFields = this.allowedFields.map(field => selectedIssueType.fields[field])
+      console.log(this.selectedIssueType.fields)
+      const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
+    },
+    selectedIssueType () {
+      if (!this.form.issuetype.name) return {}
+      return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     }
   },
   methods: {
     openIssueForm (issue = { issuetype: {} }) {
+      this.fetchMetadata()
+      this.form = JSON.parse(JSON.stringify(issue))
+      this.dialogVisible = true
+    },
+    fetchMetadata () {
       this.$jira.issue.getCreateMetadata({
         projectIds: this.selectedProject.projectId,
         expand: 'projects.issuetypes.fields'
       }).then(response => {
         this.meta = response.projects[0]
       })
-      this.form = JSON.parse(JSON.stringify(issue))
-      this.dialogVisible = true
     },
     submitForm () {
       this.$jira.issue.createIssue({
@@ -100,20 +101,11 @@ export default {
       this.dialogVisible = false
     },
     getComponentForField (field) {
-      /*
-      * TODO: parent field for subtasks
-      * sprint selecting
-      * epics
-      *      * Creating a sub-task is similar to creating a regular issue, with two important differences:
-     *
-     * * the issueType field must correspond to a sub-task issue type (you can use /issue/createmeta to discover
-     * sub-task issue types), and
-     * * you must provide a parent field in the issue create request containing the id or key of the parent issue.
-      * */
       const schemas = {
         array: Select,
         string: String,
-        user: DynamicSelect
+        user: DynamicSelect,
+        parent: Parent
       }
       return schemas[field.schema.type] || String
     }

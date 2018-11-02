@@ -33,7 +33,7 @@
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
-      <el-button class="create-issue-button" @click="createNewIssue">
+      <el-button class="create-issue-button" title="Create issue" @click="createNewIssue">
         <i
           class="fa fa-plus-circle"
         />
@@ -134,7 +134,7 @@ export default {
 
   .create-issue-button {
     position: fixed;
-    bottom: 0;
-    right: 0;
+    bottom: 15px;
+    right: 10px;
   }
 </style>
