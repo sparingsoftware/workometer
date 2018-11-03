@@ -18,6 +18,7 @@ import Issues from './issues/'
 import RecentWorklogs from './recentWorklogs/'
 import BoardsPicker from './pickers/boardsPicker/'
 import SprintsPicker from './pickers/sprintsPicker/'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -31,7 +32,13 @@ export default {
       currentTab: 'issues'
     }
   },
+  created () {
+    this.fetchUserDetails()
+  },
   methods: {
+    ...mapActions({
+      fetchUserDetails: 'fetchUserDetails'
+    }),
     changeTab (tab) {
       this.currentTab = tab.name
     }

@@ -43,6 +43,12 @@ export default {
       issueId
     })
   },
+  setIssueAssign: async ({ issueId, assignee }) => {
+    return Vue.jira.issue.assignIssue({
+      issueId,
+      assignee
+    })
+  },
   addWorkLog: (trackedIssueId, trackingStartTime, timeSpentSeconds, comment = '') => {
     return Vue.jira.issue.addWorkLog({
       issueId: trackedIssueId,
@@ -61,5 +67,8 @@ export default {
   },
   login: creds => Vue.jira.auth.login(creds).then(res => {
     Vue.jira.basic_auth = creds
-  })
+  }),
+  userDetails: () => {
+    return Vue.jira.myself.getMyself()
+  }
 }

@@ -3,7 +3,7 @@
     class="issue fluid"
     :class="{'issue--subtask': issue.fields.issuetype.subtask}"
   >
-    <preloader-bar v-wait:visible="`issueStatusChange_${issue.id}`"/>
+    <preloader-bar v-wait:visible="[`issueStatusChange_${issue.id}`, `issueAssignChange_${issue.id}`]"/>
     <div class="issue__details">
       <div class="issue__key">{{ issue.key }}</div>
       <div class="issue__description">

@@ -6,6 +6,9 @@
         <li @click="logWork(child.data)">
           Log Work
         </li>
+        <li @click="assignIssueToMe({issue: child.data})">
+          Assign to me
+        </li>
         <p class="separator">Change status</p>
         <li
           v-for="status in statuses(child.data)"
@@ -42,7 +45,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setIssueStatus: 'issues/setIssueStatus'
+      setIssueStatus: 'issues/setIssueStatus',
+      assignIssueToMe: 'issues/assignIssueToMe'
     }),
     logWork (issue) {
       this.$refs.logWorkDialog.logWork(issue)
