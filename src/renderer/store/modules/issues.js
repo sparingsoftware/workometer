@@ -72,8 +72,12 @@ const actions = {
     dispatch('wait/start', 'issueRefreshing', { root: true })
     const selectedSprintId = rootState.sprints.selectedSprintId
     const selectedBoardId = rootState.boards.selectedBoardId
-    await dispatch('fetchIssuesForSprint', selectedSprintId)
-    await dispatch('fetchIssuesForBoard', selectedBoardId)
+    if (selectedSprintId) {
+      await dispatch('fetchIssuesForSprint', selectedSprintId)
+    }
+    if (selectedBoardId) {
+      await dispatch('fetchIssuesForBoard', selectedBoardId)
+    }
     await dispatch('sprints/fetchSprints', selectedBoardId, { root: true })
     dispatch('wait/end', 'issueRefreshing', { root: true })
   }
