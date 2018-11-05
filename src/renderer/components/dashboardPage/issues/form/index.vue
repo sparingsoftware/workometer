@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="`Add new issue to ${selectedProject.projectName}`" width="90vw" :visible.sync="dialogVisible">
+    <el-dialog :title="dialogLabel" width="90vw" :visible.sync="dialogVisible">
       <el-form :model="form">
         <el-form-item label="Type" label-width="150px">
           <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
@@ -70,6 +70,11 @@ export default {
       if (!this.form.issuetype.name) return
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
+    dialogLabel () {
+      return this.selectedProject
+        ? `Add new issue to ${this.selectedProject.projectName}`
+        : ''
+    },
     sprintField () {
       return {
         key: 'sprint',
@@ -84,6 +89,7 @@ export default {
   },
   methods: {
     openIssueForm (issue = { issuetype: {} }) {
+      if (!this.selectedProject) return
       this.fetchMetadata()
       this.form = JSON.parse(JSON.stringify(issue))
       this.dialogVisible = true

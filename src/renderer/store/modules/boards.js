@@ -30,11 +30,12 @@ const mutations = {
 
 const getters = {
   selectedProjectId (state, getters) {
-    return getters.selectedProject.projectId
+    const selectedProject = getters.selectedProject
+    return selectedProject && selectedProject.projectId
   },
   selectedProject (state) {
     const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
-    return selectedBoard.location
+    return selectedBoard && selectedBoard.location
   }
 }
 
