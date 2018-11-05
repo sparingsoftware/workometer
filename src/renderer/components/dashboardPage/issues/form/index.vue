@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import MultipleSelectInput from './schemas/multipleSelect'
 import SelectInput from './schemas/select'
 import StringInput from './schemas/string'
@@ -88,6 +88,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      refreshIssues: 'issues/refreshIssues'
+    }),
     openIssueForm (issue = { issuetype: {} }) {
       if (!this.selectedProject) return
       this.fetchMetadata()
@@ -113,6 +116,7 @@ export default {
           type: 'success'
         })
         this.closeDialog()
+        this.refreshIssues()
       }).catch(this.handleErrors)
     },
     closeDialog () {
