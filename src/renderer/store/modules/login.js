@@ -37,8 +37,7 @@ const actions = {
     }
     commit('setBasicAuth', creds)
   },
-  async logout ({ commit, dispatch }, creds) {
-    await service.logout()
+  async logout ({ commit, dispatch }) {
     commit('removeUserData')
     router.push({ name: 'login' })
   },

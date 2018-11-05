@@ -10,6 +10,17 @@ const jiraClient = new JiraClient({
   host
 })
 
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  const status = error.response.status
+  if (status === 401) {
+    store.dispatch('logout')
+  }
+  return Promise.reject(error)
+})
+
+
 axios.defaults.headers.common['X-Atlassian-Token'] = 'nocheck'
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -17,18 +28,13 @@ jiraClient.makeRequest = function (options, callback, successString) {
   options.data = options.body
   options.params = options.qs
   options.url = options.uri
-  if (this.oauthConfig) {
-    options.oauth = this.oauthConfig
-  } else if (this.basic_auth) {
-    if (this.basic_auth.base64) {
-      if (!options.headers) {
-        options.headers = {}
-      }
-      options.headers['Authorization'] = 'Basic ' + this.basic_auth.base64
-    } else {
-      store.dispatch('logout')
-    }
+
+  if (!options.headers) {
+    options.headers = {}
   }
+  const authorizationHeader = this.basic_auth && 'Basic ' + this.basic_auth.base64
+  options.headers['Authorization'] = authorizationHeader
+
   return axios(options).then(res => res.data)
 }
 export default jiraClient
