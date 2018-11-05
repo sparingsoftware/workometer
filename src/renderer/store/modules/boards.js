@@ -5,7 +5,8 @@ import service from '@/service'
 const state = {
   selectedBoardId: null,
   boards: [],
-  statusesMap: {}
+  statusesMap: {},
+  statuses: []
 }
 
 const mutations = {
@@ -16,6 +17,7 @@ const mutations = {
     state.selectedBoardId = boardId
   },
   setStatusesMap (state, statuses) {
+    state.statuses = statuses
     const statusesMap = keyBy(statuses, 'name')
     state.statusesMap = mapValues(statusesMap, 'statuses')
   },
@@ -26,6 +28,16 @@ const mutations = {
   }
 }
 
+const getters = {
+  selectedProjectId (state, getters) {
+    return getters.selectedProject.projectId
+  },
+  selectedProject (state) {
+    const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
+    return selectedBoard.location
+  }
+}
+
 const actions = {
   async fetchBoards ({ commit, dispatch }) {
     dispatch('wait/start', 'boardsLoading', { root: true })
@@ -33,10 +45,8 @@ const actions = {
     commit('setBoards', boards)
     dispatch('wait/end', 'boardsLoading', { root: true })
   },
-  async fetchStatusesForSelectedBoard ({ commit, state }) {
-    const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
-    const projectId = selectedBoard.location.projectId
-    const statuses = await service.getStatuses(projectId)
+  async fetchStatusesForSelectedBoard ({ commit, state, getters }) {
+    const statuses = await service.getStatuses(getters.selectedProjectId)
     commit('setStatusesMap', statuses)
   }
 }
@@ -44,6 +54,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

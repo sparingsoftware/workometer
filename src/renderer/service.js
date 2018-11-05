@@ -72,5 +72,24 @@ export default {
   },
   userDetails: () => {
     return Vue.jira.myself.getMyself()
+  },
+  createIssue: ({ projectKey, form }) => {
+    return Vue.jira.issue.createIssue({
+      fields: {
+        ...form,
+        project: {
+          key: projectKey
+        }
+      }
+    })
+  },
+  getAutocompletion ({ url }) {
+    const options = {
+      uri: url,
+      method: 'GET',
+      json: true,
+      followAllRedirects: true
+    }
+    return Vue.jira.makeRequest(options)
   }
 }
