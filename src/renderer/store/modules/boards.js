@@ -18,6 +18,11 @@ const mutations = {
   setStatusesMap (state, statuses) {
     const statusesMap = keyBy(statuses, 'name')
     state.statusesMap = mapValues(statusesMap, 'statuses')
+  },
+  clearBoards (state) {
+    state.boards = []
+    state.statusesMap = {}
+    state.selectedBoardId = null
   }
 }
 

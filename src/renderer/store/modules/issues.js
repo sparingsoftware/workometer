@@ -24,6 +24,10 @@ const mutations = {
   updateIssue (state, { oldIssue, newIssue }) {
     /* This is a state mutation! */
     Object.assign(oldIssue, newIssue)
+  },
+  clearIssues (state) {
+    state.issuesForBoard = {}
+    state.issuesForSprint = {}
   }
 }
 

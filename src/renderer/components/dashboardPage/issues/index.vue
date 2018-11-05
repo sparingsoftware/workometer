@@ -135,6 +135,6 @@ export default {
   .remove-filters-button {
     position: absolute;
     top: -11px;
-    right: 63px;
+    right: 114px;
   }
 </style>
