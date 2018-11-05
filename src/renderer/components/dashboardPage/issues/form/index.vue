@@ -37,6 +37,7 @@ import Select from './schemas/select'
 import String from './schemas/string'
 import Parent from './schemas/parent'
 import DynamicSelect from './schemas/dynamicSelect'
+import service from '@/service'
 
 export default {
   data () {
@@ -81,13 +82,9 @@ export default {
       })
     },
     submitForm () {
-      this.$jira.issue.createIssue({
-        fields: {
-          ...this.form,
-          project: {
-            key: this.selectedProject.projectKey
-          }
-        }
+      service.createIssue({
+        projectKey: this.selectedProject.projectKey,
+        form: this.form
       }).then(response => {
         this.$notify({
           title: 'Success',

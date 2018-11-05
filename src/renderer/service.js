@@ -61,5 +61,15 @@ export default {
   },
   login: creds => Vue.jira.auth.login(creds).then(res => {
     Vue.jira.basic_auth = creds
-  })
+  }),
+  createIssue: ({ projectKey, form }) => {
+    return Vue.jira.issue.createIssue({
+      fields: {
+        ...form,
+        project: {
+          key: projectKey
+        }
+      }
+    })
+  }
 }
