@@ -22,12 +22,19 @@
         @click="clearFilters"
       />
       <el-button
-        class=""
         icon="el-icon-refresh"
         size="mini"
         :loading="$wait.is('issueRefreshing')"
         title="Fetch issues and sprints again"
         @click="refreshIssues"
+      />
+      <el-button
+        icon="fa fa-sign-out"
+        type="warning"
+        size="mini"
+        :loading="$wait.is('logout')"
+        title="Logout"
+        @click="logout"
       />
     </div>
     <perfect-scrollbar class="issues">
@@ -91,7 +98,8 @@ export default {
       fetchIssuesForSprint: 'issues/fetchIssuesForSprint',
       fetchIssuesForBoard: 'issues/fetchIssuesForBoard',
       refreshIssues: 'issues/refreshIssues',
-      fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard'
+      fetchStatusesForProject: 'boards/fetchStatusesForSelectedBoard',
+      logout: 'logout'
     }),
     ...mapMutations({
       clearFilters: 'filters/clearFilters'

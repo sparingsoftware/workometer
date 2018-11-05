@@ -1,7 +1,7 @@
 export default {
   methods: {
     handleErrors (errors) {
-      const parsedErrors = JSON.parse(errors).body.errorMessages
+      const parsedErrors = errors.response.data.errorMessages
       this.$notify({
         title: 'Error',
         message: parsedErrors.join(),

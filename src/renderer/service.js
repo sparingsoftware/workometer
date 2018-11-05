@@ -65,9 +65,11 @@ export default {
   getStatuses: projectIdOrKey => {
     return Vue.jira.project.getStatuses({ projectIdOrKey })
   },
-  login: creds => Vue.jira.auth.login(creds).then(res => {
-    Vue.jira.basic_auth = creds
-  }),
+  login: creds => Vue.jira.auth.login(creds),
+  logout: () => {
+    Vue.jira.basic_auth = null
+    Vue.jira.auth.logout()
+  },
   userDetails: () => {
     return Vue.jira.myself.getMyself()
   }
