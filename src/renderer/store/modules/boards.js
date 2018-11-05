@@ -24,10 +24,8 @@ const mutations = {
 }
 
 const getters = {
-  selectedProjectId (state) {
-    const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
-    console.log(selectedBoard.location)
-    return selectedBoard.location.projectId
+  selectedProjectId (state, getters) {
+    return getters.selectedProject.projectId
   },
   selectedProject (state) {
     const selectedBoard = state.boards.find(board => board.id === state.selectedBoardId)
