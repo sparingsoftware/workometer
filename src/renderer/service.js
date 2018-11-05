@@ -71,5 +71,14 @@ export default {
         }
       }
     })
+  },
+  getAutocompletion ({ url }) {
+    const options = {
+      uri: url,
+      method: 'GET',
+      json: true,
+      followAllRedirects: true
+    }
+    return Vue.jira.makeRequest(options)
   }
 }

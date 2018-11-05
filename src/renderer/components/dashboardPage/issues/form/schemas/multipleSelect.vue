@@ -5,6 +5,7 @@
         v-model="inputValue"
         :placeholder="field.name"
         autocomplete="off"
+        multiple
         clearable
       >
         <el-option
@@ -26,19 +27,19 @@ export default {
       default: () => ({})
     },
     value: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => ([])
     }
   },
   computed: {
     inputValue: {
       get () {
-        return this.value && this.value.name
+        return this.value && this.value.map(value => value.name)
       },
-      set (newValue) {
-        this.$emit('input', {
-          name: newValue
-        })
+      set (newValues) {
+        this.$emit('input', newValues.map(value => ({
+          name: value
+        })))
       }
     }
   }

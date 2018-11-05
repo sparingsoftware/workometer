@@ -32,11 +32,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Select from './schemas/select'
-import String from './schemas/string'
-import Parent from './schemas/parent'
-import DynamicSelect from './schemas/dynamicSelect'
+import { mapGetters, mapState } from 'vuex'
+import MultipleSelectInput from './schemas/multipleSelect'
+import SelectInput from './schemas/select'
+import StringInput from './schemas/string'
+import ParentInput from './schemas/parent'
+import DynamicSelectInput from './schemas/dynamicSelect'
 import service from '@/service'
 
 export default {
@@ -57,6 +58,9 @@ export default {
     ...mapGetters({
       selectedProject: 'boards/selectedProject'
     }),
+    ...mapState({
+      sprints: state => state.sprints.sprints
+    }),
     fields () {
       if (!this.selectedIssueType) return []
       const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
@@ -65,6 +69,17 @@ export default {
     selectedIssueType () {
       if (!this.form.issuetype.name) return
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
+    },
+    sprintField () {
+      return {
+        key: 'sprint',
+        name: 'Sprint',
+        required: false,
+        schema: {
+          type: 'select'
+        },
+        allowedValues: this.sprints.filter(sprint => sprint.name !== 'Backlog')
+      }
     }
   },
   methods: {
@@ -99,12 +114,13 @@ export default {
     },
     getComponentForField (field) {
       const schemas = {
-        array: Select,
-        string: String,
-        user: DynamicSelect,
-        issuelink: Parent
+        array: MultipleSelectInput,
+        select: SelectInput,
+        string: StringInput,
+        user: DynamicSelectInput,
+        issuelink: ParentInput
       }
-      return schemas[field.schema.type] || String
+      return schemas[field.schema.type] || StringInput
     }
   }
 }

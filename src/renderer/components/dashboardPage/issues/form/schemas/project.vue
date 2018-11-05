@@ -26,12 +26,11 @@ export default {
   props: {
     field: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     },
     value: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   computed: {

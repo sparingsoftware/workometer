@@ -28,22 +28,21 @@
 
 <script>
 import { mapState } from 'vuex'
+import service from '@/service'
 
 export default {
   props: {
     field: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     },
     allFields: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     },
     value: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data () {
@@ -72,15 +71,12 @@ export default {
   },
   methods: {
     fetchOptions (query) {
-      const options = {
-        uri: `${this.autoCompleteUrl}${query}`,
-        method: 'GET',
-        json: true,
-        followAllRedirects: true
-      }
       this.loading = true
-      this.$jira.makeRequest(options).then(response => {
+      service.getAutocompletion({
+        url: `${this.autoCompleteUrl}${query}`
+      }).then(response => {
         this.options = response.sections[0].issues
+      }).finally(() => {
         this.loading = false
       })
     }

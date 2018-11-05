@@ -26,17 +26,17 @@
 </template>
 
 <script>
+import service from '@/service'
+
 export default {
   props: {
     field: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     },
     value: {
       type: Object,
-      default: () => {
-      }
+      default: () => ({})
     }
   },
   data () {
@@ -59,15 +59,12 @@ export default {
   },
   methods: {
     fetchOptions (query) {
-      const options = {
-        uri: `${this.field.autoCompleteUrl}${query}`,
-        method: 'GET',
-        json: true,
-        followAllRedirects: true
-      }
       this.loading = true
-      this.$jira.makeRequest(options).then(response => {
+      service.getAutocompletion({
+        url: `${this.field.autoCompleteUrl}${query}`
+      }).then(response => {
         this.options = response
+      }).finally(() => {
         this.loading = false
       })
     }
