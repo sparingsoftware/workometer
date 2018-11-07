@@ -38,7 +38,7 @@
         @click="logout"
       />
     </div>
-    <perfect-scrollbar class="issues">
+    <perfect-scrollbar ref="issuesContainer" class="issues">
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
         <issue
@@ -90,6 +90,9 @@ export default {
   watch: {
     selectedSprintId (id) {
       if (id) this.fetchIssuesForSprint(id)
+    },
+    getFilteredIssues () {
+      this.$refs.issuesContainer.$refs.container.scrollTop = 0
     },
     selectedBoardId: {
       immediate: true,
