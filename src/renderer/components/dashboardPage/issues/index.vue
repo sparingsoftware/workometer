@@ -129,7 +129,6 @@ export default {
       this.$refs.issueForm.openIssueForm()
     },
     openIssueDetails (issue) {
-      console.log('open')
       this.$refs.detailsDialog.openDialog(issue)
     }
   }
