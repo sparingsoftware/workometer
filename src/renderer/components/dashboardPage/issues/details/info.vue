@@ -32,7 +32,7 @@
           <p class="detail">
             <span class="detail__name">labels</span>
             <span class="detail__value">
-              {{ formatArray(issue.fields.labels) }}
+              {{ issue.fields.labels.join(', ') }}
             </span>
           </p>
         </div>

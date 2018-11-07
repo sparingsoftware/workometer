@@ -2,6 +2,7 @@
   <div>
     <filters ref="filtersDialog"/>
     <issue-form ref="issueForm"/>
+    <issue-details-dialog ref="detailsDialog"/>
     <context-menu ref="contextMenu"/>
     <div class="filters-bar">
       <search class="search"/>
@@ -38,7 +39,6 @@
         @click="logout"
       />
     </div>
-    <issue-details-dialog ref="detailsDialog"/>
     <perfect-scrollbar ref="issuesContainer" class="issues">
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
@@ -46,7 +46,7 @@
           v-for="issue in getFilteredIssues"
           :key="issue.id"
           :issue="issue"
-          @click.native="openIssueDetails(issue)"
+          @keyClicked="openIssueDetails(issue)"
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>

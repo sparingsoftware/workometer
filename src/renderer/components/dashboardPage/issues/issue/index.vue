@@ -5,7 +5,9 @@
   >
     <preloader-bar v-wait:visible="[`issueStatusChange_${issue.id}`, `issueAssignChange_${issue.id}`]"/>
     <div class="issue__details">
-      <div class="issue__key">{{ issue.key }}</div>
+      <div class="issue__key" title="Show details" @click="$emit('keyClicked')">
+        {{ issue.key }}
+      </div>
       <div class="issue__description">
         {{ issue.fields.summary }}
       </div>
@@ -48,6 +50,7 @@ export default {
       padding: 10px 15px 10px 40px;
     }
     &__key {
+      cursor: pointer;
       font-weight: 700;
     }
     &__description {

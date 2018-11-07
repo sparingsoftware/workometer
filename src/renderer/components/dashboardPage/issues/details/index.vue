@@ -2,7 +2,8 @@
   <div>
     <el-dialog
       :title="dialogTitle"
-      fullscreen
+      width="90vw"
+      center
       :visible.sync="dialogVisible"
     >
       <info :issue="issue"/>
