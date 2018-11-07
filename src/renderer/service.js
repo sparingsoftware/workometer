@@ -49,6 +49,12 @@ export default {
       assignee
     })
   },
+  moveIssueToSprint: ({issueKey, sprintId}) => {
+    return Vue.jira.sprint.moveSprintIssues({
+      issues: [issueKey],
+      sprintId
+    })
+  },
   addWorkLog: (trackedIssueId, trackingStartTime, timeSpentSeconds, comment = '') => {
     return Vue.jira.issue.addWorkLog({
       issueId: trackedIssueId,

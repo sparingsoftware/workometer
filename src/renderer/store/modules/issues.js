@@ -78,7 +78,6 @@ const actions = {
     if (selectedBoardId) {
       await dispatch('fetchIssuesForBoard', selectedBoardId)
     }
-    await dispatch('sprints/fetchSprints', selectedBoardId, { root: true })
     dispatch('wait/end', 'issueRefreshing', { root: true })
   }
 }

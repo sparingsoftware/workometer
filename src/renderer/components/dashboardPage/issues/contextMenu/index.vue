@@ -9,6 +9,9 @@
         <li @click="assignIssueToMe({issue: child.data})">
           Assign to me
         </li>
+        <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
+          Move to {{ sprint.name }}
+        </li>
         <p class="separator">Change status</p>
         <li
           v-for="status in statuses(child.data)"
@@ -26,6 +29,7 @@
 import { mapState, mapActions } from 'vuex'
 import { VueContext } from 'vue-context'
 import LogWorkDialog from './actions/logWorkDialog/'
+import service from '@/service'
 
 export default {
   components: {
@@ -40,16 +44,31 @@ export default {
   },
   computed: {
     ...mapState({
-      statusesMap: state => state.boards.statusesMap
-    })
+      statusesMap: state => state.boards.statusesMap,
+      sprints: state => state.sprints.sprints,
+      selectedSprintId: state => state.sprints.selectedSprintId
+    }),
+    availableSprints () {
+      const notSelectedAndNotBacklog = sprint => sprint.name !== 'Backlog' && sprint.id !== this.selectedSprintId
+      return this.sprints.filter(notSelectedAndNotBacklog)
+    }
   },
   methods: {
     ...mapActions({
       setIssueStatus: 'issues/setIssueStatus',
-      assignIssueToMe: 'issues/assignIssueToMe'
+      assignIssueToMe: 'issues/assignIssueToMe',
+      refreshIssues: 'issues/refreshIssues'
     }),
     logWork (issue) {
       this.$refs.logWorkDialog.openDialog(issue)
+    },
+    moveToSprint ({issue, sprint}) {
+      service.moveIssueToSprint({
+        issueKey: issue.key,
+        sprintId: sprint.id
+      }).then(response => {
+        this.refreshIssues()
+      }).catch(this.handleErrors)
     },
     statuses (issue) {
       return issue
