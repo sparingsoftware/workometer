@@ -91,7 +91,7 @@ export default {
     ...mapActions({
       refreshIssues: 'issues/refreshIssues'
     }),
-    openIssueForm (issue = { issuetype: {} }) {
+    openDialog (issue = { issuetype: {} }) {
       if (!this.selectedProject) return
       this.fetchMetadata()
       this.form = JSON.parse(JSON.stringify(issue))

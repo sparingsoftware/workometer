@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    logWork (issue) {
+    openDialog (issue) {
       this.issue = issue
       this.dialogVisible = true
     },

@@ -33,7 +33,7 @@ export default {
     }
   },
   methods: {
-    openFiltersDialog () {
+    openDialog () {
       this.dialogVisible = true
     },
     closeDialog () {

@@ -123,10 +123,10 @@ export default {
       this.$refs.contextMenu.$refs.vueContext.open(event, issue)
     },
     openFilters () {
-      this.$refs.filtersDialog.openFiltersDialog()
+      this.$refs.filtersDialog.openDialog()
     },
     createNewIssue () {
-      this.$refs.issueForm.openIssueForm()
+      this.$refs.issueForm.openDialog()
     },
     openIssueDetails (issue) {
       this.$refs.detailsDialog.openDialog(issue)

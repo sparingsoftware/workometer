@@ -49,7 +49,7 @@ export default {
       assignIssueToMe: 'issues/assignIssueToMe'
     }),
     logWork (issue) {
-      this.$refs.logWorkDialog.logWork(issue)
+      this.$refs.logWorkDialog.openDialog(issue)
     },
     statuses (issue) {
       return issue
