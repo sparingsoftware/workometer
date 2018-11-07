@@ -38,6 +38,7 @@
         @click="logout"
       />
     </div>
+    <issue-details-dialog ref="detailsDialog"/>
     <perfect-scrollbar ref="issuesContainer" class="issues">
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
@@ -45,6 +46,7 @@
           v-for="issue in getFilteredIssues"
           :key="issue.id"
           :issue="issue"
+          @click.native="openIssueDetails(issue)"
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
@@ -64,6 +66,7 @@ import IssueForm from './form/'
 import search from './search/'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
+import IssueDetailsDialog from './details/'
 
 export default {
   components: {
@@ -71,7 +74,8 @@ export default {
     issue,
     ContextMenu,
     filters,
-    IssueForm
+    IssueForm,
+    IssueDetailsDialog
   },
   computed: {
     ...mapState({
@@ -123,6 +127,10 @@ export default {
     },
     createNewIssue () {
       this.$refs.issueForm.openIssueForm()
+    },
+    openIssueDetails (issue) {
+      console.log('open')
+      this.$refs.detailsDialog.openDialog(issue)
     }
   }
 }
