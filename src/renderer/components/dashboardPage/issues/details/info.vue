@@ -74,9 +74,7 @@
           <p class="description__label">
             Description
           </p>
-          <p class="description__value">
-            {{ issue.fields.description }}
-          </p>
+          <p class="description__value">{{ issue.fields.description }}</p>
         </div>
       </el-col>
     </el-row>
