@@ -25,7 +25,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
-        <el-button type="primary" @click="submitForm">Confirm</el-button>
+        <el-button type="primary" :loading="$wait.is('issueCreating')" @click="submitForm">
+          Confirm
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -90,7 +92,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      refreshIssues: 'issues/refreshIssues'
+      refreshIssues: 'issues/refreshIssues',
+      waitStart: 'wait/start',
+      waitEnd: 'wait/end'
     }),
     openDialog (issue = { issuetype: {} }) {
       if (!this.selectedProject) return
@@ -107,6 +111,7 @@ export default {
       })
     },
     submitForm () {
+      this.waitStart('issueCreating')
       service.createIssue({
         projectKey: this.selectedProject.projectKey,
         form: this.form
@@ -119,6 +124,9 @@ export default {
         this.closeDialog()
         this.refreshIssues()
       }).catch(this.handleErrors)
+        .finally(() => {
+          this.waitEnd('issueCreating')
+        })
     },
     closeDialog () {
       this.dialogVisible = false
