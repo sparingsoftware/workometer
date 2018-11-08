@@ -1,20 +1,25 @@
 <template>
   <div class="container">
     <el-tag
-      v-if="timeTrackingOnJiraScreen"
+      v-if="timeTrackingOnJiraScreen || originalEstimate"
       size="mini"
       title="Original Time Estimate"
       class="text-uppercase estimate"
     >
-      <span v-if="editMode">
-        <form @submit.prevent="submitEstimate">
-          <input v-model="form.originalEstimate" class="input">
-          <el-button class="submit"><i class="estimate__icon fa fa-save" @click="submitEstimate"/></el-button>
-        </form>
+      <span v-if="timeTrackingOnJiraScreen">
+        <span v-if="editMode">
+          <form @submit.prevent="submitEstimate">
+            <input v-model="form.originalEstimate" class="input">
+            <el-button class="submit"><i class="estimate__icon fa fa-save" @click="submitEstimate"/></el-button>
+          </form>
+        </span>
+        <span v-else @click="editEstimate">
+          {{ estimateLabel }}
+          <i class="estimate__icon fa fa-pencil"/>
+        </span>
       </span>
-      <span v-else @click="editEstimate">
-        {{ estimateValue }}
-        <i class="estimate__icon fa fa-pencil"/>
+      <span v-else>
+        {{ originalEstimate }}
       </span>
     </el-tag>
   </div>
@@ -39,9 +44,12 @@ export default {
     }
   },
   computed: {
-    estimateValue () {
+    estimateLabel () {
       const estimateSet = this.issue.fields.timetracking.originalEstimate
       return estimateSet || 'Set estimate'
+    },
+    originalEstimate () {
+      return this.issue.fields.timetracking.originalEstimate
     }
   },
   methods: {
