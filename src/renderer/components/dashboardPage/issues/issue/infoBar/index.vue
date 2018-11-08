@@ -8,6 +8,7 @@
     >
     <img class="issue__icon" :src="issue.fields.issuetype.iconUrl" :title="issue.fields.issuetype.name">
     <status class="issue__status" :status="issue.fields.status"/>
+    <estimate :issue="issue"/>
     <a class="issue__link" @click="openInBrowser(issue.key)">
       <i class="fa fa-external-link" title="Go to issue on Jira"/>
     </a>
@@ -28,10 +29,12 @@
 import Status from './status'
 import open from 'open'
 import { mapState } from 'vuex'
+import Estimate from './estimate'
 
 export default {
   components: {
-    Status
+    Status,
+    Estimate
   },
   props: {
     issue: {

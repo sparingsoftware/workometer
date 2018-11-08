@@ -63,6 +63,7 @@
     "element-ui": "^2.4.8",
     "font-awesome": "^4.7.0",
     "jira-connector": "^2.9.0",
+    "lodash.clonedeep": "^4.5.0",
     "lodash.deburr": "^4.1.0",
     "lodash.flatmap": "^4.5.0",
     "lodash.flatten": "^4.4.0",

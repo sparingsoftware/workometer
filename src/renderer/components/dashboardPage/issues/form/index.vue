@@ -39,6 +39,7 @@ import StringInput from './schemas/string'
 import ParentInput from './schemas/parent'
 import DynamicSelectInput from './schemas/dynamicSelect'
 import service from '@/service'
+import clone from 'lodash.clonedeep'
 
 export default {
   data () {
@@ -94,7 +95,7 @@ export default {
     openDialog (issue = { issuetype: {} }) {
       if (!this.selectedProject) return
       this.fetchMetadata()
-      this.form = JSON.parse(JSON.stringify(issue))
+      this.form = clone(issue)
       this.dialogVisible = true
     },
     fetchMetadata () {
