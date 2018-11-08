@@ -1,22 +1,21 @@
 <template>
   <div class="container">
     <el-tag
+      v-if="timeTrackingOnJiraScreen"
       size="mini"
       title="Original Time Estimate"
       class="text-uppercase estimate"
     >
-      <transition name="el-fade-in">
-        <span v-if="editMode">
-          <form @submit.prevent="submitEstimate">
-            <input v-model="form.originalEstimate" class="input">
-            <el-button class="submit"><i class="estimate__icon fa fa-save" @click="submitEstimate"/></el-button>
-          </form>
-        </span>
-        <span v-else @click="editEstimate">
-          {{ estimateValue }}
-          <i class="estimate__icon fa fa-pencil"/>
-        </span>
-      </transition>
+      <span v-if="editMode">
+        <form @submit.prevent="submitEstimate">
+          <input v-model="form.originalEstimate" class="input">
+          <el-button class="submit"><i class="estimate__icon fa fa-save" @click="submitEstimate"/></el-button>
+        </form>
+      </span>
+      <span v-else @click="editEstimate">
+        {{ estimateValue }}
+        <i class="estimate__icon fa fa-pencil"/>
+      </span>
     </el-tag>
   </div>
 </template>
@@ -35,7 +34,8 @@ export default {
   data () {
     return {
       editMode: false,
-      form: {}
+      form: {},
+      timeTrackingOnJiraScreen: false
     }
   },
   computed: {

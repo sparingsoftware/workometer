@@ -12,6 +12,7 @@ const state = {
 const mutations = {
   setBoards (state, boards) {
     state.boards = boards
+    console.log(state.boards, 'boards')
   },
   setSelectedBoard (state, boardId) {
     state.selectedBoardId = boardId
