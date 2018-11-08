@@ -103,8 +103,10 @@ export default {
   .detail {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #e2e2e2;
-    padding-bottom: 2px;
+    padding: 8px 0;
+    margin: 0;
 
     &__name {
       text-transform: uppercase;
