@@ -3,7 +3,6 @@
     <el-dialog
       :title="dialogTitle"
       width="90vw"
-      center
       :visible.sync="dialogVisible"
     >
       <info :issue="issue"/>
