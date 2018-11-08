@@ -136,7 +136,7 @@ export default {
       font-weight: 700;
     }
     &__value {
-      white-space: pre;
+      white-space: pre-wrap;
     }
   }
 
