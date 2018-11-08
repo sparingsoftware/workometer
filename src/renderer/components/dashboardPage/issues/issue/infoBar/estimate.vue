@@ -23,7 +23,7 @@
 
 <script>
 import clone from 'lodash.clonedeep'
-import service from '@/service'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -45,16 +45,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setIssueEstimate: 'issues/setIssueEstimate'
+    }),
     editEstimate () {
       const estimateCopy = clone(this.issue.fields.timetracking)
       this.form = estimateCopy
       this.editMode = true
     },
     submitEstimate () {
-      service.setIssueEstimate(
-        { issueId: this.issue.id, originalEstimate: this.form.originalEstimate }
+      this.setIssueEstimate(
+        { issue: this.issue, originalEstimate: this.form.originalEstimate }
       ).then(res => {
-        console.log(res, 'ress')
         this.editMode = false
       }).catch(this.handleErrors)
     }

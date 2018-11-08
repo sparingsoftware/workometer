@@ -165,6 +165,7 @@ export default {
 
   .start-tracking-button {
     padding: 0;
+    background: 0;
     border: 0;
     font-size: 40px;
     color: #409EFF;

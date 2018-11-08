@@ -1,6 +1,7 @@
 export default {
   methods: {
     handleErrors (errors) {
+      console.log(errors, 'errs')
       let formattedErrors = ''
       const parsedErrors = errors.response.data
       formattedErrors += parsedErrors.errorMessages.join('<br>')
