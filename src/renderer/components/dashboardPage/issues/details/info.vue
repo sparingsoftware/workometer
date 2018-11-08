@@ -135,6 +135,9 @@ export default {
       color: #8a8a8a;
       font-weight: 700;
     }
+    &__value {
+      white-space: pre;
+    }
   }
 
   .blue-gray {
