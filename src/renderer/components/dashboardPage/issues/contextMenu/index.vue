@@ -83,6 +83,11 @@ export default {
   .v-context {
     border: 1px solid #e2e2e2 !important;
     outline: none !important;
+    & ul li {
+      padding: 10px 20px !important;
+      font-weight: 400;
+      letter-spacing: 0.015em;
+    }
   }
 
   .separator {
