@@ -3,7 +3,7 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <button class="start-tracking-button" :loading="loading">
+    <el-button class="start-tracking-button">
       <i
         v-if="isIssueTracked"
         class="fa fa-stop-circle"
@@ -14,7 +14,7 @@
         class="fa fa-play-circle"
         @click="startNewTracking"
       />
-    </button>
+    </el-button>
   </div>
 </template>
 
@@ -165,7 +165,6 @@ export default {
 
   .start-tracking-button {
     padding: 0;
-    background: 0;
     border: 0;
     font-size: 40px;
     color: #409EFF;

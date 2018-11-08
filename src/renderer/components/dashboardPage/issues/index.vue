@@ -95,9 +95,6 @@ export default {
     selectedSprintId (id) {
       if (id) this.fetchIssuesForSprint(id)
     },
-    getFilteredIssues () {
-      this.$refs.issuesContainer.$refs.container.scrollTop = 0
-    },
     selectedBoardId: {
       immediate: true,
       handler (id) {
