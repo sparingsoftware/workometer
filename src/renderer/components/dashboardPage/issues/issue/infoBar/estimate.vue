@@ -23,6 +23,7 @@
 
 <script>
 import clone from 'lodash.clonedeep'
+import service from '@/service'
 
 export default {
   props: {
@@ -50,7 +51,12 @@ export default {
       this.editMode = true
     },
     submitEstimate () {
-      this.editMode = false
+      service.setIssueEstimate(
+        { issueId: this.issue.id, originalEstimate: this.form.originalEstimate }
+      ).then(res => {
+        console.log(res, 'ress')
+        this.editMode = false
+      }).catch(this.handleErrors)
     }
   }
 }
