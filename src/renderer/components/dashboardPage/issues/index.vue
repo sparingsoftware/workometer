@@ -40,6 +40,7 @@
       />
     </div>
     <perfect-scrollbar ref="issuesContainer" class="issues">
+      <no-results v-if="noIssues"/>
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
         <issue
@@ -67,6 +68,7 @@ import search from './search/'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
 import IssueDetailsDialog from './details/'
+import NoResults from './noResults'
 
 export default {
   components: {
@@ -75,7 +77,8 @@ export default {
     ContextMenu,
     filters,
     IssueForm,
-    IssueDetailsDialog
+    IssueDetailsDialog,
+    NoResults
   },
   computed: {
     ...mapState({
@@ -89,6 +92,10 @@ export default {
     }),
     filterType () {
       return this.filtersSet ? 'primary' : ''
+    },
+    noIssues () {
+      console.log('wait?', this.$wait.is('issuesLoading'), this.getFilteredIssues.length)
+      return !this.$wait.is('issuesLoading') && !this.getFilteredIssues.length
     }
   },
   watch: {
