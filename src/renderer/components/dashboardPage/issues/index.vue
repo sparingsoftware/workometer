@@ -1,5 +1,6 @@
 <template>
   <div>
+    <pinned-tracker v-if="issueTracked" class="pinned-tracker"/>
     <filters ref="filtersDialog"/>
     <issue-form ref="issueForm"/>
     <issue-details-dialog ref="detailsDialog"/>
@@ -43,8 +44,10 @@
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
         <issue
-          v-for="issue in getFilteredIssues"
-          :key="issue.id"
+          v-for="(issue, i) in getFilteredIssues"
+          :key="issue.key"
+          class="issue"
+          :class="{'padding-for-tracker': i === 0 && issueTracked}"
           :issue="issue"
           @keyClicked="openIssueDetails(issue)"
           @contextmenu.native.prevent="openMenu($event, issue)"
@@ -67,6 +70,7 @@ import search from './search/'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
 import IssueDetailsDialog from './details/'
+import PinnedTracker from './pinned-tracker/'
 
 export default {
   components: {
@@ -75,12 +79,14 @@ export default {
     ContextMenu,
     filters,
     IssueForm,
-    IssueDetailsDialog
+    IssueDetailsDialog,
+    PinnedTracker
   },
   computed: {
     ...mapState({
       selectedSprintId: state => state.sprints.selectedSprintId,
-      selectedBoardId: state => state.boards.selectedBoardId
+      selectedBoardId: state => state.boards.selectedBoardId,
+      issueTracked: state => state.tracker.issueTracked
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues',
@@ -145,9 +151,15 @@ export default {
     margin-right: 15px;
   }
 
+  .pinned-tracker {
+    left: 0;
+    top: 221px;
+  }
+
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     padding-right: 5px;
+    transition: .3s padding-top;
   }
 
   .remove-filters-button {
@@ -160,5 +172,10 @@ export default {
     position: fixed;
     bottom: 15px;
     right: 10px;
+  }
+
+  .padding-for-tracker {
+    padding-top: 57px;
+    transition: .3s padding-top;
   }
 </style>
