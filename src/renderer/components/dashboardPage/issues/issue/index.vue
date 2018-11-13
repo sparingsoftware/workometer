@@ -37,6 +37,7 @@ export default {
 
 <style lang="scss" scoped>
   .issue {
+    transition: .3s padding-top;
     position: relative;
     display: flex;
     justify-content: space-between;

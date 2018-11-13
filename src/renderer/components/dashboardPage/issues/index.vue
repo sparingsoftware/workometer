@@ -175,6 +175,5 @@ export default {
 
   .padding-for-tracker {
     padding-top: 57px;
-    transition: .3s padding-top;
   }
 </style>
