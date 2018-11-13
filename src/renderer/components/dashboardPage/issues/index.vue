@@ -159,7 +159,6 @@ export default {
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     padding-right: 5px;
-    transition: .3s padding-top;
   }
 
   .remove-filters-button {
