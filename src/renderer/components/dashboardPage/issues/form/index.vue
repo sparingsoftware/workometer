@@ -1,27 +1,34 @@
 <template>
   <div>
-    <el-dialog :title="dialogLabel" width="90vw" :visible.sync="dialogVisible">
+    <el-dialog 
+      :title="dialogLabel" 
+      top="0" 
+      width="90vw" 
+      :visible.sync="dialogVisible"
+    >
       <el-form :model="form">
-        <el-form-item label="Type" label-width="150px">
-          <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
-            <el-option
-              v-for="type in meta.issuetypes"
-              :key="type.name"
-              :value="type.name"
-              :label="type.name"
-            >
-              <img class="type-icon" :src="type.iconUrl" alt=""> {{ type.name }}
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <component
-          :is="getComponentForField(field)"
-          v-for="field in fields"
-          :key="field.key"
-          v-model="form[field.key]"
-          :field="field"
-          :all-fields="selectedIssueType.fields"
-        />
+        <perfect-scrollbar class="form-wrapper">
+          <el-form-item label="Type" label-width="150px">
+            <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
+              <el-option
+                v-for="type in meta.issuetypes"
+                :key="type.name"
+                :value="type.name"
+                :label="type.name"
+              >
+                <img class="type-icon" :src="type.iconUrl" alt=""> {{ type.name }}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <component
+            :is="getComponentForField(field)"
+            v-for="field in fields"
+            :key="field.key"
+            v-model="form[field.key]"
+            :field="field"
+            :all-fields="selectedIssueType.fields"
+          />
+        </perfect-scrollbar>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
@@ -145,7 +152,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  /deep/ .el-dialog {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   .type-icon {
     vertical-align: middle;
+  }
+
+  .form-wrapper {
+    max-height: calc(70vh - 124px);
+    padding-right: 15px;
   }
 </style>
