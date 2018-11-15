@@ -174,6 +174,7 @@ export default {
     color: #409EFF;
     outline: none;
     &:hover {
+      background: 0;
       color: #86d8ff;
       cursor: pointer;
     }
