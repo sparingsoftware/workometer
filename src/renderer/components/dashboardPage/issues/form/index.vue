@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-dialog 
-      :title="dialogLabel" 
-      top="0" 
-      width="90vw" 
+    <el-dialog
+      :title="dialogLabel"
+      top="0"
+      width="90vw"
       :visible.sync="dialogVisible"
     >
       <el-form :model="form">
@@ -28,6 +28,7 @@
             :field="field"
             :all-fields="selectedIssueType.fields"
           />
+          <sprint-field v-if="selectedIssueType" v-model="sprint"/>
         </perfect-scrollbar>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -41,22 +42,28 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import MultipleSelectInput from './schemas/multipleSelect'
 import SelectInput from './schemas/select'
 import StringInput from './schemas/string'
 import ParentInput from './schemas/parent'
 import DynamicSelectInput from './schemas/dynamicSelect'
 import service from '@/service'
+import SprintField from './sprintField'
+
 import clone from 'lodash.clonedeep'
 
 export default {
+  components: {
+    SprintField
+  },
   data () {
     return {
       dialogVisible: false,
       form: {
         issuetype: {}
       },
+      sprint: null,
       meta: {},
       allowedFields: [
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
@@ -67,9 +74,6 @@ export default {
   computed: {
     ...mapGetters({
       selectedProject: 'boards/selectedProject'
-    }),
-    ...mapState({
-      sprints: state => state.sprints.sprints
     }),
     fields () {
       if (!this.selectedIssueType) return []
@@ -84,17 +88,6 @@ export default {
       return this.selectedProject
         ? `Add new issue to ${this.selectedProject.projectName}`
         : ''
-    },
-    sprintField () {
-      return {
-        key: 'sprint',
-        name: 'Sprint',
-        required: false,
-        schema: {
-          type: 'select'
-        },
-        allowedValues: this.sprints.filter(sprint => sprint.name !== 'Backlog')
-      }
     }
   },
   methods: {
@@ -123,17 +116,27 @@ export default {
         projectKey: this.selectedProject.projectKey,
         form: this.form
       }).then(response => {
-        this.$notify({
-          title: 'Success',
-          message: 'Issue added',
-          type: 'success'
-        })
-        this.closeDialog()
-        this.refreshIssues()
+        return this.handleSprint(response.key)
+      }).then(response => {
+        this.finishSuccessResponse()
       }).catch(this.handleErrors)
         .finally(() => {
           this.waitEnd('issueCreating')
         })
+    },
+    handleSprint (issueKey) {
+      const sprintId = this.sprint && this.sprint.id
+      if (!sprintId) return
+      return service.moveIssueToSprint({ issueKey, sprintId })
+    },
+    finishSuccessResponse () {
+      this.$notify({
+        title: 'Success',
+        message: 'Issue added',
+        type: 'success'
+      })
+      this.closeDialog()
+      this.refreshIssues()
     },
     closeDialog () {
       this.dialogVisible = false
