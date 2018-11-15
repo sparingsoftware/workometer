@@ -3,20 +3,22 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <el-button class="tracking-button">
-      <i
-        v-if="isIssueTracked"
-        title="Stop tracking"
-        class="fa fa-stop-circle"
-        @click="stopIssueTracking"
-      />
-      <i
-        v-else
-        title="Start tracking"
-        class="fa fa-play-circle"
-        @click="startNewTracking"
-      />
-    </el-button>
+    <el-button 
+      v-if="isIssueTracked" 
+      class="tracking-button" 
+      icon="fa fa-stop-circle" 
+      title="Stop tracking" 
+      :loading="loading"
+      @click="stopIssueTracking"
+    />
+    <el-button 
+      v-else 
+      class="tracking-button" 
+      icon="fa fa-play-circle" 
+      title="Start tracking"
+      :loading="loading"
+      @click="startNewTracking"
+    />
   </div>
 </template>
 
