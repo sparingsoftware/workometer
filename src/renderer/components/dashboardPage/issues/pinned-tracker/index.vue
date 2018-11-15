@@ -2,14 +2,16 @@
   <div class="container">
     <div class="description">
       <p class="description__title">Tracked issue:</p>
-      <p class="description__summary">{{ issueTracked.key }} - {{ issueTracked.fields.summary }}</p>
+      <p class="description__summary" title="Jump to issue" @click="jumpToIssue">
+        {{ issueTracked.key }} - {{ issueTracked.fields.summary }}
+      </p>
     </div>
     <tracker class="elapsed-time" :issue="issueTracked"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Tracker from '@/components/dashboardPage/issues/issue/tracker/'
 
 export default {
@@ -18,8 +20,31 @@ export default {
   },
   computed: {
     ...mapState({
+      selectedSprintId: state => state.sprints.selectedSprintId,
+      selectedBoardId: state => state.boards.selectedBoardId,
       issueTracked: state => state.tracker.issueTracked
     })
+  },
+  methods: {
+    ...mapMutations({
+      setSelectedSprintId: 'sprints/setSelectedSprintId',
+      setSelectedBoard: 'boards/setSelectedBoard'
+    }),
+    jumpToIssue () {
+      const trackedIssueSprint = this.issueTracked.fields.sprint
+      const anotherSprintSelected = trackedIssueSprint.id !== this.selectedSprintId
+      if (anotherSprintSelected) {
+        this.setSelectedSprintId(trackedIssueSprint.id)
+        this.setSelectedBoard(trackedIssueSprint.originBoardId)
+      }
+      this.scrollToIssue()
+    },
+    scrollToIssue () {
+      const issueTrackedEl = document.getElementById(this.issueTracked.key)
+      if (issueTrackedEl) {
+        issueTrackedEl.scrollIntoView({})
+      }
+    }
   }
 }
 </script>
@@ -51,6 +76,7 @@ export default {
       margin: 0;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: pointer;
       overflow: hidden;
     }
 
