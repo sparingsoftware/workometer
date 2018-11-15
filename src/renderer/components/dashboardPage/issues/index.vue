@@ -32,6 +32,12 @@
         @click="refreshIssues"
       />
       <el-button
+        icon="fa fa-plus"
+        size="mini"
+        title="Create issue"
+        @click="createNewIssue"
+      />
+      <el-button
         icon="fa fa-sign-out"
         type="warning"
         size="mini"
@@ -53,11 +59,6 @@
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
-      <el-button class="create-issue-button" title="Create issue" @click="createNewIssue">
-        <i
-          class="fa fa-plus-circle"
-        />
-      </el-button>
     </perfect-scrollbar>
   </div>
 </template>
