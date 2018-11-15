@@ -2,7 +2,7 @@
   <div class="container">
     <div class="description">
       <p class="description__title">Tracked issue:</p>
-      <p class="description__summary">{{ issueTracked.fields.summary }}</p>
+      <p class="description__summary">{{ issueTracked.key }} - {{ issueTracked.fields.summary }}</p>
     </div>
     <tracker class="elapsed-time" :issue="issueTracked"/>
   </div>
@@ -41,9 +41,17 @@ export default {
   .description {
     padding: 0;
     margin: 0;
+    width: 59%;
+
+    @media screen and (min-width: 500px) {
+      width: calc(100% - 122px);
+    }
 
     &__summary {
       margin: 0;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     &__title {

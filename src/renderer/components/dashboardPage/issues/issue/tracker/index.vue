@@ -163,6 +163,7 @@ export default {
   .tracker {
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
 
   .tracking-button {
@@ -181,9 +182,7 @@ export default {
   }
 
   .elapsed-time {
-    vertical-align: middle;
     font-size: 20px;
-    display: inline-block;
     margin-right: 8px;
   }
 </style>
