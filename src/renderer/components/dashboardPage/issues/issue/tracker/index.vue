@@ -168,7 +168,6 @@ export default {
 
   .tracking-button {
     padding: 0;
-    vertical-align: middle;
     background: 0;
     border: 0;
     font-size: 40px;
@@ -176,7 +175,6 @@ export default {
     outline: none;
     &:hover {
       color: #86d8ff;
-      background: 0;
       cursor: pointer;
     }
   }
