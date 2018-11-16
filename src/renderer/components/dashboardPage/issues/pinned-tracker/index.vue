@@ -13,6 +13,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import Tracker from '@/components/dashboardPage/issues/issue/tracker/'
+import scrollToIssue from '@/utils/scrollToIssue'
 
 export default {
   components: {
@@ -36,13 +37,10 @@ export default {
       if (anotherSprintSelected) {
         this.setSelectedSprintId(trackedIssueSprint.id)
         this.setSelectedBoard(trackedIssueSprint.originBoardId)
-      }
-      this.scrollToIssue()
-    },
-    scrollToIssue () {
-      const issueTrackedEl = document.getElementById(this.issueTracked.key)
-      if (issueTrackedEl) {
-        issueTrackedEl.scrollIntoView({})
+      } else {
+        scrollToIssue(this.issueTracked, {
+          behavior: 'smooth'
+        })
       }
     }
   }
