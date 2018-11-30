@@ -32,8 +32,9 @@ export default {
       setSelectedBoard: 'boards/setSelectedBoard'
     }),
     jumpToIssue () {
-      const trackedIssueSprint = this.issueTracked.fields.sprint
-      const anotherSprintSelected = trackedIssueSprint.id !== this.selectedSprintId
+      let trackedIssueSprint = this.issueTracked.fields.sprint
+      trackedIssueSprint = trackedIssueSprint && trackedIssueSprint.id
+      const anotherSprintSelected = trackedIssueSprint !== this.selectedSprintId
       if (anotherSprintSelected) {
         this.setSelectedSprintId(trackedIssueSprint.id)
         this.setSelectedBoard(trackedIssueSprint.originBoardId)
