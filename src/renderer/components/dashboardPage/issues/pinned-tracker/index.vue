@@ -32,16 +32,16 @@ export default {
       setSelectedBoard: 'boards/setSelectedBoard'
     }),
     jumpToIssue () {
-      let trackedIssueSprint = this.issueTracked.fields.sprint
-      trackedIssueSprint = trackedIssueSprint && trackedIssueSprint.id
-      const anotherSprintSelected = trackedIssueSprint !== this.selectedSprintId
-      if (anotherSprintSelected) {
-        this.setSelectedSprintId(trackedIssueSprint.id)
-        this.setSelectedBoard(trackedIssueSprint.originBoardId)
-      } else {
+      const withinCurrentBoard = this.issueTracked.boardId === this.selectedBoardId
+      const withinCurrentSprint = this.issueTracked.sprintId === this.selectedSprintId
+      const issueOnList = withinCurrentBoard && withinCurrentSprint
+      if (issueOnList) {
         scrollToIssue(this.issueTracked, {
           behavior: 'smooth'
         })
+      } else {
+        this.setSelectedSprintId(this.issueTracked.sprintId)
+        this.setSelectedBoard(this.issueTracked.boardId)
       }
     }
   }
