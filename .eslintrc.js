@@ -30,6 +30,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'no-multiple-empty-lines': ['error', { 'max': 2 }],
     'vue/require-v-for-key': 0,
+    'vue/component-name-in-template-casing': 0,
     'no-trailing-spaces': 0,
     'vue/html-closing-bracket-spacing': 0,
     'vue/max-attributes-per-line': [2, {
