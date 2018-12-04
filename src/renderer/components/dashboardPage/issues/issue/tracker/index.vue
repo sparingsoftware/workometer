@@ -56,6 +56,9 @@ export default {
     saveAllowed () {
       const secondsElapsed = +this.elapsedTime / 1000
       return secondsElapsed > 60
+    },
+    formattedElapsedTime () {
+      return this.elapsedTime && this.elapsedTime.format('HH:mm:ss')
     }
   },
   methods: {
@@ -144,7 +147,7 @@ export default {
         .then(response => {
           this.$notify({
             title: 'Success',
-            message: 'Worklog saved',
+            message: `Worklog saved. You have worked ${this.formattedElapsedTime}`,
             type: 'success'
           })
           this.loading = false
