@@ -2,7 +2,7 @@ import { shell, Menu } from 'electron'
 
 const setDefaultApplicationMenu = () => {
   if (Menu.getApplicationMenu()) return
-  if (process.platform === 'win32') return
+  if (process.platform !== 'darwin') return
 
   const template = [
     {
