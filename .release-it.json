@@ -1,0 +1,18 @@
+{
+  "src": {
+    "tagName": "v${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "buildCommand": "npm run build",
+  "github": {
+    "release": true,
+    "assets": [
+      "build/*.AppImage",
+      "build/*.dmg",
+      "build/*.exe"
+    ]
+  },
+  "requireCleanWorkingDir": false
+}
