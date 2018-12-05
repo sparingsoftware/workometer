@@ -1,12 +1,12 @@
 {
   "name": "workometer",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Sparing Software",
   "description": "Electron based app to track tasks time",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build": "cross-env BUILD_TARGET=clean node .electron-vue/build.js && electron-builder",
     "build-all": "node .electron-vue/build.js && electron-builder -mwl",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
@@ -20,7 +20,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "new-release": "release-it"
   },
   "build": {
     "productName": "workometer",
@@ -133,6 +134,7 @@
     "multispinner": "^0.2.1",
     "node-loader": "^0.6.0",
     "node-sass": "^4.9.2",
+    "release-it": "^8.2.0",
     "require-dir": "^1.0.0",
     "sass-loader": "^7.0.3",
     "spectron": "^3.8.0",
