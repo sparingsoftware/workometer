@@ -3,18 +3,22 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <el-button class="start-tracking-button">
-      <i
-        v-if="isIssueTracked"
-        class="fa fa-stop-circle"
-        @click="stopIssueTracking"
-      />
-      <i
-        v-else
-        class="fa fa-play-circle"
-        @click="startNewTracking"
-      />
-    </el-button>
+    <el-button 
+      v-if="isIssueTracked" 
+      class="tracking-button" 
+      icon="fa fa-stop-circle" 
+      title="Stop tracking" 
+      :loading="loading"
+      @click="stopIssueTracking"
+    />
+    <el-button 
+      v-else 
+      class="tracking-button" 
+      icon="fa fa-play-circle" 
+      title="Start tracking"
+      :loading="loading"
+      @click="startNewTracking"
+    />
   </div>
 </template>
 
@@ -161,9 +165,10 @@ export default {
   .tracker {
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
 
-  .start-tracking-button {
+  .tracking-button {
     padding: 0;
     background: 0;
     border: 0;
@@ -171,6 +176,7 @@ export default {
     color: #409EFF;
     outline: none;
     &:hover {
+      background: 0;
       color: #86d8ff;
       cursor: pointer;
     }
@@ -178,7 +184,6 @@ export default {
 
   .elapsed-time {
     font-size: 20px;
-    display: inline-block;
     margin-right: 8px;
   }
 </style>

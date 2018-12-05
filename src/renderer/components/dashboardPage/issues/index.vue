@@ -1,5 +1,6 @@
 <template>
   <div>
+    <pinned-tracker v-if="issueTracked" class="pinned-tracker"/>
     <filters ref="filtersDialog"/>
     <issue-form ref="issueForm"/>
     <issue-details-dialog ref="detailsDialog"/>
@@ -27,8 +28,14 @@
         icon="el-icon-refresh"
         size="mini"
         :loading="$wait.is('issueRefreshing')"
-        title="Fetch issues and sprints again"
+        title="Refetch issues"
         @click="refreshIssues"
+      />
+      <el-button
+        icon="fa fa-plus"
+        size="mini"
+        title="Create issue"
+        @click="createNewIssue"
       />
       <el-button
         icon="fa fa-sign-out"
@@ -44,18 +51,15 @@
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
       <transition-group name="el-fade-in">
         <issue
-          v-for="issue in getFilteredIssues"
-          :key="issue.id"
+          v-for="(issue, i) in getFilteredIssues"
+          :key="issue.key"
+          class="issue"
+          :class="{'padding-for-tracker': i === 0 && issueTracked}"
           :issue="issue"
           @keyClicked="openIssueDetails(issue)"
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
-      <el-button class="create-issue-button" title="Create issue" @click="createNewIssue">
-        <i
-          class="fa fa-plus-circle"
-        />
-      </el-button>
     </perfect-scrollbar>
   </div>
 </template>
@@ -69,6 +73,7 @@ import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import filters from './filters/'
 import IssueDetailsDialog from './details/'
 import NoResults from './noResults'
+import PinnedTracker from './pinned-tracker/'
 
 export default {
   components: {
@@ -78,7 +83,8 @@ export default {
     filters,
     IssueForm,
     IssueDetailsDialog,
-    NoResults
+    NoResults,
+    PinnedTracker
   },
   data () {
     return {
@@ -88,7 +94,8 @@ export default {
   computed: {
     ...mapState({
       selectedSprintId: state => state.sprints.selectedSprintId,
-      selectedBoardId: state => state.boards.selectedBoardId
+      selectedBoardId: state => state.boards.selectedBoardId,
+      issueTracked: state => state.tracker.issueTracked
     }),
     ...mapGetters({
       getIssues: 'issues/getIssues',
@@ -162,6 +169,11 @@ export default {
     margin-right: 15px;
   }
 
+  .pinned-tracker {
+    left: 0;
+    top: 221px;
+  }
+
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     padding-right: 5px;
@@ -177,5 +189,9 @@ export default {
     position: fixed;
     bottom: 15px;
     right: 10px;
+  }
+
+  .padding-for-tracker {
+    padding-top: 57px;
   }
 </style>
