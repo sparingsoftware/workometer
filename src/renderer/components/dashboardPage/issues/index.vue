@@ -80,6 +80,11 @@ export default {
     IssueDetailsDialog,
     NoResults
   },
+  data () {
+    return {
+      noIssues: false
+    }
+  },
   computed: {
     ...mapState({
       selectedSprintId: state => state.sprints.selectedSprintId,
@@ -92,10 +97,6 @@ export default {
     }),
     filterType () {
       return this.filtersSet ? 'primary' : ''
-    },
-    noIssues () {
-      console.log('wait?', this.$wait.is('issuesLoading'), this.getFilteredIssues.length)
-      return !this.$wait.is('issuesLoading') && !this.getFilteredIssues.length
     }
   },
   watch: {
@@ -108,6 +109,15 @@ export default {
         if (id) {
           this.fetchIssuesForBoard(id)
           this.fetchStatusesForProject()
+        }
+      }
+    },
+    getFilteredIssues: {
+      immediate: true,
+      handler () {
+        this.noIssues = false
+        if (!this.$wait.is('issuesLoading') && !this.getFilteredIssues.length) {
+          this.noIssues = true
         }
       }
     }
