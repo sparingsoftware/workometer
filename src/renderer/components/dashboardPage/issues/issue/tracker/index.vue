@@ -143,11 +143,16 @@ export default {
     },
     storeWorklog (trackingStopTime) {
       this.loading = true
-      return this.saveWorklog(trackingStopTime)
+
+      const endWorkTime = trackingStopTime || moment()
+      const workedTime = endWorkTime.diff(this.trackingStartTime, 'seconds')
+      const formattedWorkedTime = (moment.utc(workedTime * 1000)).format('HH:mm:ss')
+
+      return this.saveWorklog(workedTime)
         .then(response => {
           this.$notify({
             title: 'Success',
-            message: `Worklog saved. You have worked ${this.formattedElapsedTime}`,
+            message: `Worklog saved. You have worked ${formattedWorkedTime}`,
             type: 'success'
           })
           this.loading = false

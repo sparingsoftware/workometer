@@ -24,9 +24,8 @@ const mutations = {
 }
 
 const actions = {
-  saveWorklog ({commit, state}, trackingStopTime = moment()) {
-    const timeSpentSeconds = trackingStopTime.diff(state.trackingStartTime, 'seconds')
-    return service.addWorkLog(state.issueTracked.id, state.trackingStartTime, timeSpentSeconds)
+  saveWorklog ({commit, state}, workedTime) {
+    return service.addWorkLog(state.issueTracked.id, state.trackingStartTime, workedTime)
   }
 }
 
