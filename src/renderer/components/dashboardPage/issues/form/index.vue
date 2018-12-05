@@ -82,6 +82,8 @@ export default {
     },
     selectedIssueType () {
       if (!this.form.issuetype.name) return
+      console.log('this.form.issuetype.name', this.form.issuetype.name)
+      console.log('this.meta.issuetypes', this.meta.issuetypes)
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {

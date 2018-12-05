@@ -1,5 +1,7 @@
 <template>
   <div>
+    <issue-form ref="issueForm"/>
+    <issue-details-dialog ref="detailsDialog"/>
     <vue-context ref="vueContext">
       <ul slot-scope="child" class="actions">
         <p class="separator">Actions</p>
@@ -8,6 +10,9 @@
         </li>
         <li @click="assignIssueToMe({issue: child.data})">
           Assign to me
+        </li>
+        <li @click="createSubtask({issue: child.data})">
+          Create subtask
         </li>
         <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
           Move to {{ sprint.name }}
@@ -30,11 +35,15 @@ import { mapState, mapActions } from 'vuex'
 import { VueContext } from 'vue-context'
 import LogWorkDialog from './actions/logWorkDialog/'
 import service from '@/service'
+import IssueForm from '@/components/dashboardPage/issues/form/'
+import IssueDetailsDialog from '@/components/dashboardPage/issues/details/'
 
 export default {
   components: {
     VueContext,
-    LogWorkDialog
+    LogWorkDialog,
+    IssueForm,
+    IssueDetailsDialog
   },
   props: {
     issue: {
@@ -74,6 +83,14 @@ export default {
       return issue
         ? this.statusesMap[issue.fields.issuetype.name]
         : []
+    },
+    createSubtask ({ issue }) {
+      console.log(issue)
+      console.log(this.selectedProject)
+      console.log(issue.fields)
+
+      issue.fields.issuetype.name = 'Podzadanie'
+      this.$refs.issueForm.openDialog(issue)
     }
   }
 }
