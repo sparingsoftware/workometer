@@ -6,7 +6,7 @@
       </div>
       <div class="text">
         <h1>Nothing was found.</h1>
-        <p>There's no results for you query.</p>
+        <p>There's no results for your query.</p>
       </div>
     </div>
   </transition>
