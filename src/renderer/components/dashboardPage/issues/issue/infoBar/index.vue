@@ -27,8 +27,8 @@
 
 <script>
 import Status from './status'
-import open from 'open'
 import { mapState } from 'vuex'
+import { shell } from 'electron'
 import Estimate from './estimate'
 
 export default {
@@ -45,7 +45,7 @@ export default {
   computed: mapState({ host: state => state.login.host }),
   methods: {
     openInBrowser (issueKey) {
-      open(`http://${this.host}/browse/${issueKey}`)
+      shell.openExternal(`http://${this.host}/browse/${issueKey}`)
     }
   }
 }

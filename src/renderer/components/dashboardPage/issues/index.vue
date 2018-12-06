@@ -103,7 +103,7 @@ export default {
       return this.filtersSet ? 'primary' : ''
     },
     noIssues () {
-      const loadingFinished = !this.$wait.is(['sprintIssuesLoading', 'boardIssuesLoading'])
+      const loadingFinished = !this.$wait.is('sprintIssuesLoading') && !this.$wait.is('boardIssuesLoading')
       const emptyResults = !this.getFilteredIssues.length
       return loadingFinished && emptyResults
     }
