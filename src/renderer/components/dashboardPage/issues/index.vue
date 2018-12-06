@@ -46,11 +46,12 @@
         @click="logout"
       />
     </div>
-    <perfect-scrollbar ref="issuesContainer" class="issues">
+    <div ref="issuesContainer" class="issues">
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
-      <transition-group name="el-fade-in">
+      <transition-group name="el-fade-in" mode="out-in">
         <issue
           v-for="(issue, i) in getFilteredIssues"
+          :id="issue.key"
           :key="issue.key"
           class="issue"
           :class="{'padding-for-tracker': i === 0 && issueTracked}"
@@ -59,11 +60,12 @@
           @contextmenu.native.prevent="openMenu($event, issue)"
         />
       </transition-group>
-    </perfect-scrollbar>
+    </div>
   </div>
 </template>
 
 <script>
+import scrollToIssue from '@/utils/scrollToIssue'
 import issue from './issue/'
 import ContextMenu from './contextMenu/'
 import IssueForm from './form/'
@@ -100,7 +102,12 @@ export default {
   },
   watch: {
     selectedSprintId (id) {
-      if (id) this.fetchIssuesForSprint(id)
+      if (id) {
+        this.$nextTick(() => {
+          scrollToIssue(this.issueTracked)
+        })
+        this.fetchIssuesForSprint(id).then(scrollToIssue(this.issueTracked))
+      }
     },
     selectedBoardId: {
       immediate: true,
@@ -160,6 +167,7 @@ export default {
   .issues {
     height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
     padding-right: 5px;
+    overflow-y: scroll;
   }
 
   .remove-filters-button {

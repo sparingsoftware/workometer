@@ -15,10 +15,20 @@ const addSearchableField = issue => ({
 const mutations = {
   setIssuesForBoard (state, payload) {
     const issues = payload.issues.map(addSearchableField)
+    // Add info to allow jumping to issue
+    issues.forEach(issue => {
+      issue['sprintId'] = null
+      issue['boardId'] = payload.id
+    })
     Vue.set(state.issuesForBoard, payload.id, issues)
   },
   setIssuesForSprint (state, payload) {
     const issues = payload.issues.map(addSearchableField)
+    // Add info to allow jumping to issue
+    issues.forEach(issue => {
+      issue['sprintId'] = payload.id
+      issue['boardId'] = issue.fields.sprint.originBoardId
+    })
     Vue.set(state.issuesForSprint, payload.id, issues)
   },
   updateIssue (state, { oldIssue, newIssue }) {
