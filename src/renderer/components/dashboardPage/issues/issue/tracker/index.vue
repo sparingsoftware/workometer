@@ -56,6 +56,9 @@ export default {
     saveAllowed () {
       const secondsElapsed = +this.elapsedTime / 1000
       return secondsElapsed > 60
+    },
+    formattedElapsedTime () {
+      return this.elapsedTime && this.elapsedTime.format('HH:mm:ss')
     }
   },
   methods: {
@@ -140,11 +143,16 @@ export default {
     },
     storeWorklog (trackingStopTime) {
       this.loading = true
-      return this.saveWorklog(trackingStopTime)
+
+      const endWorkTime = trackingStopTime || moment()
+      const workedTime = endWorkTime.diff(this.trackingStartTime, 'seconds')
+      const formattedWorkedTime = (moment.utc(workedTime * 1000)).format('HH:mm:ss')
+
+      return this.saveWorklog(workedTime)
         .then(response => {
           this.$notify({
             title: 'Success',
-            message: 'Worklog saved',
+            message: `Worklog saved. You have worked ${formattedWorkedTime}`,
             type: 'success'
           })
           this.loading = false
@@ -175,7 +183,7 @@ export default {
     font-size: 40px;
     color: #409EFF;
     outline: none;
-    &:hover {
+    &:hover, &:focus {
       background: 0;
       color: #86d8ff;
       cursor: pointer;
