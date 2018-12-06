@@ -52,8 +52,8 @@
       <transition-group name="el-fade-in" mode="out-in">
         <issue
           v-for="(issue, i) in getFilteredIssues"
-          :key="issue.key"
           :id="issue.key"
+          :key="issue.key"
           class="issue"
           :class="{'padding-for-tracker': i === 0 && issueTracked}"
           :issue="issue"
