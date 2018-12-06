@@ -42,16 +42,16 @@ const getters = {
 
 const actions = {
   async fetchIssuesForBoard ({ commit, dispatch }, id) {
-    dispatch('wait/start', 'issuesLoading', { root: true })
+    dispatch('wait/start', 'boardIssuesLoading', { root: true })
     const issues = await service.getIssuesForBacklog(id)
     commit('setIssuesForBoard', { id, issues })
-    dispatch('wait/end', 'issuesLoading', { root: true })
+    dispatch('wait/end', 'boardIssuesLoading', { root: true })
   },
   async fetchIssuesForSprint ({ commit, dispatch }, id) {
-    dispatch('wait/start', 'issuesLoading', { root: true })
+    dispatch('wait/start', 'sprintIssuesLoading', { root: true })
     const issues = await service.getIssuesForSprint(id)
     commit('setIssuesForSprint', { id, issues })
-    dispatch('wait/end', 'issuesLoading', { root: true })
+    dispatch('wait/end', 'sprintIssuesLoading', { root: true })
   },
   async setIssueStatus ({ commit, dispatch }, { issue, status }) {
     dispatch('wait/start', `issueStatusChange_${issue.id}`, { root: true })

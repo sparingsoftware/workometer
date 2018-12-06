@@ -86,11 +86,6 @@ export default {
     NoResults,
     PinnedTracker
   },
-  data () {
-    return {
-      noIssues: false
-    }
-  },
   computed: {
     ...mapState({
       selectedSprintId: state => state.sprints.selectedSprintId,
@@ -104,6 +99,11 @@ export default {
     }),
     filterType () {
       return this.filtersSet ? 'primary' : ''
+    },
+    noIssues () {
+      const loadingFinished = !this.$wait.is(['sprintIssuesLoading', 'boardIssuesLoading'])
+      const emptyResults = !this.getFilteredIssues.length
+      return loadingFinished && emptyResults
     }
   },
   watch: {
@@ -116,15 +116,6 @@ export default {
         if (id) {
           this.fetchIssuesForBoard(id)
           this.fetchStatusesForProject()
-        }
-      }
-    },
-    getFilteredIssues: {
-      immediate: true,
-      handler () {
-        this.noIssues = false
-        if (!this.$wait.is('issuesLoading') && !this.getFilteredIssues.length) {
-          this.noIssues = true
         }
       }
     }
