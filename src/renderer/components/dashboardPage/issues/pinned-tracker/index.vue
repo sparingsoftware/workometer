@@ -36,9 +36,7 @@ export default {
       const withinCurrentSprint = this.issueTracked.sprintId === this.selectedSprintId
       const issueOnList = withinCurrentBoard && withinCurrentSprint
       if (issueOnList) {
-        scrollToIssue(this.issueTracked, {
-          behavior: 'smooth'
-        })
+        scrollToIssue(this.issueTracked)
       } else {
         this.setSelectedSprintId(this.issueTracked.sprintId)
         this.setSelectedBoard(this.issueTracked.boardId)
