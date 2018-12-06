@@ -183,7 +183,7 @@ export default {
     font-size: 40px;
     color: #409EFF;
     outline: none;
-    &:hover {
+    &:hover, &:focus {
       background: 0;
       color: #86d8ff;
       cursor: pointer;
