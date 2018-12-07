@@ -9,7 +9,11 @@
       <el-form :model="form">
         <perfect-scrollbar class="form-wrapper">
           <el-form-item label="Type" label-width="150px">
-            <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
+            <el-select
+              v-model="form.issuetype.name"
+              placeholder="Type"
+              autocomplete="off"
+            >
               <el-option
                 v-for="type in meta.issuetypes"
                 :key="type.name"
@@ -68,7 +72,8 @@ export default {
       allowedFields: [
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
-      ]
+      ],
+      isSubtask: false
     }
   },
   computed: {
@@ -82,8 +87,6 @@ export default {
     },
     selectedIssueType () {
       if (!this.form.issuetype.name) return
-      console.log('this.form.issuetype.name', this.form.issuetype.name)
-      console.log('this.meta.issuetypes', this.meta.issuetypes)
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
@@ -104,12 +107,24 @@ export default {
       this.form = clone(issue)
       this.dialogVisible = true
     },
+    openSubtaskDialog (issue = { issuetype: { name: '' } }) {
+      if (!this.selectedProject) return
+      this.isSubtask = true
+      this.form = clone(issue)
+      this.fetchMetadata()
+      this.dialogVisible = true
+    },
     fetchMetadata () {
       this.$jira.issue.getCreateMetadata({
         projectIds: this.selectedProject.projectId,
         expand: 'projects.issuetypes.fields'
       }).then(response => {
         this.meta = response.projects[0]
+
+        if (this.isSubtask) {
+          this.meta.issuetypes = this.meta.issuetypes.filter(type => type.subtask === true)
+          this.form.issuetype.name = this.meta.issuetypes[0].name
+        }
       })
     },
     submitForm () {

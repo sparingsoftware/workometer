@@ -36,14 +36,12 @@ import { VueContext } from 'vue-context'
 import LogWorkDialog from './actions/logWorkDialog/'
 import service from '@/service'
 import IssueForm from '@/components/dashboardPage/issues/form/'
-import IssueDetailsDialog from '@/components/dashboardPage/issues/details/'
 
 export default {
   components: {
     VueContext,
     LogWorkDialog,
-    IssueForm,
-    IssueDetailsDialog
+    IssueForm
   },
   props: {
     issue: {
@@ -85,12 +83,8 @@ export default {
         : []
     },
     createSubtask ({ issue }) {
-      console.log(issue)
-      console.log(this.selectedProject)
-      console.log(issue.fields)
-
-      issue.fields.issuetype.name = 'Podzadanie'
-      this.$refs.issueForm.openDialog(issue)
+      // console.log('createSubtask issue', issue)
+      this.$refs.issueForm.openSubtaskDialog()
     }
   }
 }
