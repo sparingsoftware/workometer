@@ -8,12 +8,8 @@
     >
       <el-form :model="form">
         <perfect-scrollbar class="form-wrapper">
-          <el-form-item label="Type" label-width="150px">
-            <el-select
-              v-model="form.issuetype.name"
-              placeholder="Type"
-              autocomplete="off"
-            >
+          <el-form-item v-if="!isSubtask" label="Type" label-width="150px">
+            <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
               <el-option
                 v-for="type in meta.issuetypes"
                 :key="type.name"
@@ -31,6 +27,7 @@
             v-model="form[field.key]"
             :field="field"
             :all-fields="selectedIssueType.fields"
+            :parent="parent"
           />
           <sprint-field v-if="selectedIssueType" v-model="sprint"/>
         </perfect-scrollbar>
@@ -73,7 +70,8 @@ export default {
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
       ],
-      isSubtask: false
+      isSubtask: false,
+      parent: {}
     }
   },
   computed: {
@@ -90,9 +88,9 @@ export default {
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
-      return this.selectedProject
-        ? `Add new issue to ${this.selectedProject.projectName}`
-        : ''
+      return this.isSubtask
+        ? `Add new subtask to '${this.parent.searchableField}'`
+        : `Add new issue to '${this.selectedProject.projectName}'`
     }
   },
   methods: {
@@ -107,9 +105,9 @@ export default {
       this.form = clone(issue)
       this.dialogVisible = true
     },
-    openSubtaskDialog (issue = { issuetype: { name: '' } }) {
-      if (!this.selectedProject) return
+    openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
       this.isSubtask = true
+      this.parent = parent
       this.form = clone(issue)
       this.fetchMetadata()
       this.dialogVisible = true

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!parent.searchableField">
     <el-form-item :label="field.key" label-width="150px">
       <el-select
         v-model="inputValue"
@@ -43,6 +43,10 @@ export default {
     value: {
       type: Object,
       default: () => ({})
+    },
+    parent: {
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
@@ -54,7 +58,7 @@ export default {
   computed: {
     inputValue: {
       get () {
-        return this.value && this.value.key
+        return this.parent.key || this.value.key
       },
       set (newValue) {
         this.$emit('input', {

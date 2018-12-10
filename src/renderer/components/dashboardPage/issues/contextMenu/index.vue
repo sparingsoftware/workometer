@@ -1,7 +1,6 @@
 <template>
   <div>
     <issue-form ref="issueForm"/>
-    <issue-details-dialog ref="detailsDialog"/>
     <vue-context ref="vueContext">
       <ul slot-scope="child" class="actions">
         <p class="separator">Actions</p>
@@ -83,8 +82,7 @@ export default {
         : []
     },
     createSubtask ({ issue }) {
-      // console.log('createSubtask issue', issue)
-      this.$refs.issueForm.openSubtaskDialog()
+      this.$refs.issueForm.openSubtaskDialog(issue)
     }
   }
 }
