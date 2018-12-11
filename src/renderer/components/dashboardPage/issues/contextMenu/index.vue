@@ -4,6 +4,9 @@
     <vue-context ref="vueContext">
       <ul slot-scope="child" class="actions">
         <p class="separator">Actions</p>
+        <li @click="editIssue({issue: child.data})">
+          Edit issue
+        </li>
         <li @click="logWork(child.data)">
           Log Work
         </li>
@@ -83,6 +86,9 @@ export default {
     },
     createSubtask ({ issue }) {
       this.$refs.issueForm.openSubtaskDialog(issue)
+    },
+    editIssue ({ issue }) {
+      this.$refs.issueForm.editIssue(issue)
     }
   }
 }

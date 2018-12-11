@@ -113,6 +113,10 @@ export default {
       const subtaskType = this.meta.issuetypes.find(type => type.subtask)
       this.form.issuetype.name = subtaskType && subtaskType.name
     },
+    editIssue (issue) {
+      this.form = clone(issue.fields)
+      this.dialogVisible = true
+    },
     async initForm (issue) {
       if (!this.selectedProject) return
       this.form = clone(issue)
