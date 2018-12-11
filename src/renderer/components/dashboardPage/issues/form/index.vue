@@ -8,7 +8,7 @@
     >
       <el-form :model="form">
         <perfect-scrollbar class="form-wrapper">
-          <el-form-item label="Type" label-width="150px">
+          <el-form-item v-if="!isSubtask" label="Type" label-width="150px">
             <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
               <el-option
                 v-for="type in meta.issuetypes"
@@ -65,6 +65,7 @@ export default {
       },
       sprint: null,
       meta: {},
+      isSubtask: false,
       allowedFields: [
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
@@ -77,7 +78,9 @@ export default {
     }),
     fields () {
       if (!this.selectedIssueType) return []
-      const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
+      const hideParentIfSubtask = field => !this.isSubtask || field !== 'parent'
+      const fields = this.allowedFields.filter(hideParentIfSubtask)
+      const allowedFields = fields.map(field => this.selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
     },
     selectedIssueType () {
@@ -85,9 +88,10 @@ export default {
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
-      return this.selectedProject
-        ? `Add new issue to ${this.selectedProject.projectName}`
-        : ''
+      if (!this.selectedProject) return ''
+      return this.isSubtask
+        ? `Add new subtask to '${this.form.parent.fields.summary}'`
+        : `Add new issue to '${this.selectedProject.projectName}'`
     }
   },
   methods: {
@@ -97,13 +101,26 @@ export default {
       waitEnd: 'wait/end'
     }),
     openDialog (issue = { issuetype: {} }) {
+      this.initForm(issue)
+    },
+    async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
+      this.isSubtask = true
+      issue = {
+        ...issue,
+        parent
+      }
+      await this.initForm(issue)
+      const subtaskType = this.meta.issuetypes.find(type => type.subtask)
+      this.form.issuetype.name = subtaskType && subtaskType.name
+    },
+    async initForm (issue) {
       if (!this.selectedProject) return
-      this.fetchMetadata()
       this.form = clone(issue)
+      await this.fetchMetadata()
       this.dialogVisible = true
     },
-    fetchMetadata () {
-      this.$jira.issue.getCreateMetadata({
+    async fetchMetadata () {
+      return this.$jira.issue.getCreateMetadata({
         projectIds: this.selectedProject.projectId,
         expand: 'projects.issuetypes.fields'
       }).then(response => {
