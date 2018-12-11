@@ -27,7 +27,6 @@
             v-model="form[field.key]"
             :field="field"
             :all-fields="selectedIssueType.fields"
-            :parent="parent"
           />
           <sprint-field v-if="selectedIssueType" v-model="sprint"/>
         </perfect-scrollbar>
@@ -66,12 +65,11 @@ export default {
       },
       sprint: null,
       meta: {},
+      isSubtask: false,
       allowedFields: [
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
-      ],
-      isSubtask: false,
-      parent: {}
+      ]
     }
   },
   computed: {
@@ -80,7 +78,9 @@ export default {
     }),
     fields () {
       if (!this.selectedIssueType) return []
-      const allowedFields = this.allowedFields.map(field => this.selectedIssueType.fields[field])
+      const hideParentIfSubtask = field => !this.isSubtask || field !== 'parent'
+      const fields = this.allowedFields.filter(hideParentIfSubtask)
+      const allowedFields = fields.map(field => this.selectedIssueType.fields[field])
       return allowedFields.filter(field => field)
     },
     selectedIssueType () {
@@ -88,8 +88,9 @@ export default {
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
+      if (!this.selectedProject) return ''
       return this.isSubtask
-        ? `Add new subtask to '${this.parent.searchableField}'`
+        ? `Add new subtask to '${this.form.parent.fields.summary}'`
         : `Add new issue to '${this.selectedProject.projectName}'`
     }
   },
@@ -100,29 +101,30 @@ export default {
       waitEnd: 'wait/end'
     }),
     openDialog (issue = { issuetype: {} }) {
-      if (!this.selectedProject) return
-      this.fetchMetadata()
-      this.form = clone(issue)
-      this.dialogVisible = true
+      this.initForm(issue)
     },
-    openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
+    async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
       this.isSubtask = true
-      this.parent = parent
+      issue = {
+        ...issue,
+        parent
+      }
+      await this.initForm(issue)
+      const subtaskType = this.meta.issuetypes.find(type => type.subtask)
+      this.form.issuetype.name = subtaskType && subtaskType.name
+    },
+    async initForm (issue) {
+      if (!this.selectedProject) return
       this.form = clone(issue)
-      this.fetchMetadata()
+      await this.fetchMetadata()
       this.dialogVisible = true
     },
-    fetchMetadata () {
-      this.$jira.issue.getCreateMetadata({
+    async fetchMetadata () {
+      return this.$jira.issue.getCreateMetadata({
         projectIds: this.selectedProject.projectId,
         expand: 'projects.issuetypes.fields'
       }).then(response => {
         this.meta = response.projects[0]
-
-        if (this.isSubtask) {
-          this.meta.issuetypes = this.meta.issuetypes.filter(type => type.subtask === true)
-          this.form.issuetype.name = this.meta.issuetypes[0].name
-        }
       })
     },
     submitForm () {
