@@ -79,9 +79,10 @@ export default {
     fields () {
       if (!this.selectedIssueType) return []
       const hideParentIfSubtask = field => !this.isSubtask || field !== 'parent'
-      const fields = this.allowedFields.filter(hideParentIfSubtask)
-      const allowedFields = fields.map(field => this.selectedIssueType.fields[field])
-      return allowedFields.filter(field => field)
+      return this.allowedFields
+        .filter(hideParentIfSubtask)
+        .map(field => this.selectedIssueType.fields[field])
+        .filter(field => field)
     },
     selectedIssueType () {
       if (!this.form.issuetype.name || !this.meta.issuetypes) return
