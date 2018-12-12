@@ -168,7 +168,8 @@ export default {
         select: SelectInput,
         string: StringInput,
         user: DynamicSelectInput,
-        issuelink: ParentInput
+        issuelink: ParentInput,
+        priority: SelectInput
       }
       return schemas[field.schema.type] || StringInput
     }
