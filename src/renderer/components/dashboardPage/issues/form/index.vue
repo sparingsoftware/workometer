@@ -84,7 +84,7 @@ export default {
       return allowedFields.filter(field => field)
     },
     selectedIssueType () {
-      if (!this.form.issuetype.name) return
+      if (!this.form.issuetype.name || !this.meta.issuetypes) return
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
@@ -100,8 +100,11 @@ export default {
       waitStart: 'wait/start',
       waitEnd: 'wait/end'
     }),
-    openDialog (issue = { issuetype: {} }) {
-      this.initForm(issue)
+    async openDialog (issue = { issuetype: {} }) {
+      await this.initForm(issue)
+
+      // on edit issue
+      issue.issuetype.name && (this.form.issuetype.name = issue.issuetype.name)
     },
     async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
       this.isSubtask = true
@@ -112,10 +115,6 @@ export default {
       await this.initForm(issue)
       const subtaskType = this.meta.issuetypes.find(type => type.subtask)
       this.form.issuetype.name = subtaskType && subtaskType.name
-    },
-    editIssue (issue) {
-      this.form = clone(issue.fields)
-      this.dialogVisible = true
     },
     async initForm (issue) {
       if (!this.selectedProject) return
