@@ -33,9 +33,19 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
-        <el-button type="primary" :loading="$wait.is('issueCreating')" @click="submitForm">
-          Confirm
-        </el-button>
+        <el-button
+          v-if="!editingIssue"
+          type="primary"
+          :loading="$wait.is('issueCreating')"
+          @click="submitForm"
+          v-text="'Submit'"
+        />
+        <el-button
+          v-if="editingIssue"
+          :loading="$wait.is('issueUpdating')"
+          @click="updateForm"
+          v-text="'Update'"
+        />
       </span>
     </el-dialog>
   </div>
@@ -66,6 +76,7 @@ export default {
       sprint: null,
       meta: {},
       isSubtask: false,
+      editingIssue: {},
       allowedFields: [
         'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
         'priority', 'reporter'
@@ -89,10 +100,16 @@ export default {
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
-      if (!this.selectedProject) return ''
-      return this.isSubtask
-        ? `Add new subtask to '${this.form.parent.fields.summary}'`
-        : `Add new issue to '${this.selectedProject.projectName}'`
+      let title = ''
+      if (this.isSubtask) {
+        title = `Add new subtask to '${this.form.parent.fields.summary}'`
+      } else if (this.editingIssue) {
+        title = `Edit issue in '${this.selectedProject.projectName}'`
+      } else if (this.selectedProject) {
+        title = `Add new issue to '${this.selectedProject.projectName}'`
+      }
+
+      return title
     }
   },
   methods: {
@@ -101,11 +118,8 @@ export default {
       waitStart: 'wait/start',
       waitEnd: 'wait/end'
     }),
-    async openDialog (issue = { issuetype: {} }) {
-      await this.initForm(issue)
-
-      // on edit issue
-      issue.issuetype.name && (this.form.issuetype.name = issue.issuetype.name)
+    openDialog (issue = { issuetype: {} }) {
+      this.initForm(issue)
     },
     async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
       this.isSubtask = true
@@ -116,6 +130,13 @@ export default {
       await this.initForm(issue)
       const subtaskType = this.meta.issuetypes.find(type => type.subtask)
       this.form.issuetype.name = subtaskType && subtaskType.name
+    },
+    async editIssue (issue) {
+      this.editingIssue = issue
+      await this.initForm(issue.fields)
+      this.form.issuetype.name = issue.fields.issuetype.name
+      const filtredFields = this.filterIssueData(issue.fields)
+      console.log(filtredFields)
     },
     async initForm (issue) {
       if (!this.selectedProject) return
@@ -131,6 +152,10 @@ export default {
         this.meta = response.projects[0]
       })
     },
+    filterIssueData (issue) {
+      const fields = this.fields.map(field => field.key)
+      return Object.keys(issue).filter(key => fields.some(field => field === key))
+    },
     submitForm () {
       this.waitStart('issueCreating')
       service.createIssue({
@@ -138,11 +163,26 @@ export default {
         form: this.form
       }).then(response => {
         return this.handleSprint(response.key)
-      }).then(response => {
+      }).then(() => {
         this.finishSuccessResponse()
       }).catch(this.handleErrors)
         .finally(() => {
           this.waitEnd('issueCreating')
+        })
+    },
+    updateForm () {
+      this.waitStart('issueUpdating')
+      console.log('updateForm issue', this.form)
+      service.editIssue({
+        form: this.form,
+        issueId: this.editingIssue.id
+      }).then(response => {
+        return this.handleSprint(response.key)
+      }).then(() => {
+        this.finishSuccessResponse()
+      }).catch(this.handleErrors)
+        .finally(() => {
+          this.waitEnd('issueUpdating')
         })
     },
     handleSprint (issueKey) {

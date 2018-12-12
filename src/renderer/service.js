@@ -95,6 +95,16 @@ export default {
       }
     })
   },
+  editIssue: ({ form, issueId }) => {
+    return Vue.jira.issue.editIssue({
+      issue: {
+        fields: {
+          ...form
+        }
+      },
+      issueId
+    })
+  },
   getAutocompletion ({ url }) {
     const options = {
       uri: url,

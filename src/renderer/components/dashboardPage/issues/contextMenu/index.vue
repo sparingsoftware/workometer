@@ -88,7 +88,7 @@ export default {
       this.$refs.issueForm.openSubtaskDialog(issue)
     },
     editIssue ({ issue }) {
-      this.$refs.issueForm.openDialog(issue.fields)
+      this.$refs.issueForm.editIssue(issue)
     }
   }
 }
