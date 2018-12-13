@@ -34,14 +34,14 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
         <el-button
-          v-if="!editingIssue"
+          v-if="!isIssueEditing"
           type="primary"
           :loading="$wait.is('issueCreating')"
           @click="submitForm"
           v-text="'Submit'"
         />
         <el-button
-          v-if="editingIssue"
+          v-if="isIssueEditing"
           :loading="$wait.is('issueUpdating')"
           @click="updateForm"
           v-text="'Update'"
@@ -103,13 +103,16 @@ export default {
       let title = ''
       if (this.isSubtask) {
         title = `Add new subtask to '${this.form.parent.fields.summary}'`
-      } else if (this.editingIssue) {
+      } else if (this.isIssueEditing) {
         title = `Edit issue in '${this.selectedProject.projectName}'`
       } else if (this.selectedProject) {
         title = `Add new issue to '${this.selectedProject.projectName}'`
       }
 
       return title
+    },
+    isIssueEditing () {
+      return this.editingIssue.id
     }
   },
   methods: {
@@ -135,8 +138,6 @@ export default {
       this.editingIssue = issue
       await this.initForm(issue.fields)
       this.form.issuetype.name = issue.fields.issuetype.name
-      const filtredFields = this.filterIssueData(issue.fields)
-      console.log(filtredFields)
     },
     async initForm (issue) {
       if (!this.selectedProject) return
@@ -152,7 +153,7 @@ export default {
         this.meta = response.projects[0]
       })
     },
-    filterIssueData (issue) {
+    async filterIssueData (issue) {
       const fields = this.fields.map(field => field.key)
       return Object.keys(issue).filter(key => fields.some(field => field === key))
     },
