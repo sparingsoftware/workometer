@@ -136,7 +136,8 @@ export default {
     },
     async editIssue (issue) {
       this.editingIssue = issue
-      await this.initForm(issue.fields)
+      const filtredIssueFields = await this.filterIssueData(issue.fields)
+      await this.initForm(filtredIssueFields)
       this.form.issuetype.name = issue.fields.issuetype.name
     },
     async initForm (issue) {
@@ -155,7 +156,16 @@ export default {
     },
     async filterIssueData (issue) {
       const fields = this.fields.map(field => field.key)
-      return Object.keys(issue).filter(key => fields.some(field => field === key))
+      fields.push('issuetype')
+
+      return Object.keys(issue)
+        .filter(key => fields.some(field => field === key))
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: issue[key]
+          }
+        }, {})
     },
     submitForm () {
       this.waitStart('issueCreating')
@@ -212,6 +222,7 @@ export default {
         issuelink: ParentInput,
         priority: SelectInput
       }
+      console.log(field.name, ', schema:', field.schema.type)
       return schemas[field.schema.type] || StringInput
     }
   }
