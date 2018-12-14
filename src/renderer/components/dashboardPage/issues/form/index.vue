@@ -28,7 +28,7 @@
             :field="field"
             :all-fields="selectedIssueType.fields"
           />
-          <sprint-field v-if="selectedIssueType" v-model="sprint"/>
+          <sprint-field v-if="selectedIssueType && !isIssueEditing" v-model="sprint"/>
         </perfect-scrollbar>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -136,9 +136,12 @@ export default {
     },
     async editIssue (issue) {
       this.editingIssue = issue
-      const filtredIssueFields = await this.filterIssueData(issue.fields)
-      await this.initForm(filtredIssueFields)
+      this.form = clone({ issuetype: {} })
       this.form.issuetype.name = issue.fields.issuetype.name
+      await this.fetchMetadata()
+      const filtredIssueFields = await this.filterIssueData(issue.fields)
+      this.form = filtredIssueFields
+      this.dialogVisible = true
     },
     async initForm (issue) {
       if (!this.selectedProject) return
