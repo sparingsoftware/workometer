@@ -78,7 +78,7 @@ export default {
       isSubtask: false,
       editingIssue: {},
       allowedFields: [
-        'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
+        'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'labels',
         'priority', 'reporter'
       ]
     }
