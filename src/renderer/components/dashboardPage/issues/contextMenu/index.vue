@@ -75,7 +75,7 @@ export default {
       service.moveIssueToSprint({
         issueKey: issue.key,
         sprintId: sprint.id
-      }).then(response => {
+      }).then(() => {
         this.refreshIssues()
       }).catch(this.handleErrors)
     },

@@ -101,7 +101,7 @@ export default {
     },
     dialogLabel () {
       let title = ''
-      if (this.isSubtask) {
+      if (this.isSubtask && !this.isIssueEditing) {
         title = `Add new subtask to '${this.form.parent.fields.summary}'`
       } else if (this.isIssueEditing) {
         title = `Edit issue in '${this.selectedProject.projectName}'`
@@ -136,12 +136,17 @@ export default {
     },
     async editIssue (issue) {
       this.editingIssue = issue
-      this.form = clone({ issuetype: {} })
-      this.form.issuetype.name = issue.fields.issuetype.name
+      this.form = await clone({ issuetype: {} })
+
+      const issuetype = issue.fields.issuetype
+      this.form.issuetype.name = issuetype.name
+      issuetype.subtask ? (this.isSubtask = true) : (this.isSubtask = false)
+
       await this.fetchMetadata()
       const filtredIssueFields = await this.filterIssueData(issue.fields)
       this.form = filtredIssueFields
       this.dialogVisible = true
+      console.log('this.meta.issuetypes', this.meta.issuetypes)
     },
     async initForm (issue) {
       if (!this.selectedProject) return
@@ -225,7 +230,6 @@ export default {
         issuelink: ParentInput,
         priority: SelectInput
       }
-      console.log(field.name, ', schema:', field.schema.type)
       return schemas[field.schema.type] || StringInput
     }
   }
