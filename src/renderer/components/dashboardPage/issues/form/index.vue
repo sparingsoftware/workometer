@@ -28,7 +28,7 @@
             :field="field"
             :all-fields="selectedIssueType.fields"
           />
-          <sprint-field v-if="selectedIssueType" v-model="sprint"/>
+          <sprint-field v-if="selectedIssueType && !isSubtask" v-model="sprint"/>
         </perfect-scrollbar>
       </el-form>
       <span slot="footer" class="dialog-footer">
