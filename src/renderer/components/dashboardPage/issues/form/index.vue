@@ -89,7 +89,7 @@ export default {
     }),
     fields () {
       if (!this.selectedIssueType) return []
-      const hideParentIfSubtask = field => !this.isSubtask || field !== 'parent'
+      const hideParentIfSubtask = field => !this.isSubtask || (field !== 'parent')
       return this.allowedFields
         .filter(hideParentIfSubtask)
         .map(field => this.selectedIssueType.fields[field])
@@ -136,20 +136,33 @@ export default {
     },
     async editIssue (issue) {
       this.editingIssue = issue
-      this.form = await clone({ issuetype: {} })
-
-      const issuetype = issue.fields.issuetype
-      this.form.issuetype.name = issuetype.name
-      issuetype.subtask ? (this.isSubtask = true) : (this.isSubtask = false)
-
       await this.fetchMetadata()
-      this.form = await this.filterIssueData(issue.fields)
+      if (issue.fields.issuetype.subtask) {
+        this.isSubtask = true
+      } else {
+        this.isSubtask = false
+        this.meta.issuetypes = this.meta.issuetypes.filter(issuetype => !issuetype.subtask)
+      }
+
+      this.form.issuetype = { name: issue.fields.issuetype.name }
+      const filtredFields = await this.filterIssueData(issue.fields)
+      const form = await clone(filtredFields)
+      this.form = {
+        ...form,
+        issuetype: {
+          name: issue.fields.issuetype.name
+        }
+      }
+
       this.dialogVisible = true
+    },
+    clearData () {
+      this.isSubtask = false
+      this.editingIssue = {}
     },
     async initForm (issue) {
       if (!this.selectedProject) return
-      this.isSubtask = false
-      this.editingIssue = {}
+      this.clearData()
       this.form = clone(issue)
       await this.fetchMetadata()
       this.dialogVisible = true
@@ -164,7 +177,6 @@ export default {
     },
     async filterIssueData (issue) {
       const fields = this.fields.map(field => field.key)
-      fields.push('issuetype')
 
       return Object.keys(issue)
         .filter(key => fields.some(field => field === key))
