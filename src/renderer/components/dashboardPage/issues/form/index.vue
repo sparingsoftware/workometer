@@ -112,7 +112,7 @@ export default {
       return title
     },
     isIssueEditing () {
-      return this.editingIssue.id
+      return Object.keys(this.editingIssue).length
     }
   },
   methods: {
@@ -125,12 +125,12 @@ export default {
       this.initForm(issue)
     },
     async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
-      this.isSubtask = true
       issue = {
         ...issue,
         parent
       }
       await this.initForm(issue)
+      this.isSubtask = true
       const subtaskType = this.meta.issuetypes.find(type => type.subtask)
       this.form.issuetype.name = subtaskType && subtaskType.name
     },
@@ -143,13 +143,13 @@ export default {
       issuetype.subtask ? (this.isSubtask = true) : (this.isSubtask = false)
 
       await this.fetchMetadata()
-      const filtredIssueFields = await this.filterIssueData(issue.fields)
-      this.form = filtredIssueFields
+      this.form = await this.filterIssueData(issue.fields)
       this.dialogVisible = true
-      console.log('this.meta.issuetypes', this.meta.issuetypes)
     },
     async initForm (issue) {
       if (!this.selectedProject) return
+      this.isSubtask = false
+      this.editingIssue = {}
       this.form = clone(issue)
       await this.fetchMetadata()
       this.dialogVisible = true
@@ -191,7 +191,6 @@ export default {
     },
     updateForm () {
       this.waitStart('issueUpdating')
-      console.log('updateForm issue', this.form)
       service.editIssue({
         form: this.form,
         issueId: this.editingIssue.id
