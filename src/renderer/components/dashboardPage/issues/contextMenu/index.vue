@@ -13,7 +13,7 @@
         <li @click="assignIssueToMe({issue: child.data})">
           Assign to me
         </li>
-        <li @click="createSubtask({issue: child.data})">
+        <li v-if="child.data && !child.data.fields.issuetype.subtask" @click="createSubtask({issue: child.data})">
           Create subtask
         </li>
         <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
