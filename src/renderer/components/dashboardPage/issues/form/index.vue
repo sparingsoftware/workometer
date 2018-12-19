@@ -31,12 +31,15 @@
           <sprint-field v-if="selectedIssueType && !isSubtask" v-model="sprint"/>
         </perfect-scrollbar>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer">
+        <el-checkbox v-model="createAnother" class="dialog-footer__checkbox">
+          Create another
+        </el-checkbox>
         <el-button @click="closeDialog">Cancel</el-button>
         <el-button type="primary" :loading="$wait.is('issueCreating')" @click="submitForm">
           Confirm
         </el-button>
-      </span>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -63,6 +66,7 @@ export default {
       form: {
         issuetype: {}
       },
+      createAnother: false,
       sprint: null,
       meta: {},
       isSubtask: false,
@@ -152,7 +156,15 @@ export default {
         message: 'Issue added',
         type: 'success'
       })
-      this.closeDialog()
+      if (this.createAnother) {
+        this.openDialog({
+          ...this.form,
+          summary: '',
+          description: ''
+        })
+      } else {
+        this.closeDialog()
+      }
       this.refreshIssues()
     },
     closeDialog () {
@@ -184,5 +196,11 @@ export default {
   .form-wrapper {
     max-height: calc(70vh - 124px);
     padding-right: 15px;
+  }
+
+  .dialog-footer {
+    &__checkbox {
+      margin-right: 15px;
+    }
   }
 </style>
