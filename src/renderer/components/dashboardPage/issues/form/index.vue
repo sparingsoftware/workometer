@@ -34,17 +34,10 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">Cancel</el-button>
         <el-button
-          v-if="!isIssueEditing"
           type="primary"
-          :loading="$wait.is('issueCreating')"
+          :loading="$wait.is('formSubmitting')"
           @click="submitForm"
           v-text="'Submit'"
-        />
-        <el-button
-          v-if="isIssueEditing"
-          :loading="$wait.is('issueUpdating')"
-          @click="updateForm"
-          v-text="'Update'"
         />
       </span>
     </el-dialog>
@@ -100,16 +93,13 @@ export default {
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
-      let title = ''
       if (this.isSubtask && !this.isIssueEditing) {
-        title = `Add new subtask to '${this.form.parent.fields.summary}'`
+        return `Add new subtask to '${this.form.parent.fields.summary}'`
       } else if (this.isIssueEditing) {
-        title = `Edit issue in '${this.selectedProject.projectName}'`
+        return `Edit issue in '${this.selectedProject.projectName}'`
       } else if (this.selectedProject) {
-        title = `Add new issue to '${this.selectedProject.projectName}'`
+        return `Add new issue to '${this.selectedProject.projectName}'`
       }
-
-      return title
     },
     isIssueEditing () {
       return Object.keys(this.editingIssue).length
@@ -137,16 +127,14 @@ export default {
     async editIssue (issue) {
       this.editingIssue = issue
       await this.fetchMetadata()
-      if (issue.fields.issuetype.subtask) {
-        this.isSubtask = true
-      } else {
-        this.isSubtask = false
+      this.isSubtask = issue.fields.issuetype.subtask
+      if (!this.isSubtask) {
         this.meta.issuetypes = this.meta.issuetypes.filter(issuetype => !issuetype.subtask)
       }
 
       this.form.issuetype = { name: issue.fields.issuetype.name }
-      const filtredFields = await this.filterIssueData(issue.fields)
-      const form = await clone(filtredFields)
+      const filtredFields = this.filterIssueData(issue.fields)
+      const form = clone(filtredFields)
       this.form = {
         ...form,
         issuetype: {
@@ -156,16 +144,16 @@ export default {
 
       this.dialogVisible = true
     },
-    clearData () {
-      this.isSubtask = false
-      this.editingIssue = {}
-    },
     async initForm (issue) {
       if (!this.selectedProject) return
       this.clearData()
       this.form = clone(issue)
       await this.fetchMetadata()
       this.dialogVisible = true
+    },
+    clearData () {
+      this.isSubtask = false
+      this.editingIssue = {}
     },
     async fetchMetadata () {
       return this.$jira.issue.getCreateMetadata({
@@ -175,7 +163,7 @@ export default {
         this.meta = response.projects[0]
       })
     },
-    async filterIssueData (issue) {
+    filterIssueData (issue) {
       const fields = this.fields.map(field => field.key)
 
       return Object.keys(issue)
@@ -188,31 +176,24 @@ export default {
         }, {})
     },
     submitForm () {
-      this.waitStart('issueCreating')
-      service.createIssue({
-        projectKey: this.selectedProject.projectKey,
-        form: this.form
-      }).then(response => {
-        return this.handleSprint(response.key)
-      }).then(() => {
-        this.finishSuccessResponse()
-      }).catch(this.handleErrors)
-        .finally(() => {
-          this.waitEnd('issueCreating')
+      this.waitStart('formSubmitting')
+      const formService = this.isIssueEditing
+        ? service.editIssue({
+          form: this.form,
+          issueId: this.editingIssue.id
         })
-    },
-    updateForm () {
-      this.waitStart('issueUpdating')
-      service.editIssue({
-        form: this.form,
-        issueId: this.editingIssue.id
-      }).then(response => {
+        : service.createIssue({
+          projectKey: this.selectedProject.projectKey,
+          form: this.form
+        })
+
+      formService.then(response => {
         return this.handleSprint(response.key)
       }).then(() => {
         this.finishSuccessResponse()
       }).catch(this.handleErrors)
         .finally(() => {
-          this.waitEnd('issueUpdating')
+          this.waitEnd('formSubmitting')
         })
     },
     handleSprint (issueKey) {
@@ -223,7 +204,7 @@ export default {
     finishSuccessResponse () {
       this.$notify({
         title: 'Success',
-        message: 'Issue added',
+        message: 'Issue saved',
         type: 'success'
       })
       this.closeDialog()
