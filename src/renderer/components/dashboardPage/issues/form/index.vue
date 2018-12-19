@@ -46,6 +46,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import pick from 'lodash.pick'
 import MultipleSelectInput from './schemas/multipleSelect'
 import SelectInput from './schemas/select'
 import StringInput from './schemas/string'
@@ -102,7 +103,7 @@ export default {
       }
     },
     isIssueEditing () {
-      return Object.keys(this.editingIssue).length
+      return Object.keys(this.editingIssue).length !== 0
     }
   },
   methods: {
@@ -165,15 +166,7 @@ export default {
     },
     filterIssueData (issue) {
       const fields = this.fields.map(field => field.key)
-
-      return Object.keys(issue)
-        .filter(key => fields.some(field => field === key))
-        .reduce((obj, key) => {
-          return {
-            ...obj,
-            [key]: issue[key]
-          }
-        }, {})
+      return pick(issue, fields)
     },
     submitForm () {
       this.waitStart('formSubmitting')
