@@ -40,10 +40,7 @@ export default {
     return {
       dialogVisible: false,
       form: {
-        worklog: {
-          timeSpent: '',
-          started: ''
-        }
+        worklog: {}
       },
       issue: null
     }
@@ -52,6 +49,9 @@ export default {
     openDialog (issue) {
       this.issue = issue
       this.dialogVisible = true
+      this.form = {
+        worklog: {}
+      }
     },
     submitForm () {
       this.$jira.issue.addWorkLog({
@@ -81,7 +81,9 @@ export default {
         hours,
         minutes
       }).format('YYYY-MM-DD HH:mm:ss')
-      this.form.worklog.started = new Date(startDate)
+      if (!this.form.worklog.started) {
+        this.$set(this.form.worklog, 'started', new Date(startDate))
+      }
     },
     removeLastCharacter (arr) {
       return (arr && arr[0].length) ? arr[0].slice(0, -1) : ''
