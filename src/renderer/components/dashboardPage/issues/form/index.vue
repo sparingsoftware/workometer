@@ -162,6 +162,7 @@ export default {
           summary: '',
           description: ''
         })
+        this.$el.querySelector('.form-wrapper').scrollTop = 0
       } else {
         this.closeDialog()
       }
