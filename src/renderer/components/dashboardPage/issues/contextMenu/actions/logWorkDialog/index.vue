@@ -72,21 +72,20 @@ export default {
     },
     handleBlur (event) {
       const inputValue = event.target.value
-      const days = +this.removeLastCharacter(/([0-9]{1,2}d)+/ig.exec(inputValue))
-      const hours = +this.removeLastCharacter(/([0-9]{1,2}h)+/ig.exec(inputValue))
-      const minutes = +this.removeLastCharacter(/([0-9]{1,2}m)+/ig.exec(inputValue))
+      const getNumberBeforeLetter = letter => {
+        const regex = new RegExp(`(\\d+)${letter}`, 'i')
+        return +(regex.exec(inputValue) || [0, 0])[1]
+      }
+      const [days, hours, minutes] = ['d', 'h', 'm'].map(getNumberBeforeLetter)
 
       const startDate = moment().subtract({
         days,
         hours,
         minutes
-      }).format('YYYY-MM-DD HH:mm:ss')
+      }).toDate()
       if (!this.form.worklog.started) {
-        this.$set(this.form.worklog, 'started', new Date(startDate))
+        this.$set(this.form.worklog, 'started', startDate)
       }
-    },
-    removeLastCharacter (arr) {
-      return (arr && arr[0].length) ? arr[0].slice(0, -1) : ''
     }
   }
 }
