@@ -28,24 +28,32 @@
             :field="field"
             :all-fields="selectedIssueType.fields"
           />
-          <sprint-field v-if="selectedIssueType && !isSubtask" v-model="sprint"/>
+          <sprint-field v-if="selectedIssueType && !isIssueEditing && !isSubtask" v-model="sprint"/>
         </perfect-scrollbar>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-checkbox v-model="createAnother" class="dialog-footer__checkbox">
+      <span slot="footer" class="dialog-footer">
+        <el-checkbox
+          v-if="!isIssueEditing"
+          v-model="createAnother"
+          class="dialog-footer__checkbox"
+        >
           Create another
         </el-checkbox>
         <el-button @click="closeDialog">Cancel</el-button>
-        <el-button type="primary" :loading="$wait.is('issueCreating')" @click="submitForm">
-          Confirm
-        </el-button>
-      </div>
+        <el-button
+          type="primary"
+          :loading="$wait.is('formSubmitting')"
+          @click="submitForm"
+          v-text="'Submit'"
+        />
+      </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import pick from 'lodash.pick'
 import MultipleSelectInput from './schemas/multipleSelect'
 import SelectInput from './schemas/select'
 import StringInput from './schemas/string'
@@ -70,8 +78,9 @@ export default {
       sprint: null,
       meta: {},
       isSubtask: false,
+      editingIssue: {},
       allowedFields: [
-        'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'issuelinks', 'labels',
+        'parent', 'summary', 'assignee', 'components', 'description', 'fixVersions', 'labels',
         'priority', 'reporter'
       ]
     }
@@ -82,20 +91,27 @@ export default {
     }),
     fields () {
       if (!this.selectedIssueType) return []
-      const hideParentIfSubtask = field => !this.isSubtask || field !== 'parent'
-      const fields = this.allowedFields.filter(hideParentIfSubtask)
-      const allowedFields = fields.map(field => this.selectedIssueType.fields[field])
-      return allowedFields.filter(field => field)
+      const hideParentIfSubtask = field => !this.isSubtask || (field !== 'parent')
+      return this.allowedFields
+        .filter(hideParentIfSubtask)
+        .map(field => this.selectedIssueType.fields[field])
+        .filter(field => field)
     },
     selectedIssueType () {
-      if (!this.form.issuetype.name) return
+      if (!this.form.issuetype.name || !this.meta.issuetypes) return
       return this.meta.issuetypes.find(type => type.name === this.form.issuetype.name)
     },
     dialogLabel () {
-      if (!this.selectedProject) return ''
-      return this.isSubtask
-        ? `Add new subtask to '${this.form.parent.fields.summary}'`
-        : `Add new issue to '${this.selectedProject.projectName}'`
+      if (this.isSubtask && !this.isIssueEditing) {
+        return `Add new subtask to '${this.form.parent.fields.summary}'`
+      } else if (this.isIssueEditing) {
+        return `Edit issue in '${this.selectedProject.projectName}'`
+      } else if (this.selectedProject) {
+        return `Add new issue to '${this.selectedProject.projectName}'`
+      }
+    },
+    isIssueEditing () {
+      return Object.keys(this.editingIssue).length !== 0
     }
   },
   methods: {
@@ -108,20 +124,45 @@ export default {
       this.initForm(issue)
     },
     async openSubtaskDialog (parent, issue = { issuetype: { name: '' } }) {
-      this.isSubtask = true
       issue = {
         ...issue,
         parent
       }
       await this.initForm(issue)
+      this.isSubtask = true
       const subtaskType = this.meta.issuetypes.find(type => type.subtask)
       this.form.issuetype.name = subtaskType && subtaskType.name
     },
+    async editIssue (issue) {
+      this.editingIssue = issue
+      await this.fetchMetadata()
+      this.isSubtask = issue.fields.issuetype.subtask
+      if (!this.isSubtask) {
+        this.meta.issuetypes = this.meta.issuetypes.filter(issuetype => !issuetype.subtask)
+      }
+
+      this.form.issuetype = { name: issue.fields.issuetype.name }
+      const filtredFields = this.filterIssueData(issue.fields)
+      const form = clone(filtredFields)
+      this.form = {
+        ...form,
+        issuetype: {
+          name: issue.fields.issuetype.name
+        }
+      }
+
+      this.dialogVisible = true
+    },
     async initForm (issue) {
       if (!this.selectedProject) return
+      this.clearData()
       this.form = clone(issue)
       await this.fetchMetadata()
       this.dialogVisible = true
+    },
+    clearData () {
+      this.isSubtask = false
+      this.editingIssue = {}
     },
     async fetchMetadata () {
       return this.$jira.issue.getCreateMetadata({
@@ -131,18 +172,29 @@ export default {
         this.meta = response.projects[0]
       })
     },
+    filterIssueData (issue) {
+      const fields = this.fields.map(field => field.key)
+      return pick(issue, fields)
+    },
     submitForm () {
-      this.waitStart('issueCreating')
-      service.createIssue({
-        projectKey: this.selectedProject.projectKey,
-        form: this.form
-      }).then(response => {
+      this.waitStart('formSubmitting')
+      const formService = this.isIssueEditing
+        ? service.editIssue({
+          form: this.form,
+          issueId: this.editingIssue.id
+        })
+        : service.createIssue({
+          projectKey: this.selectedProject.projectKey,
+          form: this.form
+        })
+
+      formService.then(response => {
         return this.handleSprint(response.key)
-      }).then(response => {
+      }).then(() => {
         this.finishSuccessResponse()
       }).catch(this.handleErrors)
         .finally(() => {
-          this.waitEnd('issueCreating')
+          this.waitEnd('formSubmitting')
         })
     },
     handleSprint (issueKey) {
@@ -153,7 +205,7 @@ export default {
     finishSuccessResponse () {
       this.$notify({
         title: 'Success',
-        message: 'Issue added',
+        message: 'Issue saved',
         type: 'success'
       })
       if (this.createAnother) {
@@ -170,6 +222,7 @@ export default {
     },
     closeDialog () {
       this.dialogVisible = false
+      this.createAnother = false
     },
     getComponentForField (field) {
       const schemas = {
@@ -177,7 +230,8 @@ export default {
         select: SelectInput,
         string: StringInput,
         user: DynamicSelectInput,
-        issuelink: ParentInput
+        issuelink: ParentInput,
+        priority: SelectInput
       }
       return schemas[field.schema.type] || StringInput
     }
