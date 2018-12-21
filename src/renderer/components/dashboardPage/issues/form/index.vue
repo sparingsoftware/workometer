@@ -7,7 +7,7 @@
       :visible.sync="dialogVisible"
     >
       <el-form :model="form">
-        <perfect-scrollbar class="form-wrapper">
+        <perfect-scrollbar ref="scrollContainer" class="form-wrapper">
           <el-form-item v-if="!isSubtask" label="Type" label-width="150px">
             <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
               <el-option
@@ -214,7 +214,7 @@ export default {
           summary: '',
           description: ''
         })
-        this.$el.querySelector('.form-wrapper').scrollTop = 0
+        this.$refs.scrollContainer.scrollTop = 0
       } else {
         this.closeDialog()
       }
