@@ -181,7 +181,7 @@ export default {
   .remove-filters-button {
     position: absolute;
     top: -11px;
-    right: 114px;
+    right: 167px;
   }
 
   .create-issue-button {
