@@ -3,7 +3,9 @@
     <issue-form ref="issueForm"/>
     <vue-context ref="vueContext">
       <ul slot-scope="child" class="actions">
-        <p class="separator">Actions</p>
+        <p class="separator">
+          Actions
+        </p>
         <li @click="editIssue({issue: child.data})">
           Edit issue
         </li>
@@ -19,7 +21,9 @@
         <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
           Move to {{ sprint.name }}
         </li>
-        <p class="separator">Change status</p>
+        <p class="separator">
+          Change status
+        </p>
         <li
           v-for="status in statuses(child.data)"
           @click="setIssueStatus({ issue: child.data, status })"

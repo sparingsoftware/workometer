@@ -10,15 +10,13 @@ const state = {
 
 const getters = {
   isUserAuth (state) {
-    return state.basic_auth && state.basic_auth.base64
+    return state.basic_auth
   }
 }
 
 const mutations = {
   setBasicAuth (state, payload) {
-    state.basic_auth = {
-      base64: btoa(`${payload.username}:${payload.password}`)
-    }
+    Vue.jira.basic_auth = state.basic_auth = payload
   },
   setUserDetails (state, details) {
     state.userDetails = details
@@ -32,9 +30,6 @@ const mutations = {
 const actions = {
   async login ({ commit, dispatch }, creds) {
     await service.login(creds)
-    Vue.jira.basic_auth = {
-      base64: btoa(`${creds.username}:${creds.password}`)
-    }
     commit('setBasicAuth', creds)
   },
   async logout ({ commit, dispatch, rootState }) {

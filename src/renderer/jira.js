@@ -6,9 +6,9 @@ const auth = store.state.login.basic_auth
 const host = store.state.login.host
 
 const jiraClient = new JiraClient({
-  ...auth && { basic_auth: auth },
   host
 })
+jiraClient.basic_auth = auth
 
 axios.interceptors.response.use(function (response) {
   return response
@@ -32,9 +32,7 @@ jiraClient.makeRequest = function (options, callback, successString) {
   if (!options.headers) {
     options.headers = {}
   }
-  const authorizationHeader = this.basic_auth && 'Basic ' + this.basic_auth.base64
-  options.headers['Authorization'] = authorizationHeader
-
+  options.auth = this.basic_auth
   return axios(options).then(res => res.data)
 }
 export default jiraClient

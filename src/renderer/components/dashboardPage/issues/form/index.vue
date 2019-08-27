@@ -101,6 +101,7 @@ export default {
       } else if (this.selectedProject) {
         return `Add new issue to '${this.selectedProject.projectName}'`
       }
+      return ''
     },
     isIssueEditing () {
       return Object.keys(this.editingIssue).length !== 0

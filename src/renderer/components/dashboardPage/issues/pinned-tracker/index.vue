@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="description">
-      <p class="description__title">Tracked issue:</p>
+      <p class="description__title">
+        Tracked issue:
+      </p>
       <p class="description__summary" title="Jump to issue" @click="jumpToIssue">
         {{ issueTracked.key }} - {{ issueTracked.fields.summary }}
       </p>
