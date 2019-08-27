@@ -7,7 +7,7 @@
       :visible.sync="dialogVisible"
     >
       <el-form :model="form">
-        <perfect-scrollbar class="form-wrapper">
+        <perfect-scrollbar ref="scrollContainer" class="form-wrapper">
           <el-form-item v-if="!isSubtask" label="Type" label-width="150px">
             <el-select v-model="form.issuetype.name" placeholder="Type" autocomplete="off">
               <el-option
@@ -32,6 +32,13 @@
         </perfect-scrollbar>
       </el-form>
       <span slot="footer" class="dialog-footer">
+        <el-checkbox
+          v-if="!isIssueEditing"
+          v-model="createAnother"
+          class="dialog-footer__checkbox"
+        >
+          Create another
+        </el-checkbox>
         <el-button @click="closeDialog">Cancel</el-button>
         <el-button
           type="primary"
@@ -67,6 +74,7 @@ export default {
       form: {
         issuetype: {}
       },
+      createAnother: false,
       sprint: null,
       meta: {},
       isSubtask: false,
@@ -201,11 +209,21 @@ export default {
         message: 'Issue saved',
         type: 'success'
       })
-      this.closeDialog()
+      if (this.createAnother) {
+        this.openDialog({
+          ...this.form,
+          summary: '',
+          description: ''
+        })
+        this.$refs.scrollContainer.scrollTop = 0
+      } else {
+        this.closeDialog()
+      }
       this.refreshIssues()
     },
     closeDialog () {
       this.dialogVisible = false
+      this.createAnother = false
     },
     getComponentForField (field) {
       const schemas = {
@@ -234,5 +252,11 @@ export default {
   .form-wrapper {
     max-height: calc(70vh - 124px);
     padding-right: 15px;
+  }
+
+  .dialog-footer {
+    &__checkbox {
+      margin-right: 15px;
+    }
   }
 </style>
