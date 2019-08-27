@@ -6,25 +6,39 @@
       placeholder="Select board"
       filterable
     >
-      <el-option
-        v-for="item in boards"
-        :key="item.id"
-        :label="`${item.name} - ${item.location.name}`"
-        :value="item.id"
-      />
+      <el-option-group
+        v-for="group in groupedBoards"
+        :key="group.label"
+        :label="group.label"
+      >
+        <el-option
+          v-for="item in group.boards"
+          :key="item.id"
+          :label="`${item.name} - ${item.location.name}`"
+          :value="item.id"
+        />
+      </el-option-group>
     </el-select>
+    <el-button
+      title="Add to favourites"
+      :disabled="!selectedBoardId"
+      @click="toggleFavourite(selectedBoardId)"
+    >
+      <i :class="alreadyFavourite ? 'fa fa-star' : 'fa fa-star-o'"/>
+    </el-button>
     <preloader-bar v-wait:visible="'boardsLoading'"/>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapActions, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
       boards: state => state.boards.boards,
-      currentBoard: state => state.boards.selectedBoardId
+      currentBoard: state => state.boards.selectedBoardId,
+      favourites: state => state.boards.favourites
     }),
     selectedBoardId: {
       get () {
@@ -34,6 +48,23 @@ export default {
         this.clearFilters()
         this.setSelectedBoard(value)
       }
+    },
+    alreadyFavourite () {
+      return this.favourites.includes(this.selectedBoardId)
+    },
+    groupedBoards () {
+      const favourites = this.boards.filter(board => this.favourites.includes(board.id))
+      const remaining = this.boards.filter(board => !favourites.includes(board.id))
+      return [
+        {
+          label: 'Favourites',
+          boards: favourites
+        },
+        {
+          label: 'Boards',
+          boards: remaining
+        }
+      ]
     }
   },
   watch: {
@@ -55,14 +86,17 @@ export default {
     ...mapMutations({
       setSelectedBoard: 'boards/setSelectedBoard',
       setSprints: 'sprints/setSprints',
-      clearFilters: 'filters/clearFilters'
+      clearFilters: 'filters/clearFilters',
+      toggleFavourite: 'boards/toggleFavourite'
     })
   }
 }
 </script>
 <style lang="scss" scoped>
-  .boards-picker {
-    position: relative;
-    margin-bottom: 7px;
-  }
+.boards-picker {
+  position: relative;
+  margin-bottom: 7px;
+  display: flex;
+  justify-content: space-between;
+}
 </style>

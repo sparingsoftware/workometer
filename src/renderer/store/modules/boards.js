@@ -6,7 +6,8 @@ const state = {
   selectedBoardId: null,
   boards: [],
   statusesMap: {},
-  statuses: []
+  statuses: [],
+  favourites: []
 }
 
 const mutations = {
@@ -24,7 +25,16 @@ const mutations = {
   clearBoards (state) {
     state.boards = []
     state.statusesMap = {}
+    state.favourites = []
     state.selectedBoardId = null
+  },
+  toggleFavourite (state, boardId) {
+    if (state.favourites.includes(boardId)) {
+      const index = state.favourites.indexOf(boardId)
+      state.favourites.splice(index, 1)
+    } else {
+      state.favourites.push(boardId)
+    }
   }
 }
 
