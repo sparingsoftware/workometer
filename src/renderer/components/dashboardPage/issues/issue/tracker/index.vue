@@ -3,18 +3,18 @@
     <transition name="el-fade-in">
       <elapsed-time v-if="isIssueTracked" class="elapsed-time"/>
     </transition>
-    <el-button 
-      v-if="isIssueTracked" 
-      class="tracking-button" 
-      icon="fa fa-stop-circle" 
-      title="Stop tracking" 
+    <el-button
+      v-if="isIssueTracked"
+      class="tracking-button"
+      icon="fa fa-stop-circle"
+      title="Stop tracking"
       :loading="loading"
       @click="stopIssueTracking"
     />
-    <el-button 
-      v-else 
-      class="tracking-button" 
-      icon="fa fa-play-circle" 
+    <el-button
+      v-else
+      class="tracking-button"
+      icon="fa fa-play-circle"
       title="Start tracking"
       :loading="loading"
       @click="startNewTracking"
@@ -155,9 +155,11 @@ export default {
             message: `Worklog saved. You have worked ${formattedWorkedTime}`,
             type: 'success'
           })
-          this.loading = false
           this.clearTracker()
         }).catch(this.handleErrors)
+        .finally(() => {
+          this.loading = false
+        })
     },
     clearTracker () {
       this.clearIssueTracked()
@@ -170,28 +172,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .tracker {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .tracking-button {
-    padding: 0;
+.tracking-button {
+  padding: 0;
+  background: 0;
+  border: 0;
+  font-size: 40px;
+  color: #409EFF;
+  outline: none;
+
+  &:hover, &:focus {
     background: 0;
-    border: 0;
-    font-size: 40px;
-    color: #409EFF;
-    outline: none;
-    &:hover, &:focus {
-      background: 0;
-      color: #86d8ff;
-      cursor: pointer;
-    }
+    color: #86d8ff;
+    cursor: pointer;
   }
+}
 
-  .elapsed-time {
-    font-size: 20px;
-    margin-right: 8px;
-  }
+.elapsed-time {
+  font-size: 20px;
+  margin-right: 8px;
+}
 </style>
