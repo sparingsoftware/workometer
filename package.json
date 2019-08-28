@@ -58,10 +58,10 @@
     }
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "desktop-idle": "^1.2.0",
     "electron-context-menu": "^0.10.0",
-    "element-ui": "^2.4.8",
+    "element-ui": "^2.11.1",
     "font-awesome": "^4.7.0",
     "jira-connector": "^2.16.1",
     "lodash.clonedeep": "^4.5.0",
@@ -108,7 +108,7 @@
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
-    "electron-rebuild": "^1.8.2",
+    "electron-rebuild": "^1.8.6",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-friendly-formatter": "^4.0.1",
@@ -147,7 +147,7 @@
     "vue-template-compiler": "^2.5.16",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.1.4",
+    "webpack-dev-server": "^3.8.0",
     "webpack-hot-middleware": "^2.22.2",
     "webpack-merge": "^4.1.3"
   }

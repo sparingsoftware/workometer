@@ -99,4 +99,8 @@ export default {
   display: flex;
   justify-content: space-between;
 }
+
+.fa-star {
+  color: #E9B04D;
+}
 </style>
