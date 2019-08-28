@@ -54,7 +54,7 @@ export default {
     },
     groupedBoards () {
       const favourites = this.boards.filter(board => this.favourites.includes(board.id))
-      const remaining = this.boards.filter(board => !favourites.includes(board.id))
+      const remaining = this.boards.filter(board => !this.favourites.includes(board.id))
       return [
         {
           label: 'Favourites',
