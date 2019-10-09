@@ -1,6 +1,6 @@
 {
   "name": "workometer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Sparing Software",
   "description": "Electron based app to track tasks time",
   "license": null,
