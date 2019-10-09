@@ -66,7 +66,7 @@ export default {
       issueId: trackedIssueId,
       worklog: {
         started: trackingStartTime.format('YYYY-MM-DDTHH:mm:ss.SSSZZ'),
-        timeSpentSeconds: timeSpentSeconds,
+        timeSpentSeconds,
         comment
       }
     })

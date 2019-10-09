@@ -1,6 +1,6 @@
 {
   "name": "workometer",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Sparing Software",
   "description": "Electron based app to track tasks time",
   "license": null,
@@ -48,13 +48,14 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "static/icons/icon.icns",
+      "target": "pkg"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "static/icons/icon.ico"
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "static/icons"
     }
   },
   "dependencies": {

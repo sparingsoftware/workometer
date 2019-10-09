@@ -52,7 +52,7 @@ const getters = {
 const actions = {
   async fetchBoards ({ commit, dispatch }) {
     dispatch('wait/start', 'boardsLoading', { root: true })
-    const boards = await service.getAllBoards({ type: 'scrum' })
+    const boards = await service.getAllBoards()
     commit('setBoards', boards)
     dispatch('wait/end', 'boardsLoading', { root: true })
   },
