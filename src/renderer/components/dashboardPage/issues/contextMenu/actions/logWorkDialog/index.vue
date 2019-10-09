@@ -4,7 +4,7 @@
       <el-form :model="form">
         <el-form-item label="Time spent">
           <el-input
-            v-model="form.worklog.timeSpent"
+            v-model="form.timeSpent"
             placeholder="1d 9h 12m"
             autocomplete="off"
             @blur="handleBlur"
@@ -12,10 +12,10 @@
         </el-form-item>
         <el-form-item label="Date">
           <el-date-picker
-            v-model="form.worklog.started"
+            v-model="form.started"
             :readonly="false"
             type="datetime"
-            value-format="yyyy-MM-ddTHH:mm:ss.000ZZ"
+            format="yyyy-MM-dd HH:mm"
             placeholder="Started datetime"
           />
         </el-form-item>
@@ -34,13 +34,33 @@
 
 <script>
 import moment from 'moment'
+import service from '@/service'
+
+const getWorkedTimeParsed = timeSpent => {
+  const getNumberBeforeLetter = letter => {
+    const regex = new RegExp(`(\\d+)${letter}`, 'i')
+    return +(regex.exec(timeSpent) || [0, 0])[1]
+  }
+  return ['d', 'h', 'm'].map(getNumberBeforeLetter)
+}
+
+const parseToSeconds = timeSpent => {
+  const [days, hours, minutes] = getWorkedTimeParsed(timeSpent)
+
+  const minute = 60
+  const hour = minute * 60
+  const day = hour * 24
+
+  return (days * day) + (hours * hour) + (minutes * minute)
+}
 
 export default {
   data () {
     return {
       dialogVisible: false,
       form: {
-        worklog: {}
+        timeSpent: null,
+        started: null
       },
       issue: null
     }
@@ -50,42 +70,31 @@ export default {
       this.issue = issue
       this.dialogVisible = true
       this.form = {
-        worklog: {}
+        timeSpent: null,
+        started: null
       }
     },
     submitForm () {
-      this.$jira.issue.addWorkLog({
-        issueId: this.issue.id,
-        ...this.form
-      }).then(response => {
-        this.$notify({
-          title: 'Success',
-          message: 'Worklog saved',
-          type: 'success'
+      const timeSpentSeconds = parseToSeconds(this.form.timeSpent)
+      service.addWorkLog(this.issue.id, moment(this.form.started), timeSpentSeconds)
+        .then(() => {
+          this.$notify({
+            title: 'Success',
+            message: 'Worklog saved',
+            type: 'success'
+          })
+          this.closeDialog()
         })
-        this.closeDialog()
-      }).catch(this.handleErrors)
+        .catch(this.handleErrors)
     },
     closeDialog () {
       this.issue = null
       this.dialogVisible = false
     },
-    handleBlur (event) {
-      const inputValue = event.target.value
-      const getNumberBeforeLetter = letter => {
-        const regex = new RegExp(`(\\d+)${letter}`, 'i')
-        return +(regex.exec(inputValue) || [0, 0])[1]
-      }
-      const [days, hours, minutes] = ['d', 'h', 'm'].map(getNumberBeforeLetter)
-
-      const startDate = moment().subtract({
-        days,
-        hours,
-        minutes
-      }).toDate()
-      if (!this.form.worklog.started) {
-        this.$set(this.form.worklog, 'started', startDate)
-      }
+    handleBlur () {
+      const [days, hours, minutes] = getWorkedTimeParsed(this.form.timeSpent)
+      const startDate = moment().subtract({ days, hours, minutes }).toDate()
+      if (!this.form.started) this.$set(this.form, 'started', startDate)
     }
   }
 }
