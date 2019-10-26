@@ -30,6 +30,25 @@ const setDefaultApplicationMenu = () => {
     {
       label: 'View',
       submenu: [
+        { label: 'Theme',
+          submenu: [
+            {
+              label: 'Light',
+              type: 'radio',
+              checked: true,
+              click (item, browserWindow) {
+                browserWindow.webContents.send('theme-change', 'light')
+              }
+            },
+            {
+              label: 'Dark',
+              type: 'radio',
+              click (item, browserWindow) {
+                browserWindow.webContents.send('theme-change', 'dark')
+              }
+            }
+          ]
+        },
         { role: 'reload' },
         { role: 'forcereload' },
         { type: 'separator' },

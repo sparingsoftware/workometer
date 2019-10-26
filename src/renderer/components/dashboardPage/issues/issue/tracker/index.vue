@@ -184,12 +184,10 @@ export default {
   background: 0;
   border: 0;
   font-size: 40px;
-  color: #409EFF;
   outline: none;
 
   &:hover, &:focus {
     background: 0;
-    color: #86d8ff;
     cursor: pointer;
   }
 }

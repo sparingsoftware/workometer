@@ -42,21 +42,20 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    border-top: 1px solid #e2e2e2;
-    border-bottom: 1px solid #e2e2e2;
-    &:hover {
-      background: #f8f8f8;
-    }
+
     &--subtask {
       padding: 10px 15px 10px 40px;
     }
+
     &__key {
       cursor: pointer;
       font-weight: 700;
     }
+
     &__description {
       margin: 0 0 5px;
     }
+
     &__tracking {
       margin-left: 15px;
       text-align: right;

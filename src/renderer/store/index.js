@@ -8,6 +8,7 @@ Vue.use(Vuex)
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   reducer: state => ({
+    theme: state.theme,
     login: state.login,
     boards: state.boards
   })
