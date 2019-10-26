@@ -55,7 +55,6 @@ export default {
     width: 100%;
     padding: 4px 15px;
     margin-bottom: 11px;
-    background-color: #333333;
     color: #ffffff;
     display: flex;
     align-items: center;

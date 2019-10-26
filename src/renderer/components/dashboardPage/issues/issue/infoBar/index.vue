@@ -57,16 +57,19 @@ export default {
       vertical-align: middle;
       margin-right: 5px;
     }
+
     &__status {
       vertical-align: middle;
       margin-right: 5px;
     }
+
     &__link {
       vertical-align: middle;
       margin-right: 5px;
       font-size: 16px;
       cursor: pointer;
     }
+
     &__avatar {
       display: inline-block;
       vertical-align: middle;

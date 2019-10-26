@@ -10,12 +10,14 @@
         clearable
         filterable
       >
-        <el-option
-          v-for="item in sprints"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        />
+        <el-option-group label="Sprints and Backlog">
+          <el-option
+            v-for="item in sprints"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-option-group>
       </el-select>
     </transition>
   </div>
@@ -52,5 +54,9 @@ export default {
   .sprints-picker {
     margin-top: 7px;
     position: relative;
+
+    /deep/ .el-input__inner {
+      height: auto !important;
+    }
   }
 </style>
