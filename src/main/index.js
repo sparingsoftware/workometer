@@ -24,6 +24,7 @@ function createWindow () {
     height: 563,
     useContentSize: true,
     width: 1000,
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       webSecurity: false
     }

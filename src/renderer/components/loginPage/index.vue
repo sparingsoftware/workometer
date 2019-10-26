@@ -1,5 +1,6 @@
 <template>
   <div class="view">
+    <header-component/>
     <div class="wrapper">
       <h1 class="header">work'o'meter</h1>
       <h2 class="subheader">
@@ -27,8 +28,10 @@
 
 <script>
 import open from 'open'
+import HeaderComponent from '../header'
 
 export default {
+  components: { HeaderComponent },
   data () {
     return {
       form: {

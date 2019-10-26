@@ -1,12 +1,12 @@
 <template>
   <div class="view">
+    <header-component/>
     <div class="pickers">
       <boards-picker/>
       <sprints-picker/>
     </div>
     <el-tabs v-model="currentTab" stretch @tab-click="changeTab">
       <el-tab-pane label="Issues" name="issues"/>
-      <!--<el-tab-pane label="Recent Worklogs" name="worklogs"/>-->
     </el-tabs>
     <issues v-if="currentTab === 'issues'"/>
     <recent-worklogs v-if="currentTab === 'worklogs'"/>
@@ -18,10 +18,12 @@ import Issues from './issues/'
 import RecentWorklogs from './recentWorklogs/'
 import BoardsPicker from './pickers/boardsPicker/'
 import SprintsPicker from './pickers/sprintsPicker/'
+import HeaderComponent from '../header'
 import { mapActions } from 'vuex'
 
 export default {
   components: {
+    HeaderComponent,
     BoardsPicker,
     RecentWorklogs,
     SprintsPicker,

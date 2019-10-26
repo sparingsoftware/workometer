@@ -49,7 +49,7 @@
     <div ref="issuesContainer" class="issues">
       <no-results v-if="noIssues"/>
       <preloader-bar v-wait:visible="'issuesLoading'" main/>
-      <transition-group name="el-fade-in" mode="out-in">
+      <transition-group name="el-fade-in" mode="out-in" tag="div">
         <issue
           v-for="(issue, i) in getFilteredIssues"
           :id="issue.key"
@@ -155,6 +155,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  $topbar-height: 262px; // 262px = title, boards picker, sprint picker, tabs, search input height
+
   .filters-bar {
     padding: 0 15px 15px;
     display: flex;
@@ -169,11 +171,11 @@ export default {
 
   .pinned-tracker {
     left: 0;
-    top: 221px;
+    top: $topbar-height;
   }
 
   .issues {
-    height: calc(100vh - 221px); // 221px = boards picker, sprint picker, tabs, search input height
+    height: calc(100vh - #{$topbar-height});
     padding-right: 5px;
     overflow-y: scroll;
   }
