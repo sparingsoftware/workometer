@@ -59,6 +59,10 @@ new Vue({
     '$store.state.theme.theme': {
       immediate: true,
       handler (value) {
+        // Update menu bar item
+        ipcRenderer.send('theme-change', value)
+
+        // Update styles
         const theme = getOrCreateEl('theme')
         theme.setAttribute('href', getPath(`/themes/theme-${value}/index.css`))
 

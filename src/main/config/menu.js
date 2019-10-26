@@ -1,4 +1,4 @@
-import { shell, Menu } from 'electron'
+import { shell, Menu, ipcMain } from 'electron'
 
 const setDefaultApplicationMenu = () => {
   if (Menu.getApplicationMenu()) return
@@ -30,17 +30,24 @@ const setDefaultApplicationMenu = () => {
     {
       label: 'View',
       submenu: [
-        { label: 'Theme',
+        { role: 'reload' },
+        { role: 'forcereload' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' },
+        { type: 'separator' },
+        {
+          label: 'Theme',
           submenu: [
             {
+              id: 'theme-light',
               label: 'Light',
               type: 'radio',
-              checked: true,
               click (item, browserWindow) {
                 browserWindow.webContents.send('theme-change', 'light')
               }
             },
             {
+              id: 'theme-dark',
               label: 'Dark',
               type: 'radio',
               click (item, browserWindow) {
@@ -48,11 +55,7 @@ const setDefaultApplicationMenu = () => {
               }
             }
           ]
-        },
-        { role: 'reload' },
-        { role: 'forcereload' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' }
+        }
       ]
     },
     {
@@ -72,6 +75,10 @@ const setDefaultApplicationMenu = () => {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  ipcMain.on('theme-change', (_, theme) => {
+    menu.getMenuItemById(`theme-${theme}`).checked = true
+  })
 }
 
 export {
