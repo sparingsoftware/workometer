@@ -1,36 +1,40 @@
 <template>
   <div>
     <issue-form ref="issueForm"/>
-    <vue-context ref="vueContext">
-      <ul slot-scope="child" class="actions">
-        <p class="separator">
+    <vue-context ref="vueContext" class="context-menu">
+      <div slot-scope="child">
+        <h2 class="separator">
           Actions
-        </p>
-        <li @click="editIssue({issue: child.data})">
-          Edit issue
-        </li>
-        <li @click="logWork(child.data)">
-          Log Work
-        </li>
-        <li @click="assignIssueToMe({issue: child.data})">
-          Assign to me
-        </li>
-        <li v-if="child.data && !child.data.fields.issuetype.subtask" @click="createSubtask({issue: child.data})">
-          Create subtask
-        </li>
-        <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
-          Move to {{ sprint.name }}
-        </li>
-        <p class="separator">
+        </h2>
+        <ul>
+          <li @click="editIssue({issue: child.data})">
+            Edit issue
+          </li>
+          <li @click="logWork(child.data)">
+            Log Work
+          </li>
+          <li @click="assignIssueToMe({issue: child.data})">
+            Assign to me
+          </li>
+          <li v-if="child.data && !child.data.fields.issuetype.subtask" @click="createSubtask({issue: child.data})">
+            Create subtask
+          </li>
+          <li v-for="sprint in availableSprints" @click="moveToSprint({issue: child.data, sprint: sprint})">
+            Move to {{ sprint.name }}
+          </li>
+        </ul>
+        <h2 class="separator">
           Change status
-        </p>
-        <li
-          v-for="status in statuses(child.data)"
-          @click="setIssueStatus({ issue: child.data, status })"
-        >
-          {{ status.name }}
-        </li>
-      </ul>
+        </h2>
+        <ul>
+          <li
+            v-for="status in statuses(child.data)"
+            @click="setIssueStatus({ issue: child.data, status })"
+          >
+            {{ status.name }}
+          </li>
+        </ul>
+      </div>
     </vue-context>
     <log-work-dialog ref="logWorkDialog"/>
   </div>
@@ -75,7 +79,7 @@ export default {
     logWork (issue) {
       this.$refs.logWorkDialog.openDialog(issue)
     },
-    moveToSprint ({issue, sprint}) {
+    moveToSprint ({ issue, sprint }) {
       service.moveIssueToSprint({
         issueKey: issue.key,
         sprintId: sprint.id
@@ -99,10 +103,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .v-context {
-    border: 1px solid #e2e2e2 !important;
+  .context-menu {
     outline: none !important;
-    & ul li {
+
+    li {
       padding: 10px 20px !important;
       font-weight: 400;
       letter-spacing: 0.015em;
@@ -110,8 +114,9 @@ export default {
   }
 
   .separator {
-    margin-left: 20px;
+    margin: 20px 0 0 20px;
+    font-weight: 600;
+    font-size: 12px;
     cursor: default;
-    color: #939393;
   }
 </style>
