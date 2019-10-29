@@ -10,6 +10,7 @@
     "release": true,
     "assets": [
       "build/*.AppImage",
+      "build/*.pkg",
       "build/*.dmg",
       "build/*.exe"
     ]
