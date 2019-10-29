@@ -76,7 +76,7 @@
     "lodash.uniq": "^4.5.0",
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.22.2",
-    "open": "0.0.5",
+    "open": "6.0.0",
     "vue": "^2.5.16",
     "vue-context": "^3.3.0",
     "vue-electron": "^1.0.6",
