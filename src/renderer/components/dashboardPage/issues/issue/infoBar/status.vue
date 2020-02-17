@@ -21,6 +21,7 @@ export default {
       const statusName = this.status.name.toLowerCase()
       const statusTypeMap = {
         'done': 'success',
+        'selected to development': 'info',
         'to do': 'info',
         'in progress': 'warning'
       }
