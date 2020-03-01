@@ -43,16 +43,16 @@ export default {
       issueId
     })
   },
-  setIssueEstimate: async ({issueId, originalEstimate}) => {
+  setIssueEstimate: async ({ issueId, originalEstimate }) => {
     return Vue.jira.issue.editIssue({
       issueId,
       issue: { fields: { timetracking: { originalEstimate } } }
     })
   },
-  setIssueAssign: async ({ issueId, assignee }) => {
+  setIssueAssign: async ({ issueId, accountId }) => {
     return Vue.jira.issue.assignIssue({
       issueId,
-      assignee
+      accountId
     })
   },
   moveIssueToSprint: ({ issueKey, sprintId }) => {

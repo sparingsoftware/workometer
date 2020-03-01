@@ -82,8 +82,8 @@ const actions = {
   },
   async assignIssueToMe ({ commit, dispatch, rootGetters, rootState }, { issue }) {
     dispatch('wait/start', `issueAssignChange_${issue.id}`, { root: true })
-    const assignee = rootState.login.userDetails.name
-    await service.setIssueAssign({ issueId: issue.id, assignee })
+    const { accountId } = rootState.login.userDetails
+    await service.setIssueAssign({ issueId: issue.id, accountId })
     const updatedIssue = await service.getIssue({ issueId: issue.id })
     commit('updateIssue', { oldIssue: issue, newIssue: updatedIssue })
     dispatch('wait/end', `issueAssignChange_${issue.id}`, { root: true })
