@@ -13,12 +13,12 @@
       >
         <el-option
           v-for="option in options"
-          :key="option.name"
-          :value="option.name"
-          :label="option.displayName || option.name"
+          :key="optionName(option)"
+          :value="optionName(option)"
+          :label="optionName(option)"
         >
           <img class="icon" :src="option.avatarUrls['16x16']" alt="">
-          {{ option.displayName || option.name }}
+          {{ optionName(option) }}
         </el-option>
       </el-select>
     </el-form-item>
@@ -46,14 +46,22 @@ export default {
     }
   },
   computed: {
+    optionName () {
+      return option => option ? option.displayName || option.name : ''
+    },
     inputValue: {
       get () {
-        return this.value && this.value.name
+        return this.optionName(this.value)
       },
-      set (newValue) {
-        this.$emit('input', {
-          name: newValue
-        })
+      async set (value) {
+        if (!value) this.$emit('input', {})
+        else {
+          service.getAutocompletion({ url: `${this.field.autoCompleteUrl}${value}` })
+            .then(res => {
+              if (res.length > 1) this.$emit('input', {})
+              else this.$emit('input', res[0])
+            })
+        }
       }
     }
   },
