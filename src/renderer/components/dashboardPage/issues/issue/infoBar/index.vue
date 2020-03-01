@@ -56,6 +56,8 @@ export default {
     &__icon {
       vertical-align: middle;
       margin-right: 5px;
+      width: 16px;
+      height: 16px;
     }
 
     &__status {
