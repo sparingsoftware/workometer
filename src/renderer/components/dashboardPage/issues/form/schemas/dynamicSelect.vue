@@ -58,8 +58,9 @@ export default {
         else {
           service.getAutocompletion({ url: `${this.field.autoCompleteUrl}${value}` })
             .then(res => {
-              if (res.length > 1) this.$emit('input', {})
-              else this.$emit('input', res[0])
+              if (res.length < 1) return this.$emit('input', {})
+              const user = res.find(u => u.displayName === value || u.name === value)
+              this.$emit('input', user || res[0])
             })
         }
       }
