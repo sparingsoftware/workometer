@@ -59,7 +59,7 @@
     }
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "desktop-idle": "^1.2.0",
     "electron-context-menu": "^0.10.0",
     "element-ui": "^2.11.1",
